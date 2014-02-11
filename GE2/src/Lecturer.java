@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import Session.SessionType;
+
 
 public class Lecturer extends User {
 
@@ -31,6 +33,11 @@ public class Lecturer extends User {
 
 		//implementation of the session, don't know what attributes it will have yet..
 		c.addSession(s);
+	}
+	
+	public void specifySessionType(Session session, SessionType type){
+		session.setSessionType(type);
+		
 	}
 	
 	
