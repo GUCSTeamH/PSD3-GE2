@@ -1,4 +1,3 @@
-import java.sql.Time;
 import java.util.LinkedList;
 
 
@@ -15,8 +14,7 @@ public class Session {
 	private SessionType type;
 	
 	//when 
-	private Day day;
-	private Time time;
+	private Timeslot timeslot;
 	
 	//list of students registered with the session
 	private LinkedList<Student> students;
@@ -28,18 +26,17 @@ public class Session {
 	
 	
 	//constructors: probably other will be added accourding to our needs
-	public Session (int id,SessionType type, Day d, Time t){
+	public Session (int id,SessionType type, Timeslot t){
 		this.type = type;
-		this.day = d;
-		this.time = t;
+		this.timeslot = t;
 		this.id = id;
 		students = new LinkedList<Student>();
 		slots = new LinkedList<TimetableSlot>();
 	}
 	
 	
-	public Session(int id, SessionType type, Day d, Time t, Staff staff){
-		this(id, type, d, t);
+	public Session(int id, SessionType type, Timeslot t, Staff staff){
+		this(id, type, t);
 		this.staff=staff;
 	}
 	
@@ -65,20 +62,14 @@ public class Session {
 		students.add(s);
 	}
 	
-	public Day getDay(){
-		return day;
+
+	
+	public Timeslot getTime(){
+		return timeslot;
 	}
 	
-	public void setDay(Day d){
-		day = d;
-	}
-	
-	public Time getTime(){
-		return time;
-	}
-	
-	public void setTime(Time t){
-		time = t;
+	public void setTime(Timeslot t){
+		timeslot = t;
 	}
 	
 	public Staff getStaff(){
@@ -88,6 +79,8 @@ public class Session {
 	public void assignStaff(Staff s){
 		staff = s;
 	}
+	
+	
 	
 	
 	
