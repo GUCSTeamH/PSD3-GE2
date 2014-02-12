@@ -2,7 +2,7 @@ package test.impl;
 
 import java.util.ArrayList;
 
-import test.LecturerInterface;
+import test.inter.LecturerInterface;
 
 public class LecturerImpl implements LecturerInterface {
 
