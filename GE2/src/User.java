@@ -1,5 +1,5 @@
 
-public class User {
+public abstract class User {
 
 	String name, surname, email;
 	

@@ -1,38 +1,36 @@
 
 
 public class TimetableSlot {
-	private Day day;
-	private Time time;
+	
+	
+	private Timeslot timeslot;
 	private Room room;
 	private boolean free;
+	private int capacity;
 	
 	
-	public TimetableSlot(Day d, Time t, Room r){
-		day = d;
-		time = t;
+	public TimetableSlot( Timeslot t, Room r){
+		timeslot = t;
 		room = r;
 	}
 	
-	public TimetableSlot(Day d, Time t, Room r, boolean free){
-		this(d, t, r);
+	public TimetableSlot( Timeslot t, Room r, boolean free){
+		this(t, r);
 		this.free = free;
 	}
 	
 	
+
 	
-	public Day getDay(){
-		return day;
-	}
-	
-	public Time getTime(){
-		return time;
+	public Timeslot getTime(){
+		return timeslot;
 	}
 	
 	public Room getRoom(){
 		return room;
 	}
 	
-	public void setRoom (Room r){
+	public void assignRoom (Room r){
 		room = r;
 	}
 	 
@@ -42,5 +40,18 @@ public class TimetableSlot {
 	
 	public void setFree(boolean f){
 		free = f;
+	}
+	
+	
+	//should be used to add capacity to a session- returns true if successful, 
+	// false if the specified capacity is greater than the room capacity
+	public boolean setCapacity(int capacity){
+		if(capacity<=room.getCapacity()){
+			this.capacity = capacity;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }
