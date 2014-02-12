@@ -3,14 +3,83 @@
  */
 package database;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * @author Michael
  *
  */
 public class DatabasImpl implements DatabaseInterface {
+	Connection connection = null;
+	
+	
+	void connect() {
+		try {
+			// create a database connection
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:data/BookingSystem.db");
+		} catch (SQLException e) {
+			// if the error message is "out of memory",
+			// it probably means no database file is found
+			System.err.println(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				// connection close failed.
+				System.err.println(e);
+			}
+		}
+	}
 
+	
+	
+	void disconnect() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	void createTables() {
+		try {
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement
+					.addBatch("CREATE TABLE IF NOT EXISTS course(course_id TEXT PRIMARY KEY, course_name TEXT);");
+			statement
+					.addBatch("CREATE TABLE IF NOT EXISTS student(student_id TEXT PRIMARY KEY, student_name TEXT);");
+			statement
+					.addBatch("CREATE TABLE IF NOT EXISTS session(session_id INTEGER PRIMARY KEY AUTOINCREMENT, capacity INTEGER, recurring BOOLEAN, compulsory BOOLEAN);");
+			statement
+					.addBatch("CREATE TABLE IF NOT EXISTS tutor(tutor_id TEXT PRIMARY KEY, tutor_name TEXT);");
+			statement
+					.addBatch("CREATE TABLE IF NOT EXISTS timeslot(timeslot_id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT, day INTEGER, room TEXT, session_id INTEGER, tutor_id TEXT);");
+			statement
+					.addBatch("CREATE TABLE IF NOT EXISTS student_course(student_id TEXT, course_id TEXT);");
+			statement
+					.addBatch("CREATE TABLE IF NOT EXISTS student_session(student_id TEXT, session_id INTEGER);");
+			statement
+					.addBatch("CREATE TABLE IF NOT EXISTS student_timeslot(student_id TEXT, timeslot_id INTEGER);");
+			statement.addBatch("COMMIT;");
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#addSession(int, java.lang.String, boolean, boolean)
 	 */
