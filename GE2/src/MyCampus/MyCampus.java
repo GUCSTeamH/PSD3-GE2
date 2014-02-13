@@ -2,7 +2,8 @@ package MyCampus;
 
 import java.util.HashMap;
 
-import Course.Course;
+import test.base.Course;
+
 
 public class MyCampus implements AuthenticatorInterface,MyCampusCommunicator{
 	
@@ -29,6 +30,7 @@ public class MyCampus implements AuthenticatorInterface,MyCampusCommunicator{
 		
 		
 	}
+
 
 
 

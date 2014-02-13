@@ -2,7 +2,9 @@ package test.impl;
 
 import java.util.ArrayList;
 
+import MyCampus.MyCampusCommunicator;
 import database.DatabaseInterface;
+import test.base.Course;
 import test.base.Session;
 import test.base.Session.SessionType;
 import test.base.Timeslot;
@@ -14,7 +16,7 @@ public class LecturerImpl implements LecturerInterface {
 
 	ArrayList something;
 	DatabaseInterface db;
-	mycampusInterface m;
+	MyCampusCommunicator mycampusCommunicator;
 	
 	public LecturerImpl(){
 		
@@ -24,8 +26,16 @@ public class LecturerImpl implements LecturerInterface {
 		
 	}
 	
-	public authenticate(){
-		m.auth();
+	public void registerMyCampusCommunicator(MyCampusCommunicator communicator){
+		mycampusCommunicator = communicator;		
+	}
+	
+	public String getCourseInfoFromMyCampus(Course c){
+		if (mycampusCommunicator!=null){
+			return mycampusCommunicator.getCourseInfo(c);
+		}
+		else return "Please register for MyCampus Communicator first!!!";
+		
 	}
 	
 	public void addSessionToCourse(String courseId){

@@ -4,18 +4,25 @@ import database.DatabaseInterface;
 import test.inter.StudentInterface;
 
 public class StudentImpl extends User implements StudentInterface {
-	String matric;
-	DatabaseInterface db;
+	private String matric;
+	private DatabaseInterface db;
 	
-	StudentImpl(String name, String surname, String email, String matric){
-		super(name, surname, email);
+	public StudentImpl(String name, String surname, String email, String password, String matric){
+		super(name, surname, email,password);
 		this.matric=matric;
 	}
+	
+	
+	public StudentImpl(){
+		
+	}
+	
+	
 	
 
 	public void bookSession(int time){
 		db.signUpToTimeslot(time, this.matric);
-		db.add
+
 		
 		
 	}

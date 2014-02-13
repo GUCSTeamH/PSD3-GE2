@@ -4,7 +4,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import Course.Course;
+
 
 
 
@@ -34,7 +34,8 @@ public class Activator implements BundleActivator {
 	@Override
 	public void stop(BundleContext arg0) throws Exception {
 
-		registration.unregister();
+		authenticatorRegistration.unregister();
+		communicatorRegistration.unregister();
 
 	}
 

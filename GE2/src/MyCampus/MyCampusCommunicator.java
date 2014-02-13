@@ -1,6 +1,8 @@
 package MyCampus;
 
-import Course.Course;
+import test.base.Course;
+
+
 
 public interface MyCampusCommunicator {
 	

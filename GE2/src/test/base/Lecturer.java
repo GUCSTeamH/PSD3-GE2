@@ -11,8 +11,8 @@ public class Lecturer extends User {
 	ArrayList<Course> courses;
 	int[] smth = new int[10];
 	
-	Lecturer(String n, String s, String mail){
-		super(n, s, mail);
+	Lecturer(String n, String s, String mail,String password){
+		super(n, s, mail,password);
 		courses = new ArrayList<Course>();
 	}
 	

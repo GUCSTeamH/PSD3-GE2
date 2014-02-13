@@ -98,7 +98,14 @@
 		description="Builds OSGi bundles for the project."
 		depends="compile"
 	>
-
+		<jar update="no" destfile="mycampus.jar" manifest="config/MyCampus.MF">
+			
+			<fileset 
+				dir="bin/"
+				includes="MyCampus/*.class"
+			/>
+		
+		</jar>
 		<jar update="no" destfile="lect-int.jar" manifest="config/LecturerInt.MF">
 			
 			<fileset 

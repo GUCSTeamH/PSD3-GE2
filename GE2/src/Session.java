@@ -14,7 +14,6 @@ public class Session {
 	private SessionType type;
 	
 	//when 
-	private Timeslot timeslot;
 	
 	//list of students registered with the session
 	private LinkedList<Student> students;
@@ -26,17 +25,16 @@ public class Session {
 	
 	
 	//constructors: probably other will be added accourding to our needs
-	public Session (int id,SessionType type, Timeslot t){
+	public Session (int id,SessionType type){
 		this.type = type;
-		this.timeslot = t;
 		this.id = id;
 		students = new LinkedList<Student>();
 		slots = new LinkedList<TimetableSlot>();
 	}
 	
 	
-	public Session(int id, SessionType type, Timeslot t, Staff staff){
-		this(id, type, t);
+	public Session(int id, SessionType type, Staff staff){
+		this(id, type);
 		this.staff=staff;
 	}
 	
@@ -64,13 +62,7 @@ public class Session {
 	
 
 	
-	public Timeslot getTime(){
-		return timeslot;
-	}
-	
-	public void setTime(Timeslot t){
-		timeslot = t;
-	}
+
 	
 	public Staff getStaff(){
 		return staff;

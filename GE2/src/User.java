@@ -1,5 +1,8 @@
+import MyCampus.AuthenticatorInterface;
+
 
 public abstract class User {
+
 
 	String name, surname, email;
 	

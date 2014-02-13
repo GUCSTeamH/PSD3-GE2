@@ -1,15 +1,35 @@
 package test.impl;
 
-public abstract class User {
+import MyCampus.AuthenticatorInterface;
 
-	String name, surname, email;
+public abstract class User {
+	AuthenticatorInterface mycampusAuthenticator;
+	String name, surname, email, password;
 	
-	User(String n, String s, String mail){
+	protected User(String n, String s, String mail,String p){
 		name=n;
 		surname=s;
 		email=mail;
+		password = p;
 	}
 	
+	
+	public User(){
+		
+	}
+	
+	public void registerMyCampusAuthenticator(AuthenticatorInterface authenticator){
+		mycampusAuthenticator = authenticator;
+	}
+	
+	public boolean login(){
+		if(mycampusAuthenticator!=null)
+			return mycampusAuthenticator.authenticate(email, password);
+		else {
+			System.out.println("Please register for MyCampus Authenticator first!!!");
+			return false;
+		}
+	}
 	
 	
 }
