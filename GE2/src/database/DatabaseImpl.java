@@ -10,7 +10,7 @@ import java.sql.Statement;
  * @author Michael
  * 
  */
-public class DatabasImpl implements DatabaseInterface {
+public class DatabaseImpl implements DatabaseInterface {
 	Connection connection = null;
 
 	void connect() {
