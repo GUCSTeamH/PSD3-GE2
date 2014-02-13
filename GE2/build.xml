@@ -145,6 +145,15 @@
 			/>
 			
 		</jar>
+		
+		<jar update="no" destfile="database.jar"  manifest="config/Database.MF" >
+			
+			<fileset
+				dir="bin/"
+				includes="database/*.class"
+			/>
+			
+		</jar>
 
 	</target>
 	
