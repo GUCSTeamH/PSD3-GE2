@@ -7,7 +7,9 @@ public Student(String id,String n,String s,String mail,int y){
 	studentid=id;
 	year=y;
 }
-
+public void bookSession(){
+}
+public void checkSession(){}
 public String getStudentid() {
 	return studentid;
 }
