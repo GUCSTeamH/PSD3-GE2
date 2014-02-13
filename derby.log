@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Thu Feb 13 16:55:18 GMT 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-0144-2c2c-826a-0000032b2170 
+on database directory E:\Dropbox\Uni\3rd_Year\PSD3\PSD3-GE2\data\BookingSystem with class loader sun.misc.Launcher$AppClassLoader@752a2259 
+Loaded from file:/E:/Dropbox/Uni/3rd_Year/PSD3/PSD3-GE2/lib/derby-10.10.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_25-b17
+user.dir=E:\Dropbox\Uni\3rd_Year\PSD3\PSD3-GE2
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
