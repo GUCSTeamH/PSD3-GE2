@@ -10,7 +10,7 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void start(BundleContext arg0) throws Exception {
+	public void start(BundleContext context) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -19,7 +19,7 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void stop(BundleContext arg0) throws Exception {
+	public void stop(BundleContext context) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

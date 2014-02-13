@@ -59,7 +59,7 @@ public class DatabasImpl implements DatabaseInterface {
 			statement
 					.addBatch("CREATE TABLE IF NOT EXISTS student(student_id TEXT PRIMARY KEY, student_name TEXT);");
 			statement
-					.addBatch("CREATE TABLE IF NOT EXISTS session(session_id INTEGER PRIMARY KEY AUTOINCREMENT, capacity INTEGER, recurring BOOLEAN, compulsory BOOLEAN);");
+					.addBatch("CREATE TABLE IF NOT EXISTS session(session_id INTEGER PRIMARY KEY AUTOINCREMENT, course_id TEXT, capacity INTEGER, recurring BOOLEAN, compulsory BOOLEAN);");
 			statement
 					.addBatch("CREATE TABLE IF NOT EXISTS tutor(tutor_id TEXT PRIMARY KEY, tutor_name TEXT);");
 			statement
@@ -80,16 +80,34 @@ public class DatabasImpl implements DatabaseInterface {
 	}
 	
 	
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#addSession(int, java.lang.String, boolean, boolean)
 	 */
 	@Override
-	public void addSession(int capacity, String course, boolean recurring,
+	public void addSession(int capacity, String courseID, boolean recurring,
 			boolean compulsory) {
-		// TODO Auto-generated method stub
-
+		try {
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement
+					.addBatch("INSERT INTO session (course_id, capacity, recurring, compulsory) VALUES ("
+							+ courseID
+							+ ","
+							+ capacity
+							+ ","
+							+ recurring
+							+ ","
+							+ compulsory + ")");
+			statement.addBatch("COMMIT;");
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#addTimeslot(int, java.lang.String, java.lang.String, int, java.lang.String)
 	 */
@@ -100,33 +118,67 @@ public class DatabasImpl implements DatabaseInterface {
 
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#addCourse(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void addCourse(String courseID, String name) {
 		// TODO Auto-generated method stub
-
+		try{
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement.addBatch("INSERT INTO course(course_id, course_name) VALUES (" + courseID + ", " + name + ")");
+			statement.addBatch("COMMIT;");
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generate catch block
+			e.printStackTrace();
+		}
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#addStudent(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void addStudent(String studentID, String name) {
 		// TODO Auto-generated method stub
-
+		try {
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement
+					.addBatch("INSERT INTO student(student_id, student_name) VALUES ("
+							+ studentID + ", " + name + ")");
+			statement.addBatch("COMMIT;");
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#addStudentToCourse(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void addStudentToCourse(String studentID, String courseID) {
 		// TODO Auto-generated method stub
-
+		try {
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement
+					.addBatch("INSERT INTO student_course(student_id, course_id) VALUES ("
+							+ studentID + ", " + courseID + ")");
+			statement.addBatch("COMMIT;");
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#signUpToTimeslot(int, java.lang.String)
 	 */
@@ -136,6 +188,7 @@ public class DatabasImpl implements DatabaseInterface {
 
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#makeSessionRecurring(int)
 	 */
@@ -145,6 +198,7 @@ public class DatabasImpl implements DatabaseInterface {
 
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#bookSession(int, int)
 	 */
@@ -154,6 +208,7 @@ public class DatabasImpl implements DatabaseInterface {
 
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#checkCompulsorySessions(java.lang.String, java.lang.String)
 	 */
@@ -163,6 +218,7 @@ public class DatabasImpl implements DatabaseInterface {
 		return null;
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see database.DatabaseInterface#getCourseSessionDetails(int)
 	 */

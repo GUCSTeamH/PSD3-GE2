@@ -14,7 +14,7 @@ public interface DatabaseInterface {
 	 * @param recurring
 	 * @param compulsory
 	 */
-	public void addSession(int capacity, String course, boolean recurring, boolean compulsory);
+	public void addSession(int capacity, String courseID, boolean recurring, boolean compulsory);
 	
 	/**
 	 * @param sessionID
