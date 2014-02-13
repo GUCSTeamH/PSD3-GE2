@@ -27,6 +27,8 @@
 		<dependency org="org.jbehave.site" name="jbehave-site-resources" rev="3.1.1">
 			<artifact name="jbehave-site-resources" type="zip"/>
 		</dependency>
+		
+		<dependency org="org.xerial" name="sqlite-jdbc" rev="3.7.2"/>
 			
 	</dependencies>
 
