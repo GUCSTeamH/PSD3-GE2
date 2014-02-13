@@ -99,38 +99,38 @@
 		depends="compile"
 	>
 
-		<jar update="no" destfile="repository.jar" manifest="config/osgi/REPOSITORY.MF">
+		<jar update="no" destfile="lect-int.jar" manifest="config/LecturerInt.MF">
 			
 			<fileset 
 				dir="bin/"
-				includes="uk/ac/glasgow/senotes/components/lab/repository/*.class"
+				includes="test/inter/*.class"
 			/>
 		
 		</jar>
 
-		<jar update="no" destfile="repository-impl.jar" manifest="config/osgi/REPOSITORY-IMPL.MF">
+		<jar update="no" destfile="lect-impl.jar"  manifest="config/LecturerImp.MF">
 		
 			<fileset 
 				dir="bin/" 
-				includes="uk/ac/glasgow/senotes/components/lab/repository/impl/*.class"
+				includes="test/impl/*.class"
 			/>
 		
 		</jar>
 
-		<jar update="no" destfile="monitor.jar" manifest="config/osgi/MONITOR.MF">
+		<jar update="no" destfile="lect-activators.jar"  manifest="config/LecturerActivator.MF" >
 			
 			<fileset
 				dir="bin/"
-				includes="uk/ac/glasgow/senotes/components/lab/monitor/*.class"
+				includes="test/activator/*.class"
 			/>
 			
 		</jar>
 
-		<jar update="no" destfile="alarm.jar" manifest="config/osgi/ALARM.MF">
+		<jar update="no" destfile="lect-consumer.jar"  manifest="config/LecturerConsumer.MF" >
 			
 			<fileset 
 				dir="bin/" 
-				includes="uk/ac/glasgow/senotes/components/lab/alarm/*.class"
+				includes="test/consumer/*.class"
 			/>
 			
 		</jar>
@@ -194,38 +194,6 @@
 		name="test"
 		depends="build"
 	>
-		
-
-		<junit			
-			printsummary="yes"
-		>
-			<classpath refid="project.classpath"/>
-			
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.repository.test.RepositoryImplBundleTest"
-			/>
-						
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.repository.test.unit.TemperatureRangeTest"
-			/>
-						
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.repository.test.unit.TemperatureHandlerTest"
-			/>
-			
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.test.integration.AlarmTest"
-			/>
-			
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.repository.test.LabStories"
-			/>
-
-
-		</junit>
-
-
-		
 	
 	</target>
 	

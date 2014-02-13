@@ -1,9 +1,17 @@
 package test.inter;
 
+import test.base.Session.SessionType;
+
 public interface LecturerInterface {
 
-	void addSomething(int i);
+	void importMyCampusCourse();
 	
-	int printSomething();
+	void addSessionToCourse(String courseId);
+	
+	void specifySessionType(int sessionId, SessionType type);
+	
+	void seeDetails(int sessionId);
+	
+	void printSomething();
 	
 }

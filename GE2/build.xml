@@ -108,6 +108,17 @@
 		
 		</jar>
 
+		<jar update="no" destfile="base.jar" manifest="config/Base.MF">
+			
+			<fileset 
+
+				dir="bin/"
+				includes="test/base/*.class"
+
+			/>
+		
+		</jar>
+
 		<jar update="no" destfile="lect-impl.jar"  manifest="config/LecturerImp.MF">
 		
 			<fileset 

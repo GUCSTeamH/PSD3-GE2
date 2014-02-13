@@ -1,2 +1,15 @@
+/Admin.class
+/Course.class
+/Lecturer.class
+/LecturerInterface.class
+/Room.class
+/Session$SessionType.class
+/Session.class
+/Staff.class
+/Student.class
+/Timeslot.class
+/TimetableSlot.class
+/User.class
+/base
+/impl
 /test
-/activator
