@@ -15,7 +15,7 @@ public interface DatabaseInterface {
 	 * @param recurring boolean on if session is recurring (once a week)
 	 * @param compulsory boolean on if session is compulsory
 	 */
-	public void addSession(int capacity, String courseID, boolean recurring,
+	public void addSession(String courseID, boolean recurring,
 			boolean compulsory);
 
 	/**
@@ -25,7 +25,7 @@ public interface DatabaseInterface {
 	 * @param day integer representing day of timeslot: 0 = Monday...6 = Sunday
 	 * @param room string representing room timeslot has been allocated
 	 */
-	public void addTimeslot(String startTime, int duration, int day, String room);
+	public void addTimeslot(int capactiy, String startTime, int duration, int day, String room);
 
 	/**
 	 * adds a course to the database
