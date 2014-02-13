@@ -1,29 +1,48 @@
 
 
 public class TimetableSlot {
-	
-	
-	private Timeslot timeslot;
+
 	private Room room;
 	private boolean free;
-	private int capacity;
+	private int capacity;  
+	private int weekNumber; //Timeslot attribute	
+	private String weekDay; //Timeslot attribute	
+	private int startTime; // Timeslot attribute	
+	private int endTime; //Timeslot attribute	
 	
-	
-	public TimetableSlot( Timeslot t, Room r){
-		timeslot = t;
+	public TimetableSlot(int wn, String wd, int st, int et, Room r){
+		weekNumber = wn;
+		weekDay = wd;
+		startTime = st;
+		endTime = et;
 		room = r;
 	}
-	
-	public TimetableSlot( Timeslot t, Room r, boolean free){
-		this(t, r);
+	public TimetableSlot(int wn, String wd, int st, int et, Room r, boolean free){
+		this.weekNumber = wn;
+		this.weekDay = wd;
+		this.startTime = st;
+		this.endTime = et;
+		this.room = r;
 		this.free = free;
 	}
 	
 	
 
 	
-	public Timeslot getTime(){
-		return timeslot;
+	public int getWeekNum(){
+		return weekNumber;
+	}
+	
+	public String getWeekDay(){
+		return weekDay;
+	}
+	
+	public int getStartTime(){
+		return startTime;
+	}
+	
+	public int getEndTime(){
+		return endTime;
 	}
 	
 	public Room getRoom(){
@@ -55,6 +74,6 @@ public class TimetableSlot {
 		}
 	}
 	public String toString(){
-		return "Time :"+Integer.toString(timeslot.getStartTime())+" - "+Integer.toString(timeslot.getEndTime())+"\n Room: "+room.getRoom()+"\n"+"Students: (list) "+"\n Tutor: (name) \n";
+		return "Time :"+Integer.toString(startTime)+" - "+Integer.toString(endTime)+"\n Room: "+room.getRoom()+"\n"+"Students: (list) "+"\n Tutor: (name) \n";
 	}
 }
