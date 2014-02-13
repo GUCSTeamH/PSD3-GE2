@@ -1,15 +1,23 @@
 package test.impl;
 
+import database.DatabaseInterface;
 import test.inter.StudentInterface;
 
-public class StudentImpl implements StudentInterface {
+public class StudentImpl extends User implements StudentInterface {
+	String matric;
+	DatabaseInterface db;
+	
+	StudentImpl(String name, String surname, String email, String matric){
+		super(name, surname, email);
+		this.matric=matric;
+	}
+	
 
-	public void bookSession(){
-		//get list of courses from db
+	public void bookSession(int time){
+		db.signUpToTimeslot(time, this.matric);
+		db.add
 		
-		//for each course -> get session list
 		
-		//populate student db with session
 	}
 	
 	public boolean checkSession(){

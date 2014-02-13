@@ -1,4 +1,4 @@
-package test.base;
+package test.impl;
 
 public abstract class User {
 
@@ -9,5 +9,7 @@ public abstract class User {
 		surname=s;
 		email=mail;
 	}
+	
+	
 	
 }

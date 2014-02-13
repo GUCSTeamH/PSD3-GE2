@@ -6,12 +6,13 @@ public interface LecturerInterface {
 
 	void importMyCampusCourse();
 	
+	void addCourse(String courseID, String name);
+	
 	void addSessionToCourse(String courseId);
 	
-	void specifySessionType(int sessionId, SessionType type);
+	void specifyRecurrent(int sessionId);
 	
 	void seeDetails(int sessionId);
-	
-	void printSomething();
+
 	
 }

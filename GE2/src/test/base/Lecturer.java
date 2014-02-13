@@ -1,6 +1,8 @@
 package test.base;
 import java.util.ArrayList;
 
+import test.impl.User;
+
 
 
 

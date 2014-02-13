@@ -2,7 +2,7 @@ package test.inter;
 
 public interface StudentInterface {
 
-	public void bookSession();
+	public void bookSession(int time);
 	
 	public boolean checkSession();
 	

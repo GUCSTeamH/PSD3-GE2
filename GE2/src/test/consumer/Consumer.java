@@ -27,7 +27,6 @@ public class Consumer {
 	public void startLec(){
 		lect.addSessionToCourse("COMPSCI20");
 		lect.addSessionToCourse("COMPSCI50");
-		lect.specifySessionType(20, SessionType.COMPULSORY);
 		lect.seeDetails(20);
 	}
 	
