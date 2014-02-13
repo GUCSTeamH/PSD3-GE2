@@ -55,6 +55,6 @@ public class TimetableSlot {
 		}
 	}
 	public String toString(){
-		return "Time :"+Integer.toString(timeslot.getStartTime())+" - "+Integer.toString(timeslot.getEndTime())+"\n"+room.getRoom()+"\n"+"Students: (list) "+"\n Tutor: (name) \n";
+		return "Time :"+Integer.toString(timeslot.getStartTime())+" - "+Integer.toString(timeslot.getEndTime())+"\n Room: "+room.getRoom()+"\n"+"Students: (list) "+"\n Tutor: (name) \n";
 	}
 }
