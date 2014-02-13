@@ -23,7 +23,7 @@ public interface DatabaseInterface {
 	 * @param day
 	 * @param room
 	 */
-	public void addTimeslot(int sessionID, String startTime, String  endTime, int day, String room);
+	public void addTimeslot(String startTime, int duration, int day, String room);
 	
 	/**
 	 * @param courseID

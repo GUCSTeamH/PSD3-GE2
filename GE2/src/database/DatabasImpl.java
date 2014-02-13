@@ -16,12 +16,12 @@ import java.sql.Statement;
 public class DatabasImpl implements DatabaseInterface {
 	Connection connection = null;
 	
-	
 	void connect() {
 		try {
 			// create a database connection
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:data/BookingSystem.db");
+			connection = DriverManager
+					.getConnection("jdbc:sqlite:data/BookingSystem.db");
 		} catch (SQLException e) {
 			// if the error message is "out of memory",
 			// it probably means no database file is found
@@ -63,7 +63,7 @@ public class DatabasImpl implements DatabaseInterface {
 			statement
 					.addBatch("CREATE TABLE IF NOT EXISTS tutor(tutor_id TEXT PRIMARY KEY, tutor_name TEXT);");
 			statement
-					.addBatch("CREATE TABLE IF NOT EXISTS timeslot(timeslot_id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT, day INTEGER, room TEXT, session_id INTEGER, tutor_id TEXT);");
+					.addBatch("CREATE TABLE IF NOT EXISTS timeslot(timeslot_id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT, duration INTEGER, day INTEGER, room TEXT, session_id INTEGER, tutor_id TEXT);");
 			statement
 					.addBatch("CREATE TABLE IF NOT EXISTS student_course(student_id TEXT, course_id TEXT);");
 			statement
@@ -98,7 +98,7 @@ public class DatabasImpl implements DatabaseInterface {
 							+ ","
 							+ recurring
 							+ ","
-							+ compulsory + ")");
+							+ compulsory + ");");
 			statement.addBatch("COMMIT;");
 			statement.executeBatch();
 		} catch (SQLException e) {
@@ -112,10 +112,25 @@ public class DatabasImpl implements DatabaseInterface {
 	 * @see database.DatabaseInterface#addTimeslot(int, java.lang.String, java.lang.String, int, java.lang.String)
 	 */
 	@Override
-	public void addTimeslot(int sessionID, String startTime, String endTime,
-			int day, String room) {
-		// TODO Auto-generated method stub
-
+	public void addTimeslot(String startTime, int duration, int day, String room) {
+		try {
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement
+					.addBatch("INSERT INTO timeslot (time, duration, day, room) VALUES ("
+							+ startTime
+							+ ","
+							+ duration
+							+ ","
+							+ day
+							+ ","
+							+ room + ");");
+			statement.addBatch("COMMIT;");
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -124,11 +139,12 @@ public class DatabasImpl implements DatabaseInterface {
 	 */
 	@Override
 	public void addCourse(String courseID, String name) {
-		// TODO Auto-generated method stub
-		try{
+		try {
 			Statement statement = connection.createStatement();
 			statement.addBatch("BEGIN;");
-			statement.addBatch("INSERT INTO course(course_id, course_name) VALUES (" + courseID + ", " + name + ")");
+			statement
+					.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
+							+ courseID + ", " + name + ");");
 			statement.addBatch("COMMIT;");
 			statement.executeBatch();
 		} catch (SQLException e) {
@@ -143,13 +159,12 @@ public class DatabasImpl implements DatabaseInterface {
 	 */
 	@Override
 	public void addStudent(String studentID, String name) {
-		// TODO Auto-generated method stub
 		try {
 			Statement statement = connection.createStatement();
 			statement.addBatch("BEGIN;");
 			statement
 					.addBatch("INSERT INTO student(student_id, student_name) VALUES ("
-							+ studentID + ", " + name + ")");
+							+ studentID + ", " + name + ");");
 			statement.addBatch("COMMIT;");
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
@@ -163,13 +178,12 @@ public class DatabasImpl implements DatabaseInterface {
 	 */
 	@Override
 	public void addStudentToCourse(String studentID, String courseID) {
-		// TODO Auto-generated method stub
 		try {
 			Statement statement = connection.createStatement();
 			statement.addBatch("BEGIN;");
 			statement
 					.addBatch("INSERT INTO student_course(student_id, course_id) VALUES ("
-							+ studentID + ", " + courseID + ")");
+							+ studentID + ", " + courseID + ");");
 			statement.addBatch("COMMIT;");
 			statement.executeBatch();
 		} catch (SQLException e) {
@@ -184,8 +198,18 @@ public class DatabasImpl implements DatabaseInterface {
 	 */
 	@Override
 	public void signUpToTimeslot(int timeID, String studentID) {
-		// TODO Auto-generated method stub
-
+		try {
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement
+					.addBatch("INSERT INTO student_timeslot(timeslot_id, student_id) VALUES ("
+							+ timeID + "," + studentID + ");");
+			statement.addBatch("COMMIT;");
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -194,8 +218,18 @@ public class DatabasImpl implements DatabaseInterface {
 	 */
 	@Override
 	public void makeSessionRecurring(int sessionID) {
-		// TODO Auto-generated method stub
-
+		try {
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement
+					.addBatch("UPDATE session SET recurring = 1 WHERE session_id = "
+							+ sessionID + ";");
+			statement.addBatch("COMMIT;");
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -204,8 +238,17 @@ public class DatabasImpl implements DatabaseInterface {
 	 */
 	@Override
 	public void bookSession(int sessionID, int timeID) {
-		// TODO Auto-generated method stub
-
+		try {
+			Statement statement = connection.createStatement();
+			statement.addBatch("BEGIN;");
+			statement.addBatch("UPDATE timeslot SET session_id = " + sessionID
+					+ " WHERE time_id = " + timeID + ";");
+			statement.addBatch("COMMIT;");
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
 	}
 
 	
