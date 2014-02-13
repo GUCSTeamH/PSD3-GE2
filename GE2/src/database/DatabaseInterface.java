@@ -10,7 +10,6 @@ public interface DatabaseInterface {
 
 	/**
 	 * adds a session to the database
-	 * @param capacity integer value for capacity size
 	 * @param courseID string representing course id e.g DIM3 or PSD3
 	 * @param recurring boolean on if session is recurring (once a week)
 	 * @param compulsory boolean on if session is compulsory
@@ -20,6 +19,7 @@ public interface DatabaseInterface {
 
 	/**
 	 * adds a timeslot to the database
+	 * @param capacity integer value for capacity size
 	 * @param startTime string representation of start of timeslot
 	 * @param duration integer representing duration of timeslot in minutes
 	 * @param day integer representing day of timeslot: 0 = Monday...6 = Sunday
