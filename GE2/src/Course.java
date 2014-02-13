@@ -67,4 +67,7 @@ public class Course {
 	public void assignLecturerForACourse(Lecturer l){
 		lecturer = l;
 	}
+	public String toString(){
+		return "Course name: "+name+"\n"+"Course ID: "+ Integer.toString(id)+"\n";
+	}
 }
