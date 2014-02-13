@@ -1,6 +1,3 @@
-/**
- * 
- */
 package database;
 
 import java.sql.Connection;
@@ -87,6 +84,8 @@ public class DatabasImpl implements DatabaseInterface {
 	public void addSession(int capacity, String courseID, boolean recurring,
 			boolean compulsory) {
 		try {
+			int recurringInt = (recurring) ? 1 : 0;
+			int compulsoryInt = (compulsory) ? 1 : 0;
 			Statement statement = connection.createStatement();
 			statement.addBatch("BEGIN;");
 			statement
@@ -95,9 +94,9 @@ public class DatabasImpl implements DatabaseInterface {
 							+ ","
 							+ capacity
 							+ ","
-							+ recurring
+							+ recurringInt
 							+ ","
-							+ compulsory + ");");
+							+ compulsoryInt + ");");
 			statement.addBatch("COMMIT;");
 			statement.executeBatch();
 		} catch (SQLException e) {

@@ -4,6 +4,11 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+/**
+ * 
+ * @author Michael
+ *
+ */
 public class Activator implements BundleActivator {
 
 	/*
