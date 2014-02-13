@@ -32,6 +32,8 @@ public class Consumer {
 	
 	public void startStud(){
 		
+		System.out.println(stud.checkSession());
+		
 	}
 	
 	public void startAdmin(){

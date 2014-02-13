@@ -60,13 +60,12 @@ public class LecturerImpl implements LecturerInterface {
 	}
 	
 
-	public void seeDetails(int sessionId){
+	public void seeDetails(int courseId){
 		
-		//get session from db
+		db.getCourseSessionDetails(courseId);
 		
-		//display details for all timetable slots
+		System.out.println("Lecturer : details not available for session: "+courseId);
 		
-		System.out.println("Lecturer : details not available for session: "+sessionId);
 		
 	}
 

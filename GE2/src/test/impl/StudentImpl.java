@@ -14,6 +14,7 @@ public class StudentImpl extends User implements StudentInterface {
 	
 	
 	public StudentImpl(){
+		matric="1";
 		
 	}
 	
@@ -30,6 +31,7 @@ public class StudentImpl extends User implements StudentInterface {
 	public boolean checkSession(){
 		//get list of compulsory sessions
 		
+		db.checkCompulsorySessions(this.matric);
 		return true;
 	}
 	
