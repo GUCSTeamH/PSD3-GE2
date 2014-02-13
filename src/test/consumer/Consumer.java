@@ -31,7 +31,7 @@ public class Consumer {
 	}
 	
 	public void startStud(){
-		
+		stud.bookSession(9);
 		System.out.println(stud.checkSession());
 		
 	}
