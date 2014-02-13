@@ -1,5 +1,3 @@
-package base;
-
 public class Admin extends User{
 
 	Admin(String n, String s, String mail) {

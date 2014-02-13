@@ -1,7 +1,3 @@
-package base;
-
-import base.User;
-
 
 public class Student extends User {
 private String studentid;
