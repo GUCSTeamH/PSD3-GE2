@@ -51,7 +51,6 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = DriverManager
 					.getConnection("jdbc:derby:data/BookingSystem;create=true");
 			Statement statement = connection.createStatement();
-			// statement.addBatch("BEGIN;");
 			if (!tableExists("course")) {
 				statement
 						.execute("CREATE TABLE course(course_id VARCHAR(128) PRIMARY KEY, course_name VARCHAR(128))");
@@ -59,7 +58,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			if (!tableExists("student")) {
 				statement
-						.execute("CREATE TABLE student(student_id VARCHAR(128) PRIMARY KEY, student_name VARCHAR(128)");
+						.execute("CREATE TABLE student(student_id VARCHAR(128) PRIMARY KEY, student_name VARCHAR(128))");
 			}
 
 			if (!tableExists("session")) {
@@ -91,9 +90,7 @@ public class DatabaseImpl implements DatabaseInterface {
 				statement
 						.execute("CREATE TABLE student_timeslot(student_id VARCHAR(128), timeslot_id INTEGER)");
 			}
-
-			// statement.addBatch("COMMIT;");
-			statement.executeBatch();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,7 +112,6 @@ public class DatabaseImpl implements DatabaseInterface {
 			int recurringInt = (recurring) ? 1 : 0;
 			int compulsoryInt = (compulsory) ? 1 : 0;
 			Statement statement = connection.createStatement();
-			//statement.addBatch("BEGIN;");
 			statement
 					.addBatch("INSERT INTO session (course_id, recurring, compulsory) VALUES ("
 							+ courseID
@@ -123,12 +119,13 @@ public class DatabaseImpl implements DatabaseInterface {
 							+ recurringInt
 							+ ","
 							+ compulsoryInt + ");");
-			//statement.addBatch("COMMIT;");
 			statement.executeBatch();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 	/*
@@ -154,8 +151,8 @@ public class DatabaseImpl implements DatabaseInterface {
 							+ day
 							+ ","
 							+ room + "," + capacity + ");");
-			//statement.addBatch("COMMIT;");
 			statement.executeBatch();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -174,12 +171,11 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = DriverManager
 					.getConnection("jdbc:derby:data/BookingSystem;create=true");
 			Statement statement = connection.createStatement();
-			//statement.addBatch("BEGIN;");
 			statement
 					.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
 							+ courseID + ", " + name + ");");
-			//statement.addBatch("COMMIT;");
 			statement.executeBatch();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generate catch block
 			e.printStackTrace();
@@ -198,11 +194,10 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = DriverManager
 					.getConnection("jdbc:derby:data/BookingSystem;create=true");
 			Statement statement = connection.createStatement();
-			//statement.addBatch("BEGIN;");
 			statement
 					.addBatch("INSERT INTO student(student_id, student_name) VALUES ("
 							+ studentID + ", " + name + ");");
-			//statement.addBatch("COMMIT;");
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
 			e.printStackTrace();
@@ -221,12 +216,11 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = DriverManager
 					.getConnection("jdbc:derby:data/BookingSystem;create=true");
 			Statement statement = connection.createStatement();
-			//statement.addBatch("BEGIN;");
 			statement
 					.addBatch("INSERT INTO student_course(student_id, course_id) VALUES ("
 							+ studentID + ", " + courseID + ");");
-			//statement.addBatch("COMMIT;");
 			statement.executeBatch();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
 			e.printStackTrace();
@@ -249,15 +243,14 @@ public class DatabaseImpl implements DatabaseInterface {
 							+ timeID + ";");
 			int session_id = rs.getInt("session_id");
 
-			//statement.addBatch("BEGIN;");
 			statement
 					.addBatch("INSERT INTO student_timeslot(timeslot_id, student_id) VALUES ("
 							+ timeID + "," + studentID + ");");
 			statement
 					.addBatch("INSERT INTO student_session(student_id, session_id) VALUES ("
 							+ studentID + ", " + session_id + ")");
-			//statement.addBatch("COMMIT;");
 			statement.executeBatch();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
 			e.printStackTrace();
@@ -275,12 +268,11 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = DriverManager
 					.getConnection("jdbc:derby:data/BookingSystem;create=true");
 			Statement statement = connection.createStatement();
-			//statement.addBatch("BEGIN;");
 			statement
 					.addBatch("UPDATE session SET recurring = 1 WHERE session_id = "
 							+ sessionID + ";");
-			//statement.addBatch("COMMIT;");
 			statement.executeBatch();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
 			e.printStackTrace();
@@ -298,11 +290,10 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = DriverManager
 					.getConnection("jdbc:derby:data/BookingSystem;create=true");
 			Statement statement = connection.createStatement();
-			//statement.addBatch("BEGIN;");
 			statement.addBatch("UPDATE timeslot SET session_id = " + sessionID
 					+ " WHERE time_id = " + timeID + ";");
-			//statement.addBatch("COMMIT;");
 			statement.executeBatch();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
 			e.printStackTrace();
@@ -327,6 +318,7 @@ public class DatabaseImpl implements DatabaseInterface {
 					.executeQuery("SELECT student_course.course_id, session.session_id FROM (SELECT s.session_id, s.course_id FROM session AS s WHERE s.compulsory = 1) AS session INNER JOIN (SELECT c.course_id FROM course AS c) AS course ON session.course_id = course.course_id INNER JOIN student_course ON student_course.course_id = course.course_id INNER JOIN (SELECT st.student_id FROM student AS st WHERE st.student_id = "
 							+ studentID
 							+ ") AS student ON student.student_id = student_course.student_id WHERE session.session_id NOT IN (SELECT s_s.session_id FROM student_session AS s_s WHERE s_s.student_id = student.student_id)");
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
 			e.printStackTrace();
@@ -351,6 +343,7 @@ public class DatabaseImpl implements DatabaseInterface {
 					.executeQuery("SELECT timeslot.time, timeslot.room, tutor.tutor_name, student.student_id, student.student_name FROM (SELECT s.session_id FROM session AS s WHERE course_id = "
 							+ courseID
 							+ ") AS session INNER JOIN (SELECT t.time, t.room, t.tutor_id, t.timeslot_id, t.session_id FROM timeslot AS t) AS timeslot ON session.session_id = timeslot.session_id INNER JOIN (SELECT st.student_id, st.timeslot_id FROM student_timeslot AS st) AS student_timeslot ON timeslot.timeslot_id = student_timeslot.timeslot_id INNER JOIN (SELECT s.student_name, s.student_id FROM student AS s) AS student ON student.student_id = student_timeslot.student_id INNER JOIN (SELECT tt.tutor_id, tt.tutor_name FROM tutor AS tt ) AS tutor ON tutor.tutor_id = timeslot.tutor_id");
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
 			e.printStackTrace();

@@ -27,8 +27,8 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		db = new DatabaseImpl();
-		db.connect();
-		//db.createTables();
+//		db.connect();
+		db.createTables();
 		
 		dbinterface = db;
 		
@@ -43,7 +43,7 @@ public class Activator implements BundleActivator {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		db.disconnect();
+//		db.disconnect();
 		databaseInterfaceRegistration.unregister();
 	}
 

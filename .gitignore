@@ -1,3 +1,5 @@
-GE2/bin/*
-GE2/bundle/*
+GE2/bin/
+GE2/bundle/
+data/
+felix-cache/
 *.*~
