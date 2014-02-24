@@ -1,9 +1,9 @@
 package test.consumer;
 
-import test.base.Session.SessionType;
-import test.inter.AdminInterface;
-import test.inter.LecturerInterface;
-import test.inter.StudentInterface;
+import uk.ac.glasgow.teamH.base.Session.SessionType;
+import uk.ac.glasgow.teamH.user.AdminInterface;
+import uk.ac.glasgow.teamH.user.LecturerInterface;
+import uk.ac.glasgow.teamH.user.StudentInterface;
 
 public class Consumer {
 

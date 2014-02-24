@@ -4,9 +4,9 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import test.inter.AdminInterface;
-import test.inter.LecturerInterface;
-import test.inter.StudentInterface;
+import uk.ac.glasgow.teamH.user.AdminInterface;
+import uk.ac.glasgow.teamH.user.LecturerInterface;
+import uk.ac.glasgow.teamH.user.StudentInterface;
 
 public class Activator implements BundleActivator {
 	private Consumer consLect;
