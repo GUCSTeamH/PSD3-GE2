@@ -1,17 +1,17 @@
 package test.impl;
 
-//import database.DatabaseInterface;
+import database.DatabaseInterface;
 import test.base.Room;
 import test.base.Timeslot;
 import test.base.TimetableSlot;
 import test.inter.AdminInterface;
 
 public class AdminImpl implements AdminInterface {
-	//DatabaseInterface db;
+	DatabaseInterface db;
 
 	
 	public void createTimeSlot() {
-		//db.addTimeslot(50,"9.00", 1, 3, "507");
+		db.addTimeslot(50,"9.00", 1, 3, "507");
 		
 		System.out.println("new timeslot created ");
 		
@@ -26,7 +26,7 @@ public class AdminImpl implements AdminInterface {
 	
 	public void addTimeToSession(int sessionId, int timeId) {
 		System.out.println("added timeslot to a session");
-		//db.bookSession(sessionId, timeId);
+		db.bookSession(sessionId, timeId);
 	}
 	
 	
