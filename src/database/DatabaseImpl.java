@@ -13,29 +13,35 @@ import java.sql.Statement;
  */
 public class DatabaseImpl implements DatabaseInterface {
 	Connection connection = null;
+	Statement stmt = null;
+	
+	private static final String connectionString =
+			"jdbc:derby:data/mycampus5;create=true";
 
-	void connect() {
+
+	public DatabaseImpl(){
 		try {
-			// create a database connection
-			// Class.forName("org.sqlite.JDBC");
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
+			connection=getDatabaseConnection();
+			createTables();
 		} catch (SQLException e) {
-			// if the error message is "out of memory",
-			// it probably means no database file is found
-			System.err.println(e.getMessage());
-/*		} catch (ClassNotFoundException e) {
-			e.printStackTrace();*/
-		} finally {
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				// connection close failed.
-				System.err.println(e);
-			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	private static Connection getDatabaseConnection ()
+			throws SQLException{
+			return DriverManager.getConnection(connectionString);
+		}
+
+	
+	
+
+	
+	
+
 
 	void disconnect() {
 		try {
@@ -48,48 +54,187 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	void createTables() {
 		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
+			System.out.println("In create tables");
+			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 			if (!tableExists("course")) {
 				statement
-						.execute("CREATE TABLE course(course_id VARCHAR(128) PRIMARY KEY, course_name VARCHAR(128), session_id INTEGER, FOREIGN KEY (session_id) REFERENCES session (session_id))");
+						.execute("CREATE TABLE course(course_id INTEGER PRIMARY KEY, course_name VARCHAR(128))");
+				System.out.println("Created course table");
 			}
 
 			if (!tableExists("student")) {
 				statement
-						.execute("CREATE TABLE student(student_id VARCHAR(128) PRIMARY KEY, student_name VARCHAR(128),course_id VARCHAR(128),session_id INTEGER, timetableslot_id INTEGER,FOREIGN KEY (course_id) REFERENCES course (course_id), FOREIGN KEY (session_id) REFERENCES session (session_id),FOREIGN KEY (session_id) REFERENCES timetableslot (timetableslot_id))");
+						.execute("CREATE TABLE student(student_id INTEGER PRIMARY KEY, student_name VARCHAR(128))");
+				System.out.println("Created student table");
 			}
-
-			if (!tableExists("session")) {
-				statement
-						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), recurring VARCHAR(128), compulsory BOOLEAN,timetableslot_id INTEGER, staff_id INTEGER, FOREIGN KEY (timetableslot_id) REFERENCES timetableslot (timetableslot_id),  FOREIGN KEY (staff_id) REFERENCES staff (staff_id))");
-			}
-
 			if (!tableExists("staff")) {
+
 				statement
 						.execute("CREATE TABLE staff(staff_id INTEGER PRIMARY KEY, staff_name VARCHAR(128))");
+				System.out.println("Created staff table");
+			}
+			if (!tableExists("session")) {
+				statement
+						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY, recurring VARCHAR(128), compulsory BOOLEAN,timetableslot_id INTEGER, staff_id INTEGER,"
+								+ "  FOREIGN KEY (staff_id) REFERENCES staff (staff_id))");
+				System.out.println("Created session table");
+			}
+			if(!tableExists("timetableslot")){
+				statement
+				.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER PRIMARY KEY, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,session_id INTEGER)");
+				
 			}
 
-			if (!tableExists("timetableslot")) {
-				statement
-						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN)");
-			}
 
-			if (!tableExists("student_course")) {
-				statement
-						.execute("CREATE TABLE student_course(student_id VARCHAR(128), course_id VARCHAR(128))");
-			}
 
-			if (!tableExists("student_session")) {
-				statement
-						.execute("CREATE TABLE student_session(student_id VARCHAR(128), session_id INTEGER)");
-			}
+				if (!tableExists("student_course_session")) {
+					statement
+							.execute("CREATE TABLE student_course_session(student_id INTEGER, course_id INTEGER,session_id INTEGER,timetableslot_id INTEGER, PRIMARY KEY(student_id,course_id,session_id))");
+					System.out.println("Created student_course_session table");
+				}
 
-			if (!tableExists("student_timeslot")) {
-				statement
-						.execute("CREATE TABLE student_timeslot(student_id VARCHAR(128), timeslot_id INTEGER)");
+				if (!tableExists("student_session")) {
+					statement
+							.execute("CREATE TABLE student_session(student_id INTEGER, session_id INTEGER)");
+				}
+
+				//if (!tableExists("student_timeslot")) {
+				//	statement
+				//			.execute("CREATE TABLE student_timeslot(student_id INTEGER, timeslot_id INTEGER)");
+				//}
+				if (!tableExists("session_timetableslot")) {
+					statement
+							.execute("CREATE TABLE session_timetableslot(session_id INTEGER, timetableslot_id INTEGER)");
+					System.out.println("Created session_timetableslot table");
+				}
+				if (!tableExists("mycampus_authentication")) {
+					statement
+							.execute("CREATE TABLE mycampus_authentication(username VARCHAR(128) NOT NULL PRIMARY KEY, password VARCHAR(128) NOT NULL UNIQUE, usertype VARCHAR(128))");
+					System.out.println("Created authentication table");
+				}
+				if (!tableExists("mycampus_course")) {
+					statement
+							.execute("CREATE TABLE mycampus_course(course_id INTEGER PRIMARY KEY, course_name VARCHAR(128), staff_id INTEGER, FOREIGN KEY (staff_id) REFERENCES staff (staff_id))");
+					System.out.println("Created mycampus_course table");
+				
+				}
+				if (!tableExists("course_session")) {
+					statement
+							.execute("CREATE TABLE course_session(course_id INTEGER,session_id INTEGER,PRIMARY KEY(course_id, session_id))");
+					System.out.println("Created course_session table");
+				
+				}
+				 existingTables();
+				connection.close();
 			}
+		 catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+//2.-OK
+	@Override
+	public void addSession(int courseID, int sessionID, boolean compulsory) {
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			statement.addBatch("Delete from course_session ");
+			statement.executeBatch();
+			statement.addBatch("Delete from session ");
+			statement.executeBatch();
+			statement
+					.addBatch("INSERT INTO session (session_id, compulsory) VALUES ("
+							+ sessionID + "," + compulsory + ")");
+			statement.executeBatch();
+
+			statement
+					.addBatch("INSERT INTO course_session (course_id, session_id) VALUES ("
+							+ courseID + "," + sessionID + ")");
+			statement.executeBatch();
+
+			String query1 = "SELECT * FROM SESSION";
+			String query2 = "SELECT * FROM course_session";
+
+			ResultSet result1 = statement.executeQuery(query1);
+			System.out.println("Table Session");
+			System.out.println("---------------------------------------");
+			while (result1.next()) {
+				System.out.println(result1.getInt(1) + " "
+						+ result1.getBoolean(2));
+			}
+			System.out.println("---------------------------------------");
+
+			ResultSet result2 = statement.executeQuery(query2);
+			System.out.println("Table Course_Session");
+			System.out.println("---------------------------------------");
+			while (result2.next()) {
+				System.out.println(result2.getInt(1) + " " + result2.getInt(2));
+			}
+			System.out.println("---------------------------------------");
+
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	public String getTableInfo(String table){
+		String r=table + ":\n--------------------------------------------"+"\n";
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			String query = "SELECT * FROM " + table;	
+			ResultSet result= statement.executeQuery(query);
+
+			while(result.next()){
+				r+=result.getInt(1)+"\n";
+			}
+			r+="\n------------------------------------------\n";
+			connection.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		return r;
+	}
+
+	//8-OK
+	@Override
+	public void assignRoomToTimetableslot(int timetableslotID, String room) {
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			statement.addBatch("Delete from timetableslot ");
+			statement.executeBatch();
+			statement
+			.addBatch("INSERT INTO timetableslot (timetableslot_id) VALUES ("
+					+ timetableslotID+ ")");
+	statement.executeBatch();
+	
+			statement.addBatch("UPDATE timetableslot SET room = " + "'"+room+"'"
+					+ " WHERE timetableslot_id = " + timetableslotID );
+			statement.executeBatch();
+	
+	
+			String query = "SELECT * FROM timetableslot";
+
+			ResultSet result = statement.executeQuery(query);
+			System.out.println("Table Timetableslot");
+			System.out.println("---------------------------------------");
+			while (result.next()) {
+				System.out.println(result.getInt(1) + " "
+						+ result.getString(7));
+			}
+			System.out.println("---------------------------------------");
 			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -97,84 +242,106 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#addSession(int, java.lang.String,
-	 * boolean, boolean)
-	 */
+	
+	
+	//1-OK
 	@Override
-	public void addSession(String courseID, boolean recurring,
-			boolean compulsory) {
+	public void importMycampusCourse(int courseID) {
 		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
-			int recurringInt = (recurring) ? 1 : 0;
-			int compulsoryInt = (compulsory) ? 1 : 0;
+			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 			statement
-					.addBatch("INSERT INTO session (course_id, recurring, compulsory) VALUES ("
-							+ courseID
-							+ ","
-							+ recurringInt
-							+ ","
-							+ compulsoryInt + ");");
-			statement.executeBatch();
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#addTimeslot(int, java.lang.String,
-	 * java.lang.String, int, java.lang.String)
-	 */
-	@Override
-	public void addTimeslot(int capacity, String startTime, int duration,
-			int day, String room) {
-		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
-			Statement statement = connection.createStatement();
-//			statement.addBatch("BEGIN;");
+			.addBatch("Delete from course ");
+	statement.executeBatch();
+			String getCourseFromMyCampus= "SELECT * FROM mycampus_course WHERE course_id="+courseID;
+			ResultSet info=statement.executeQuery(getCourseFromMyCampus);
+			if(info.next()){
 			statement
-					.addBatch("INSERT INTO timeslot (time, duration, day, room, capacity) VALUES ("
-							+ startTime
+					.addBatch("INSERT INTO course VALUES ("
+							+ info.getInt(1)
 							+ ","
-							+ duration
-							+ ","
-							+ day
-							+ ","
-							+ room + "," + capacity + ");");
+							+ "'"+info.getString(2)+"'"
+							+ ")");
 			statement.executeBatch();
+			String query = "Select * FROM course";
+			ResultSet result  = statement.executeQuery(query);
+			System.out.println("---------------------------------------");
+			while(result.next()){
+				System.out.println(result.getInt(1)+" "+result.getString(2));
+			}
+			System.out.println("---------------------------------------");}
 			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#addCourse(java.lang.String,
-	 * java.lang.String)
-	 */
+	
+	
+	
+	//4-OK
 	@Override
-	public void addCourse(String courseID, String name) {
+	public void specifySessionRecurrence(int sessionID,String recurrence) {
 		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
+			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 			statement
-					.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
-							+ courseID + ", " + name + ");");
+			.addBatch("Delete from session ");
+	statement.executeBatch();
+	statement
+	.addBatch("INSERT INTO session (session_id) VALUES ("
+			+ sessionID
+			+ ")");
+statement.executeBatch();
+			//statement
+			//		.addBatch("UPDATE session SET recurring = ?" + recurrence + " WHERE session_id = "
+			//				+ sessionID );
+			statement.executeUpdate("UPDATE session SET recurring = " + "'"+recurrence+"'" + " WHERE session_id = "
+							+ sessionID);
+			//statement.executeBatch();
+			String query = "Select * FROM session";
+			ResultSet result  = statement.executeQuery(query);
+			System.out.println("---------------------------------------");
+			while(result.next()){
+				System.out.println(result.getInt(1)+" "+result.getString(2));
+			}
+			System.out.println("---------------------------------------");
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
+	}
+
+	//11-OK
+	@Override
+	public void bookTimetableSlot(int studentID, int courseID, int sessionID,int timetableslotID) {
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			statement
+			.addBatch("Delete from student_course_session ");
+	statement.executeBatch();
+	statement
+	.addBatch("INSERT INTO student_course_session (student_id,session_id,course_id) VALUES ("
+			+ studentID
+			+","
+			+sessionID
+			+","
+			+courseID
+			+ ")");
+statement.executeBatch();
+			statement
+			.addBatch("UPDATE student_course_session SET timetableslot_id = " + timetableslotID + " WHERE session_id = "
+					+ sessionID + " AND student_id = " + studentID + " AND course_id = "+ courseID);
 			statement.executeBatch();
+			String query = "Select * FROM student_course_session";
+			ResultSet result  = statement.executeQuery(query);
+			System.out.println("---------------------------------------");
+			while(result.next()){
+				System.out.println(result.getInt(1)+" "+result.getInt(2)+" "+result.getInt(3)+" "+result.getInt(4));
+			}
+			System.out.println("---------------------------------------");
 			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generate catch block
@@ -182,180 +349,337 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#addStudent(java.lang.String,
-	 * java.lang.String)
-	 */
+	
+	//12-OK
 	@Override
-	public void addStudent(String studentID, String name) {
+	public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,int courseID) {
 		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
+			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
+			
 			statement
-					.addBatch("INSERT INTO student(student_id, student_name) VALUES ("
-							+ studentID + ", " + name + ");");
+			.addBatch("Delete from student_course_session ");
+	statement.executeBatch();
+	statement
+	.addBatch("Delete from session ");
+statement.executeBatch();
+	statement
+	.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
+			+ studentID
+			+","
+			+sessionID
+			+","
+			+courseID
+			+ ")");
+statement.executeBatch();
+
+statement
+.addBatch("INSERT INTO session(session_id,compulsory) VALUES ("
+		+ sessionID
+		+","
+		+true
+		+ ")");
+statement.executeBatch();
+			
+			String query = "SELECT s.session_id FROM session AS s, student_course_session AS scs WHERE student_id = "+ studentID + " AND scs.timetableslot_id IS NOT NULL AND s.session_id = scs.session_id AND compulsory = true";
+			ResultSet result = statement.executeQuery(query);
+			boolean r=result.next();
 			connection.close();
+			return r;
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+			return false;
+		}
+	
+	}
+
+	//14-OK
+	@Override
+	public String getTimetableslotDetails(int sessionID) {
+		String r="";
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			
+			
+			
+			statement
+			.addBatch("Delete from timetableslot ");
+	statement.executeBatch();
+	
+	
+	statement
+	.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
+			+ 1
+			+","
+			+sessionID
+			+","
+			+"'"+"BO715"+"'"
+			+","
+			+1
+			+","
+			+2
+			+ ")");
+	statement.executeBatch();
+	for(int i=0;i<15;i++){
+	statement
+	.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
+			+ i
+			+","
+			+sessionID
+			+","
+			+ 100
+			+ ")");
+	statement.executeBatch();
+	}
+			
+			String queryDetails = "SELECT * FROM timetableslot WHERE session_id= "+sessionID;
+			String queryStudents = "SELECT student_id FROM student_course_session WHERE session_id ="+sessionID;
+			ResultSet detailsResult=statement.executeQuery(queryDetails);
+			if(detailsResult.next()){
+				r="Details:" + detailsResult.getInt(1);
+			ResultSet students = statement.executeQuery(queryStudents);
+			r+=" "+ " Students: ";
+			while(students.next()){
+				r+=students.getInt(1)+",";
+			}}
+			connection.close();
+			System.out.println(r);
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
 			e.printStackTrace();
 		}
+		return r; 
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#addStudentToCourse(java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public void addStudentToCourse(String studentID, String courseID) {
+	
+	
+	//non-functional distinguish between user types-OK
+	public String getUserRole(String username){
 		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
+			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
+			
+			
 			statement
-					.addBatch("INSERT INTO student_course(student_id, course_id) VALUES ("
-							+ studentID + ", " + courseID + ");");
+			.addBatch("Delete from mycampus_authentication ");
+	statement.executeBatch();
+	
+	
+	statement
+	.addBatch("INSERT INTO mycampus_authentication(username,password,usertype) VALUES ("
+			+ "'"+username+"'"
+			+","
+			+ "'"+"username"+"'"
+			+","
+			+"'"+"student"+"'"
+			+ ")");
+	statement.executeBatch();
+			
+			String query = "SELECT usertype FROM mycampus_authentication WHERE username= "+"'"+username+"'";
+			ResultSet result=statement.executeQuery(query);
+			String r="";
+			if(result.next()){
+			r="Type:" + result.getString(1); 
+			}
+			System.out.println(r);
+			connection.close();
+			return  r;
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+			return "";
+		}
+		
+	}
+	
+	//non-functional authenticate user-OK
+	public boolean authenticate(String username, String password){
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			
+			String query = "SELECT * FROM mycampus_authentication WHERE username= "+"'"+username+"'"+" AND password = "+"'"+password+"'";
+			ResultSet result=statement.executeQuery(query);
+			boolean r=result.next
+					();  
+			connection.close();
+			return r;
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	//non-functional support at least 100 courses-OK
+	public int supportNCourses(int n){
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			
+			statement
+			.addBatch("Delete from course ");
+	statement.executeBatch();
+			for (int i = 0; i<n; i++){		
+			statement
+					.addBatch("INSERT INTO course (course_id) VALUES ("
+							+ i
+							+ ")");
 			statement.executeBatch();
+			}
+			
+			String query = "SELECT * FROM course";
+			
+			
+			ResultSet result=statement.executeQuery(query);
+			int count=0;
+			while (result.next()){
+				//System.out.println(result.getInt(1));
+				count++;
+			}
+
+
 			connection.close();
+			return count;
 		} catch (SQLException e) {
-			// TODO Auto-generated method stub
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return 0;
 		}
+		
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#signUpToTimeslot(int, java.lang.String)
-	 */
-	@Override
-	public void signUpToTimeslot(int timeID, String studentID) {
+	
+	//non-functional support at least 10 sessions per course-OK
+	public int supportNSessionTypes(int n, int courseID){
 		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
+			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			ResultSet rs = statement
-					.executeQuery("SELECT session_id FROM timeslot WHERE timeslot_id = "
-							+ timeID + ";");
-			int session_id = rs.getInt("session_id");
-
+			
 			statement
-					.addBatch("INSERT INTO student_timeslot(timeslot_id, student_id) VALUES ("
-							+ timeID + "," + studentID + ");");
+			.addBatch("Delete from course_session ");
+	statement.executeBatch();
+			
+			for (int i = 0; i<n; i++){		
 			statement
-					.addBatch("INSERT INTO student_session(student_id, session_id) VALUES ("
-							+ studentID + ", " + session_id + ")");
-			statement.executeBatch();
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated method stub
-			e.printStackTrace();
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#makeSessionRecurring(int)
-	 */
-	@Override
-	public void makeSessionRecurring(int sessionID) {
-		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
-			Statement statement = connection.createStatement();
-			statement
-					.addBatch("UPDATE session SET recurring = 1 WHERE session_id = "
-							+ sessionID + ";");
-			statement.executeBatch();
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated method stub
-			e.printStackTrace();
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#bookSession(int, int)
-	 */
-	@Override
-	public void bookSession(int sessionID, int timeID) {
-		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
-			Statement statement = connection.createStatement();
-			statement.addBatch("UPDATE timeslot SET session_id = " + sessionID
-					+ " WHERE time_id = " + timeID + ";");
-			statement.executeBatch();
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated method stub
-			e.printStackTrace();
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#checkCompulsorySessions(java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public ResultSet checkCompulsorySessions(String studentID) {
-		ResultSet rs = null;
-		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
-			Statement statement = connection.createStatement();
-			statement.setQueryTimeout(30);
-			rs = statement
-					.executeQuery("SELECT student_course.course_id, session.session_id FROM (SELECT s.session_id, s.course_id FROM session AS s WHERE s.compulsory = 1) AS session INNER JOIN (SELECT c.course_id FROM course AS c) AS course ON session.course_id = course.course_id INNER JOIN student_course ON student_course.course_id = course.course_id INNER JOIN (SELECT st.student_id FROM student AS st WHERE st.student_id = "
-							+ studentID
-							+ ") AS student ON student.student_id = student_course.student_id WHERE session.session_id NOT IN (SELECT s_s.session_id FROM student_session AS s_s WHERE s_s.student_id = student.student_id)");
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated method stub
-			e.printStackTrace();
-		}
-		return rs;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see database.DatabaseInterface#getCourseSessionDetails(int)
-	 */
-	@Override
-	public ResultSet getCourseSessionDetails(int courseID) {
-		ResultSet rs = null;
-		try {
-			connection = DriverManager
-					.getConnection("jdbc:derby:data/BookingSystem;create=true");
-			Statement statement = connection.createStatement();
-			statement.setQueryTimeout(30);
-			rs = statement
-					.executeQuery("SELECT timeslot.time, timeslot.room, tutor.tutor_name, student.student_id, student.student_name FROM (SELECT s.session_id FROM session AS s WHERE course_id = "
+					.addBatch("INSERT INTO course_session (course_id,session_id) VALUES ("
 							+ courseID
-							+ ") AS session INNER JOIN (SELECT t.time, t.room, t.tutor_id, t.timeslot_id, t.session_id FROM timeslot AS t) AS timeslot ON session.session_id = timeslot.session_id INNER JOIN (SELECT st.student_id, st.timeslot_id FROM student_timeslot AS st) AS student_timeslot ON timeslot.timeslot_id = student_timeslot.timeslot_id INNER JOIN (SELECT s.student_name, s.student_id FROM student AS s) AS student ON student.student_id = student_timeslot.student_id INNER JOIN (SELECT tt.tutor_id, tt.tutor_name FROM tutor AS tt ) AS tutor ON tutor.tutor_id = timeslot.tutor_id");
+							+ ","
+							+ i
+							+ ")");
+			statement.executeBatch();
+			}
+			
+			String query = "SELECT count(session_id) FROM course_session WHERE course_id ="+courseID+ " GROUP BY course_id";
+			
+			
+			ResultSet result=statement.executeQuery(query);
+			int count=0;
+			if(result.next())
+				count = result.getInt(1);
+
+
 			connection.close();
+			return count;
 		} catch (SQLException e) {
-			// TODO Auto-generated method stub
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return 0;
 		}
-		return rs;
+		
 	}
+	
+	
+	
+	//non-functional support at least 20 timetableslots per session
+	public int supportNTimetableslotsPerSession(int n, int sessionID){
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			
+			statement
+			.addBatch("Delete from timetableslot ");
+	statement.executeBatch();
+			
+			for (int i = 0; i<n; i++){		
+			statement
+					.addBatch("INSERT INTO timetableslot (timetableslot_id,session_id) VALUES ("
+							+ i
+							+ ","
+							+ sessionID
+							+ ")");
+			statement.executeBatch();
+			}
+			
+			String query = "SELECT count(timetableslot_id) FROM timetableslot WHERE session_id ="+sessionID+ " GROUP BY session_id";
+			
+			
+			ResultSet result=statement.executeQuery(query);
+			int count = 0;
+			if(result.next())
+				count = result.getInt(1);
+
+
+			connection.close();
+			return count;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	
+	
+	//non-functional support at least 1000 users-OK
+	public int supportNUsers(int n){
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			
+			statement
+			.addBatch("Delete from mycampus_authentication ");
+	statement.executeBatch();
+	
+	
+			for (int i = 0; i < n; i++){		
+			statement
+					.addBatch("INSERT INTO mycampus_authentication (username,password) VALUES ("
+							+ "'"+i+"'"
+							+","
+							+"'"+i+"'"
+							+ ")");
+			statement.executeBatch();
+			}
+			
+			String query = "SELECT * FROM mycampus_authentication";
+			
+			
+			ResultSet result=statement.executeQuery(query);
+			int count=0;
+			while (result.next()){
+				count++;
+			}
+
+
+			connection.close();
+			return count;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	
 	
 	public Boolean tableExists(String tableName) 
 			throws SQLException{
 			
-		connection = DriverManager
-				.getConnection("jdbc:derby:data/BookingSystem;create=true");
+		connection = getDatabaseConnection();;
 			
 		DatabaseMetaData metaData = 
 			connection.getMetaData();
@@ -375,4 +699,67 @@ public class DatabaseImpl implements DatabaseInterface {
 		return result;
 	}
 
+	
+	public void existingTables() 
+			throws SQLException{
+			
+		connection = getDatabaseConnection();;
+			
+		DatabaseMetaData metaData = 
+			connection.getMetaData();
+							
+		ResultSet resultSet;
+			resultSet=metaData.getTables(null, null, "%", null);
+		while(resultSet.next()){
+			System.out.println(resultSet.getString(3));
+		}
+
+		resultSet.close();
+		connection.close();
+
+	}
+
+
+	
+	public void populateMyCampusCourse(){
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			statement
+			.addBatch("Delete from mycampus_course ");
+	statement.executeBatch();
+			for (int i = 0; i<20; i++){		
+			statement
+					.addBatch("INSERT INTO mycampus_course (course_id,course_name) VALUES ("
+							+ i
+							+","
+							+"'course"+i+"'"
+							+ ")");
+			statement.executeBatch();
+
+			}
+			
+			
+			String query = "SELECT * FROM mycampus_course";
+			ResultSet result=statement.executeQuery(query);
+			System.out.println("---------------------------------------");
+			while(result.next()){
+				System.out.println(result.getInt(1)+" "+result.getString(2));
+			}
+			System.out.println("---------------------------------------");
+
+			connection.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
+		
+		
+	}
+	
+	
 }
