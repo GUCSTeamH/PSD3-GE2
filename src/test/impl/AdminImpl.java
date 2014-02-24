@@ -2,7 +2,6 @@ package test.impl;
 
 import database.DatabaseInterface;
 import test.base.Room;
-import test.base.Timeslot;
 import test.base.TimetableSlot;
 import test.inter.AdminInterface;
 

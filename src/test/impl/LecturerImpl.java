@@ -7,7 +7,6 @@ import database.DatabaseInterface;
 import test.base.Course;
 import test.base.Session;
 import test.base.Session.SessionType;
-import test.base.Timeslot;
 import test.base.TimetableSlot;
 import test.inter.AdminInterface;
 import test.inter.LecturerInterface;
@@ -40,15 +39,17 @@ public class LecturerImpl implements LecturerInterface {
 	}
 	
 	public void addSessionToCourse(String courseId){
-		
-		Timeslot time = new Timeslot(3,"Friday",9,10);
-		Session s=new Session(154, SessionType.COMPULSORY, time);
+		// removed timetable slot as a session has multiple timetable slots and not one
+		Session s=new Session(154, SessionType.COMPULSORY);
 		
 		db.addSession(courseId, s.getSessionType()==SessionType.ONEOFF, s.getSessionType() == SessionType.COMPULSORY);
 		
 		System.out.println("Lecturer : session added to course: "+courseId);
 
 		
+	}
+	public void addTimetSlotToSession(Session s){
+		// add a timetable slot to a session
 	}
 	
 	public void specifyRecurrent(int sessionId){
