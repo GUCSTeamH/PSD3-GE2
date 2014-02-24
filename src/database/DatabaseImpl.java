@@ -53,27 +53,27 @@ public class DatabaseImpl implements DatabaseInterface {
 			Statement statement = connection.createStatement();
 			if (!tableExists("course")) {
 				statement
-						.execute("CREATE TABLE course(course_id VARCHAR(128) PRIMARY KEY, course_name VARCHAR(128))");
+						.execute("CREATE TABLE course(course_id VARCHAR(128) PRIMARY KEY, course_name VARCHAR(128), session_id INTEGER, FOREIGN KEY (session_id) REFERENCES session (session_id))");
 			}
 
 			if (!tableExists("student")) {
 				statement
-						.execute("CREATE TABLE student(student_id VARCHAR(128) PRIMARY KEY, student_name VARCHAR(128))");
+						.execute("CREATE TABLE student(student_id VARCHAR(128) PRIMARY KEY, student_name VARCHAR(128),course_id VARCHAR(128),session_id INTEGER, timetableslot_id INTEGER,FOREIGN KEY (course_id) REFERENCES course (course_id), FOREIGN KEY (session_id) REFERENCES session (session_id),FOREIGN KEY (session_id) REFERENCES timetableslot (timetableslot_id))");
 			}
 
 			if (!tableExists("session")) {
 				statement
-						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), course_id VARCHAR(128), recurring BOOLEAN, compulsory BOOLEAN)");
+						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), recurring VARCHAR(128), compulsory BOOLEAN,timetableslot_id INTEGER, staff_id INTEGER, FOREIGN KEY (timetableslot_id) REFERENCES timetableslot (timetableslot_id),  FOREIGN KEY (staff_id) REFERENCES staff (staff_id))");
 			}
 
-			if (!tableExists("tutor")) {
+			if (!tableExists("staff")) {
 				statement
-						.execute("CREATE TABLE tutor(tutor_id VARCHAR(128) PRIMARY KEY, tutor_name VARCHAR(128))");
+						.execute("CREATE TABLE staff(staff_id INTEGER PRIMARY KEY, staff_name VARCHAR(128))");
 			}
 
-			if (!tableExists("timeslot")) {
+			if (!tableExists("timetableslot")) {
 				statement
-						.execute("CREATE TABLE timeslot(timeslot_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), capacity INTEGER, time VARCHAR(128), duration INTEGER, day INTEGER, room VARCHAR(128), session_id INTEGER, tutor_id VARCHAR(128))");
+						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN)");
 			}
 
 			if (!tableExists("student_course")) {
