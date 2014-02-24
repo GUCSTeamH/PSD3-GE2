@@ -1,6 +1,6 @@
 package uk.ac.glasgow.teamH.user.impl;
 
-import uk.ac.glasgow.teamH.database.impl.DatabaseInterface;
+import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
 
 public class StudentImpl extends User implements StudentInterface {

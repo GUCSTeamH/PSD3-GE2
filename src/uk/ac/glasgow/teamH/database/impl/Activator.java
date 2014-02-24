@@ -1,11 +1,10 @@
-package uk.ac.glasgow.teamH.database;
+package uk.ac.glasgow.teamH.database.impl;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import uk.ac.glasgow.teamH.database.impl.DatabaseImpl;
-import uk.ac.glasgow.teamH.database.impl.DatabaseInterface;
+import uk.ac.glasgow.teamH.database.DatabaseInterface;
 
 
 /**

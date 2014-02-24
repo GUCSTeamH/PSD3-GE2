@@ -2,23 +2,27 @@ package uk.ac.glasgow.teamH.user.impl;
 
 import java.util.ArrayList;
 
-import uk.ac.glasgow.teamH.MyCampus.impl.MyCampusCommunicator;
-import uk.ac.glasgow.teamH.base.Course;
-import uk.ac.glasgow.teamH.base.Session;
-import uk.ac.glasgow.teamH.base.TimetableSlot;
-import uk.ac.glasgow.teamH.base.Session.SessionType;
-import uk.ac.glasgow.teamH.database.impl.DatabaseInterface;
-import uk.ac.glasgow.teamH.user.AdminInterface;
+import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;
+import uk.ac.glasgow.teamH.database.DatabaseInterface;
+import uk.ac.glasgow.teamH.user.Course;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
+import uk.ac.glasgow.teamH.user.Session;
+import uk.ac.glasgow.teamH.user.Session.SessionType;
 
-public class LecturerImpl implements LecturerInterface {
+public class LecturerImpl extends User implements LecturerInterface {
 
-	ArrayList something;
 	DatabaseInterface db;
 	MyCampusCommunicator mycampusCommunicator;
 	
 	public LecturerImpl(){
 		
+		super("Jack","John", "jack.john@dcs.gla.ac.uk", "password");
+		
+	}
+	
+	LecturerImpl(String n, String s, String mail,String password){
+		super(n, s, mail,password);
+
 	}
 	
 	public void importMyCampusCourse(){

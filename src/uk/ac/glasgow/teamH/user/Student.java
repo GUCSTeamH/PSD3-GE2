@@ -1,4 +1,4 @@
-package uk.ac.glasgow.teamH.base;
+package uk.ac.glasgow.teamH.user;
 
 import uk.ac.glasgow.teamH.user.impl.User;
 

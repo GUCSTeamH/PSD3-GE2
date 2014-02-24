@@ -1,6 +1,6 @@
 package uk.ac.glasgow.teamH.user;
 
-import uk.ac.glasgow.teamH.base.Session.SessionType;
+
 
 public interface LecturerInterface {
 

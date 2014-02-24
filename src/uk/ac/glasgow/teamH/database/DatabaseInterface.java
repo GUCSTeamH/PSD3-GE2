@@ -1,4 +1,4 @@
-package uk.ac.glasgow.teamH.database.impl;
+package uk.ac.glasgow.teamH.database;
 
 import java.sql.ResultSet;
 

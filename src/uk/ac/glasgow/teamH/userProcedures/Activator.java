@@ -1,4 +1,4 @@
-package test.consumer;
+package uk.ac.glasgow.teamH.userProcedures;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -9,35 +9,33 @@ import uk.ac.glasgow.teamH.user.LecturerInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
 
 public class Activator implements BundleActivator {
-	private Consumer consLect;
-	private Consumer consStud;
-	private Consumer consAdmin;
+	private LecturerActivities consLect;
+	private StudentActivities consStud;
+	private AdminActivities consAdmin;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		
 		ServiceReference refLec = context.getServiceReference(LecturerInterface.class.getName());
 		
-		consLect = new Consumer((LecturerInterface) context.getService(refLec));
+		consLect = new LecturerActivities((LecturerInterface) context.getService(refLec));
 		consLect.startLec();
+		consLect.importFromMycampus();
 		
 		ServiceReference refStud = context.getServiceReference(StudentInterface.class.getName());
 		
-		consStud = new Consumer((StudentInterface) context.getService(refStud));
-		consStud.startStud();
+		consStud = new StudentActivities((StudentInterface) context.getService(refStud));
 		
 		ServiceReference refAdmin = context.getServiceReference(AdminInterface.class.getName());
 		
-		consAdmin = new Consumer((AdminInterface) context.getService(refAdmin));
-		consAdmin.startAdmin();
+		consAdmin = new AdminActivities((AdminInterface) context.getService(refAdmin));
+		consAdmin.createNewTimeslot();
 	}
 
 	@Override
 	public void stop(BundleContext arg0) throws Exception {
 		
 		consLect.stop();
-		consStud.stop();
-		consAdmin.stop();
 		
 	}
 	

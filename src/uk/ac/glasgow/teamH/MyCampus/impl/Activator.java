@@ -5,6 +5,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import uk.ac.glasgow.teamH.MyCampus.AuthenticatorInterface;
+import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;
 
 
 

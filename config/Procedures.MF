@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: User Procedures
+Bundle-SymbolicName: uk.ac.glasgow.teamH.userProcedures
+Bundle-Version: 1.0.0
+Bundle-Activator: uk.ac.glasgow.teamH.userProcedures.Activator
+Bundle-Vendor: University of Glasgow
+Bundle-Localization: plugin
+Import-Package: uk.ac.glasgow.teamH.user,
+  org.osgi.framework;version="1.3.0"
+  

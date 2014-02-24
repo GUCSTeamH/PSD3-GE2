@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Database Implementation
+Bundle-SymbolicName: database-impl
+Bundle-Version: 1.0.0
+Bundle-Activator: uk.ac.glasgow.teamH.database.impl.Activator
+Bundle-Vendor: Team H
+Bundle-Localization: plugin
+Import-Package: uk.ac.glasgow.teamH.database, org.osgi.framework;version="1.3.0"

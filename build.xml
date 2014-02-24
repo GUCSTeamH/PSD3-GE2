@@ -102,65 +102,64 @@
 			
 			<fileset 
 				dir="bin/"
-				includes="MyCampus/*.class"
+				includes="uk/ac/glasgow/teamH/MyCampus/*.class"
 			/>
 		
 		</jar>
-		<jar update="no" destfile="lect-int.jar" manifest="config/LecturerInt.MF">
+		
+		<jar update="no" destfile="mycampus-impl.jar" manifest="config/MyCampusImpl.MF">
+					
+					<fileset 
+						dir="bin/"
+						includes="uk/ac/glasgow/teamH/MyCampus/impl/*.class"
+					/>
+				
+				</jar>
+		<jar update="no" destfile="user.jar" manifest="config/User.MF">
 			
 			<fileset 
 				dir="bin/"
-				includes="test/inter/*.class"
+				includes="uk/ac/glasgow/teamH/user/*.class"
 			/>
 		
 		</jar>
 
-		<jar update="no" destfile="base.jar" manifest="config/Base.MF">
-			
-			<fileset 
-
-				dir="bin/"
-				includes="test/base/*.class"
-
-			/>
-		
-		</jar>
-
-		<jar update="no" destfile="lect-impl.jar"  manifest="config/LecturerImp.MF">
+		<jar update="no" destfile="user-impl.jar"  manifest="config/UserImpl.MF">
 		
 			<fileset 
 				dir="bin/" 
-				includes="test/impl/*.class"
+				includes="uk/ac/glasgow/teamH/user/impl/*.class"
 			/>
 		
 		</jar>
 
-		<jar update="no" destfile="lect-activators.jar"  manifest="config/LecturerActivator.MF" >
-			
-			<fileset
-				dir="bin/"
-				includes="test/activator/*.class"
-			/>
-			
-		</jar>
-
-		<jar update="no" destfile="lect-consumer.jar"  manifest="config/LecturerConsumer.MF" >
-			
-			<fileset 
-				dir="bin/" 
-				includes="test/consumer/*.class"
-			/>
-			
-		</jar>
 		
 		<jar update="no" destfile="database.jar"  manifest="config/Database.MF" >
 			
 			<fileset
 				dir="bin/"
-				includes="database/*.class"
+				includes="uk/ac/glasgow/teamH/database/*.class"
 			/>
 			
 		</jar>
+		
+		<jar update="no" destfile="database-impl.jar"  manifest="config/DatabaseImpl.MF" >
+					
+					<fileset
+						dir="bin/"
+						includes="uk/ac/glasgow/teamH/database/*.class"
+					/>
+					
+				</jar>
+		
+		<jar update="no" destfile="userActivities.jar" manifest="config/Procedures.MF">
+					
+					<fileset 
+						dir="bin/"
+						includes="uk/ac/glasgow/teamH/userProcedures/*.class"
+					/>
+				
+				</jar>
 
 	</target>
 	

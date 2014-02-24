@@ -1,6 +1,6 @@
-package uk.ac.glasgow.teamH.MyCampus.impl;
+package uk.ac.glasgow.teamH.MyCampus;
 
-import uk.ac.glasgow.teamH.base.Course;
+import uk.ac.glasgow.teamH.user.Course;
 
 
 
