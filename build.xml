@@ -147,7 +147,7 @@
 					
 					<fileset
 						dir="bin/"
-						includes="uk/ac/glasgow/teamH/database/*.class"
+						includes="uk/ac/glasgow/teamH/database/impl/*.class"
 					/>
 					
 				</jar>

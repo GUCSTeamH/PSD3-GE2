@@ -3,3 +3,4 @@ GE2/bundle/
 data/
 felix-cache/
 *.*~
+/bin
