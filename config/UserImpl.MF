@@ -6,5 +6,5 @@ Bundle-Version: 1.0.0
 Bundle-Activator: uk.ac.glasgow.teamH.user.impl.Activator
 Bundle-Vendor: Team H
 Bundle-Localization: plugin
-Import-Package: uk.ac.glasgow.teamH.user, org.osgi.framework;version="1.3.0"
+Import-Package: uk.ac.glasgow.teamH.user, uk.ac.glasgow.teamH.database, uk.ac.glasgow.teamH.MyCampus,org.osgi.framework;version="1.3.0"
   

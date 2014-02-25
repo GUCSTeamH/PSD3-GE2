@@ -13,9 +13,10 @@ public class LecturerImpl extends User implements LecturerInterface {
 	DatabaseInterface db;
 	MyCampusCommunicator mycampusCommunicator;
 	
-	public LecturerImpl(){
+	public LecturerImpl(DatabaseInterface db){
 		
 		super("Jack","John", "jack.john@dcs.gla.ac.uk", "password");
+		this.db = db;
 		
 	}
 	

@@ -7,8 +7,12 @@ import uk.ac.glasgow.teamH.user.TimetableSlot;
 
 public class AdminImpl implements AdminInterface {
 	DatabaseInterface db;
+	String matric;
 
-	
+	AdminImpl(DatabaseInterface db){
+		this.db=db;
+		matric="110099c";
+	}
 	
 	public void assignRoomtoTimetableSlot(int slot, String room){
 		System.out.println("Admin : room booked for slot: "+slot);

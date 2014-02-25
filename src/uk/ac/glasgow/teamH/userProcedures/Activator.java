@@ -4,6 +4,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.AdminInterface;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
@@ -15,7 +16,7 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		
+
 		ServiceReference refLec = context.getServiceReference(LecturerInterface.class.getName());
 		
 		consLect = new LecturerActivities((LecturerInterface) context.getService(refLec));

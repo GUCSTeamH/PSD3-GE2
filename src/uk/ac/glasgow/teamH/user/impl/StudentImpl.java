@@ -13,8 +13,9 @@ public class StudentImpl extends User implements StudentInterface {
 	}
 	
 	
-	public StudentImpl(){
-		matric="1";
+	public StudentImpl(DatabaseInterface db){
+		this.db=db;
+		matric="112233f";
 		
 	}
 	

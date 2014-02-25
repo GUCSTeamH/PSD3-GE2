@@ -23,6 +23,7 @@
 	>
 		
 		<delete dir="bin" />
+		<delete dir="felix-cache" />
 	
 	</target>
 	
