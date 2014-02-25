@@ -14,7 +14,7 @@ import uk.ac.glasgow.teamH.database.DatabaseInterface;
  * 
  */
 public class DatabaseImpl implements DatabaseInterface {
-	Connection connection = null;
+	static Connection connection = null;
 	Statement stmt = null;
 
 	private static final String connectionString = "jdbc:derby:data/mycampus5;create=true";
@@ -42,24 +42,29 @@ public class DatabaseImpl implements DatabaseInterface {
 			e.printStackTrace();
 		}
 	}
-	public void populate(){
+	private static void populate() {
+		// TODO Auto-generated method stub
 		try{connection = getDatabaseConnection();
 		Statement statement = connection.createStatement();
-		ArrayList<Integer> dupSid=new ArrayList<Integer>();
+		java.util.ArrayList<Integer> dupSid=new java.util.ArrayList<Integer>();
 		dupSid.add(0);
-		ArrayList<Integer> dupTid=new ArrayList<Integer>();
+		java.util.ArrayList<Integer> dupTid=new java.util.ArrayList<Integer>();
 		dupTid.add(0);
-		ArrayList<Integer> dupStudentid=new ArrayList<Integer>();
+		java.util.ArrayList<Integer> dupStudentid=new java.util.ArrayList<Integer>();
 		dupStudentid.add(0);
-		ArrayList<Integer> dupStaffid=new ArrayList<Integer>();
+		java.util.ArrayList<Integer> dupStaffid=new java.util.ArrayList<Integer>();
 		dupStaffid.add(0);
+		java.util.ArrayList<Integer> Cid=new java.util.ArrayList<Integer>();
+		Cid.add(25);
 		boolean compulsory=false;
 		for (int i = 0; i < 20; i++) {
 			String name="A";
+			int courseid=(int)(Math.random() * (7000+i)) + 1400;
 			int sessionID=(int)(Math.random() * (5000+i)) + 1000;
 			int staffID=(int)(Math.random() * (7000+i)) + 1400;
 			int studentID=(int)(Math.random() * (6000+i)) + 1005;
 			int timeID=(int)(Math.random() * (3000+i)) + 1005;
+			if(Cid.contains(i))courseid=(int)(Math.random() * (7000+i)) + 1400;
 			while(dupStaffid.contains(staffID)){staffID=(int)(Math.random() * (7000+i)) + 1400;}
 			while(dupTid.contains(timeID)){timeID=(int)(Math.random() * (3000+i)) + 1005;}
 			while(dupStudentid.contains(studentID)){studentID=(int)(Math.random() * (6000+i)) + 1005;}
@@ -77,11 +82,11 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.executeBatch();
 			statement
 			.addBatch("INSERT INTO timetableslot(timetableslot_id, capacity, starttime, endtime, weekday, weeknumber, room, occupied, staff_id,session_id) VALUES ("
-					+ timeID + "," + i*50 + "," + i*2 + ","+i*3+ "," + "Monday"+ "," + i+ ","+"Boyd Orr 513"+ ","+true+ ","+staffID+ ","+sessionID+ ")");
-
+					+ timeID + "," + 150 + "," + 12 + ","+13+ "," + 2+ "," + i+ ","+"'Boyd Orr"+"'"+","+true+ ","+staffID+ ","+sessionID+ ")");
+			statement.executeBatch();
 			statement
 			.addBatch("INSERT INTO student_course_session(student_id, course_id,session_id,timetableslot_id) VALUES ("
-				+ studentID + "," + i + "," + sessionID + ","+timeID+ ")");
+				+ studentID + "," + courseid + "," + sessionID + ","+timeID+ ")");
 			statement.executeBatch();
 			
 			statement
@@ -94,41 +99,41 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.executeBatch();
 			statement
 					.addBatch("INSERT INTO mycampus_course (course_id,course_name) VALUES ("
-							+ i + "," + "'course" + i + "'" + ")");
+							+ courseid + "," + "'"+name + i + "'" + ")");
 			statement.executeBatch();
 
 		statement
 		.addBatch("INSERT INTO session (session_id, compulsory) VALUES ("
-				+ sessionID + "," + compulsory + ")");
+				+ sessionID+i + "," + compulsory + ")");
 statement.executeBatch();
 statement
 .addBatch("INSERT INTO course_session (course_id, session_id) VALUES ("
-		+ i + "," + sessionID + ")");
+		+ courseid + "," + sessionID + ")");
 statement.executeBatch();
 statement
 .addBatch("INSERT INTO course (course_id, course_name) VALUES ("
-		+ i + "," + name + ")");
+		+ courseid + "," +"'"+ name+"'" + ")");
 statement.executeBatch();
 		statement
 		.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
-				+ studentID + "," + name + ")");
+				+ studentID + ","+"'"+ name+i+"'" + ")");
 		statement.executeBatch();}
 	
 		statement
 		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "admin" + "," + "admin" + ","+"admin" + ")");
+				+ "'admin"+"'" + "," + "'admin"+"'" + ","+"'admin"+"'" + ")");
 		statement.executeBatch();
 		statement 
 		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "lecturer" + "," + "lecturer" + ","+"lecturer" + ")");
+				+ "'lecturer"+"'" + "," + "'lecturer"+"'" + ","+"'lecturer"+"'" + ")");
 		statement.executeBatch();
 		statement 
 		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "student" + "," + "student" + ","+"student" + ")");
+				+ "'student"+"'" + "," + "'student"+"'" + ","+"'student"+"'" + ")");
 		statement.executeBatch();
 		statement
 		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "tutor" + "," + "tutor" + ","+"tutor" + ")");
+				+ "'tutor"+"'" + "," + "'tutor"+"'" + ","+"'tutor"+"'" + ")");
 		statement.executeBatch();
 	
 		connection.close();
@@ -137,6 +142,8 @@ statement.executeBatch();
 		e.printStackTrace();
 	}
 	}
+	
+
 	void createTables() {
 		try {
 			System.out.println("In create tables");
