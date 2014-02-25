@@ -1,5 +1,7 @@
 package uk.ac.glasgow.teamH.database;
 
+import java.sql.ResultSet;
+
 
 
 public interface DatabaseInterface {
@@ -18,7 +20,7 @@ public void bookTimetableSlot(int studentID, int courseID, int sessionID,int tim
 
 public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,int courseID);
 
-public String getTimetableslotDetails(int sessionID);
+public ResultSet getTimetableslotDetails(int sessionID);
 
 public int supportNUsers(int n);
 

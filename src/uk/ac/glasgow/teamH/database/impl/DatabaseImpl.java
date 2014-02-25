@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 
@@ -474,8 +475,9 @@ statement.executeBatch();
 
 	// 14-OK
 	@Override
-	public String getTimetableslotDetails(int sessionID) {
+	public ResultSet getTimetableslotDetails(int sessionID) {
 		String r = "";
+		ResultSet detailsResult = null;
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -505,7 +507,7 @@ statement.executeBatch();
 					+ sessionID;
 			String queryStudents = "SELECT student_id FROM student_course_session WHERE session_id ="
 					+ sessionID;
-			ResultSet detailsResult = statement.executeQuery(queryDetails);
+			detailsResult = statement.executeQuery(queryDetails);
 			if (detailsResult.next()) {
 				r = "Details:" + detailsResult.getInt(1);
 				ResultSet students = statement.executeQuery(queryStudents);
@@ -520,7 +522,7 @@ statement.executeBatch();
 			// TODO Auto-generated method stub
 			e.printStackTrace();
 		}
-		return r;
+		return detailsResult;
 	}
 
 	// non-functional distinguish between user types-OK
