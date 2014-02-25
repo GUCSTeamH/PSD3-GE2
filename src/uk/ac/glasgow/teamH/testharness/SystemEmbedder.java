@@ -23,14 +23,14 @@ import org.jbehave.core.steps.ParameterConverters.DateConverter;
 import org.jbehave.core.steps.SilentStepMonitor;
 import org.jbehave.core.steps.StepMonitor;
 
-import uk.ac.glasgow.senotes.cook.test.steps.CookSteps;
+import uk.ac.glasgow.teamH.steps.SystemTestSteps;
 
 /**
- * Extends the default embedder class to customise settings for the cook stories.
- * @author tws
+ * Extends the default embedder class to customise settings for the system stories.
+ * 
  *
  */
-public class CookEmbedder extends Embedder {
+public class SystemEmbedder extends Embedder {
   
     @Override
     public InjectableStepsFactory stepsFactory() {
@@ -91,7 +91,7 @@ public class CookEmbedder extends Embedder {
 		StoryReporterBuilder builder =
 			new StoryReporterBuilder();
 		
-        Class<? extends CookEmbedder> embedderClass =
+        Class<? extends SystemEmbedder> embedderClass =
             this.getClass();
         
         URL codeLocation =

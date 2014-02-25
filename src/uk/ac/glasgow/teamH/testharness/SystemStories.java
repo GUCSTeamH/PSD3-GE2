@@ -7,11 +7,11 @@ import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.io.StoryFinder;
 import org.junit.Test;
 
-public class CookStories {
+public class SystemStories {
 
 	@Test
 	public void runURLLoadedStoriesAsJUnit() {
-		Embedder embedder = new CookEmbedder();
+		Embedder embedder = new SystemEmbedder();
 		
 		List<String> storyPaths = 
 			getStoryPathsFromProjectBinDir();
