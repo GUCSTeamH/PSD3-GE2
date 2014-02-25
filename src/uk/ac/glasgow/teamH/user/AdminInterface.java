@@ -6,7 +6,7 @@ public interface AdminInterface {
 
 		public void createTimeSlot();
 		
-		public void assignRoom(TimetableSlot slot);
+		//public void assignRoomtoTimetableSlot(int timetableslotID, String room);
 		
 		public void addTimeToSession(int sessionId, int timeId);
 	

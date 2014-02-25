@@ -2,8 +2,8 @@ package uk.ac.glasgow.teamH.user;
 
 public interface StudentInterface {
 
-	public void bookSession(int time);
+	public void bookTimetableSlot(int student, int course, int session, int time);
 	
-	public boolean checkSession();
+	public boolean checkIfSignedUpForCompulsory( int student, int session, int course);
 	
 }

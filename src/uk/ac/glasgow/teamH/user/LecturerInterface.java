@@ -4,15 +4,13 @@ package uk.ac.glasgow.teamH.user;
 
 public interface LecturerInterface {
 
-	void importMyCampusCourse();
+	void importMyCampusCourse(int courseID);
 	
-	void addCourse(String courseID, String name);
+	void addSession(int courseId, int sessionID, boolean compulsory);
 	
-	void addSessionToCourse(String courseId);
+	void specifySessionRecurrence(int sessionId, String recurrence);
 	
-	void specifyRecurrent(int sessionId);
-	
-	void seeDetails(int sessionId);
+	String getTimetableslotDetails(int sessionId);
 
 	
 }

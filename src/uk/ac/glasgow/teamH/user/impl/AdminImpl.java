@@ -9,17 +9,16 @@ public class AdminImpl implements AdminInterface {
 	DatabaseInterface db;
 
 	
-	public void createTimeSlot() {
+/*	public void bookTimetableSlot(int studentID, int course, int session) {
 		db.addTimeslot(50,"9.00", 1, 3, "507");
 		
 		System.out.println("new timeslot created ");
 		
-	}
+	} */
 	
-	public void assignRoom(TimetableSlot slot){
-		System.out.println("Admin : room booked for slot: "+slot.toString());
-		Room room = new Room(513, "Boyd Orr",50);
-		slot.assignRoom(room);
+	public void assignRoom(int slot, String room){
+		System.out.println("Admin : room booked for slot: "+slot);
+		db.assignRoomToTimetableslot(slot, room);
 	}
 
 	

@@ -21,20 +21,17 @@ public class StudentImpl extends User implements StudentInterface {
 	
 	
 
-	public void bookSession(int time){
+	public void bookTimetableSlot(int student, int course, int session, int time){
 		System.out.println("student: booked session ");
-		db.signUpToTimeslot(time, this.matric);
-
-		
-		
+		db.bookTimetableSlot(student, course, session, time);;
 	}
 	
-	public boolean checkSession(){
+	public boolean checkIfSignedUpForCompulsory(int student, int session, int course){
 		System.out.println("student: enrolled in all couurses");
 		//get list of compulsory sessions
 		
-		db.checkCompulsorySessions(this.matric);
-		return true;
+		boolean check= db.checkIfSignedUpForCompulsory(student, session, course);
+		return check;
 	}
 	
 	

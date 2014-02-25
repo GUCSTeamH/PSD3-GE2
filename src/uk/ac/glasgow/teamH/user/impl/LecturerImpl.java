@@ -25,8 +25,8 @@ public class LecturerImpl extends User implements LecturerInterface {
 
 	}
 	
-	public void importMyCampusCourse(){
-		System.out.println("course added");
+	public void importMyCampusCourse(int courseID){
+		db.importMycampusCourse(courseID);
 		
 	}
 	
@@ -42,13 +42,11 @@ public class LecturerImpl extends User implements LecturerInterface {
 		
 	}
 	
-	public void addSessionToCourse(String courseId){
-		// removed timetable slot as a session has multiple timetable slots and not one
-		Session s=new Session(154, SessionType.COMPULSORY);
+	public void addSession(int courseID, int sessionID, boolean compulsory ){
 		
-		db.addSession(courseId, s.getSessionType()==SessionType.ONEOFF, s.getSessionType() == SessionType.COMPULSORY);
+		db.addSession(courseID, sessionID, compulsory);
 		
-		System.out.println("Lecturer : session added to course: "+courseId);
+		System.out.println("Lecturer : session added to course: "+courseID);
 
 		
 	}
@@ -56,8 +54,8 @@ public class LecturerImpl extends User implements LecturerInterface {
 		// add a timetable slot to a session
 	}
 	
-	public void specifyRecurrent(int sessionId){
-		db.makeSessionRecurring(sessionId);
+	public void specifySessionRecurrence(int sessionId, String rec){
+		db.specifySessionRecurrence(sessionId, rec);
 		
 		System.out.println("Lecturer : changed session  "+sessionId+" recurrent ");
 		//get session from db
@@ -66,19 +64,16 @@ public class LecturerImpl extends User implements LecturerInterface {
 	}
 	
 
-	public void seeDetails(int courseId){
+	public String getTimetableslotDetails(int sessionId){
 		
-		db.getCourseSessionDetails(courseId);
+		String details=db.getTimetableslotDetails(sessionId);
 		
-		System.out.println("Lecturer : details not available for session: "+courseId);
+		System.out.println("Lecturer : details for session: "+sessionId+" : "+details);
+		
+		return details;
 		
 		
 	}
 
-	public void addCourse(String courseID, String name) {
-
-		db.addCourse(courseID, name);
-		
-	}
 
 }
