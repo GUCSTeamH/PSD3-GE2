@@ -6,8 +6,7 @@ import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.Course;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
-import uk.ac.glasgow.teamH.user.Session;
-import uk.ac.glasgow.teamH.user.Session.SessionType;
+
 
 public class LecturerImpl extends User implements LecturerInterface {
 
@@ -50,9 +49,7 @@ public class LecturerImpl extends User implements LecturerInterface {
 
 		
 	}
-	public void addTimetSlotToSession(Session s){
-		// add a timetable slot to a session
-	}
+
 	
 	public void specifySessionRecurrence(int sessionId, String rec){
 		db.specifySessionRecurrence(sessionId, rec);

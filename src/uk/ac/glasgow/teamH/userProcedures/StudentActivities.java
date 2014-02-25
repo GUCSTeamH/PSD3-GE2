@@ -16,7 +16,7 @@ public class StudentActivities {
 	 */
 	
 	public void checkIfEnrolled(){
-		student.checkSession();
+		//student.checkSession();
 	}
 	
 }

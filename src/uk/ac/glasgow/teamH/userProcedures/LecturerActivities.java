@@ -12,14 +12,12 @@ public class LecturerActivities {
 	}
 	
 	public void importFromMycampus(){
-		lect.importMyCampusCourse();
+		lect.importMyCampusCourse(3);
 	}
 
 	
 	public void startLec(){
-		lect.addSessionToCourse("COMPSCI20");
-		lect.addSessionToCourse("COMPSCI50");
-		lect.seeDetails(20);
+
 	}
 	
 	/*

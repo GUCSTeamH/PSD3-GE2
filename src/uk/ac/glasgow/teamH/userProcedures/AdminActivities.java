@@ -16,6 +16,6 @@ public class AdminActivities {
 	 */
 	
 	public void createNewTimeslot(){
-		admin.createTimeSlot();
+		//admin.createTimeSlot();
 	}
 }

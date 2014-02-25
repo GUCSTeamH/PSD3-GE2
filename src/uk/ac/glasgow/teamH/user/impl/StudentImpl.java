@@ -18,9 +18,6 @@ public class StudentImpl extends User implements StudentInterface {
 		
 	}
 	
-	
-	
-
 	public void bookTimetableSlot(int student, int course, int session, int time){
 		System.out.println("student: booked session ");
 		db.bookTimetableSlot(student, course, session, time);;
