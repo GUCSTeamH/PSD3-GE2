@@ -1,0 +1,14 @@
+<story path="uk/ac/glasgow/teamH/test/stories/ge2stories.story" title="">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">achieve full functionality</inOrderTo>
+  <asA keyword="As a">user</asA>
+  <iWantTo keyword="I want to">use the system without any errors</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="lecturer selects that a session is a one-off.">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When session <parameter>10</parameter> is marked as one-off</step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is repeated <parameter>1</parameter> time<failure>java.lang.AssertionError: 
+Expected: &lt;1&gt;
+     but: was &lt;0&gt;</failure></step>
+</scenario>
+</story>

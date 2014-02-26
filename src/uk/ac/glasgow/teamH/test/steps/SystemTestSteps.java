@@ -16,75 +16,52 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 
+import uk.ac.glasgow.teamH.database.DatabaseInterface;
+import uk.ac.glasgow.teamH.database.impl.DatabaseImpl;
 import uk.ac.glasgow.teamH.test.ConfiguredFrameworkFactory;
 import uk.ac.glasgow.teamH.user.AdminInterface;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
+import uk.ac.glasgow.teamH.user.impl.LecturerImpl;
 
 public class SystemTestSteps {
 
+	private static final LecturerInterface LecturerInterface = null;
 	private BundleContext bundleContext;
 	private Framework framework;
-	private Bundle repository_impl;
+	private Bundle database;
+	private Bundle mycampus;
+	private Bundle user;
+	private Bundle activities;
+	
 	
 	private AdminInterface admin;
 	private LecturerInterface lecturer;
 	private StudentInterface student;
 	
-	@Before
-	public void aRepositoryComponent() throws Exception{
-		String extraPackages =
-			"uk.ac.glasgow.teamH.database";
-		
-		framework = 
-			ConfiguredFrameworkFactory.createFelixFramework(
-				extraPackages);
-
-		bundleContext = framework.getBundleContext();
-		
-		//...
-		
-		Integer actualNumberOfBundles = 
-			bundleContext.getBundles().length;
-		Integer expectedNumberOfBundles = 1;
-		
-		String message = 
-			"If cleanly initialised, the framework should "
-			+ "only contain 1 bundle (the framework).";
-		
-		assertEquals(
-			message,
-			expectedNumberOfBundles,
-			actualNumberOfBundles);
-		
-		repository_impl = 
-			bundleContext.installBundle(
-				"file:repository-impl.jar");
-		repository_impl.start();
-	}
+	private LecturerImpl lect;
+	private DatabaseImpl data;
 	
 	/**********************************************************************/
 	
 	@Given("a lecturer")
-	public void aLecturer(){
-		ServiceReference<LecturerInterface> 
-		lecturerReference = 
-			bundleContext.getServiceReference(
-				LecturerInterface.class);
-		
-		this.lecturer = bundleContext.getService(lecturerReference);
+	public void aLecturer() throws Exception{
+	
+		data = new DatabaseImpl();
+		lect= new LecturerImpl(data);
+	
 	}
 	
 	@When("session $sessID is marked as one-off")
 	public void sessionMarkedAsOneOff(Integer sessID){
-		lecturer.specifySessionRecurrence(sessID, "one-off");
+		lect.specifySessionRecurrence(sessID, "one-off");
 	}
 	
 	
 	
 	@Then("session $sessID is repeated $expected time")
 	public void recurringSession(Integer sessID, Integer expected){
-		ResultSet result = lecturer.getTimetableslotDetails(sessID);
+		ResultSet result = lect.getTimetableslotDetails(sessID);
 		Integer actual = 0;
 		try {
 			while (result.next()){
