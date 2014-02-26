@@ -64,26 +64,17 @@ public class LecturerImpl extends User implements LecturerInterface {
 	}
 	
 
-	public String getTimetableslotDetails(int sessionId){
+	public ResultSet getTimetableslotDetails(int sessionId){
 		
-		ResultSet result=db.getTimetableslotDetails(sessionId);
-		String details = "";
-		try {
-			while (result.next()){
-				/*****************
-				 *	Fix later    * 
-				 ****************/
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println("Lecturer : details for session: "+sessionId+" : "+details);
-		
-		return details;
+		return db.getTimetableslotDetails(sessionId);
 		
 		
+		
+	}
+
+	@Override
+	public ResultSet getTimetablslotStudentDetails(int sessionId) {
+		return db.getTimetableslotStudentDetails(sessionId);
 	}
 
 

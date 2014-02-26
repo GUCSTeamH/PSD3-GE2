@@ -505,12 +505,54 @@ statement.executeBatch();
 
 			String queryDetails = "SELECT * FROM timetableslot WHERE session_id= "
 					+ sessionID;
+			detailsResult = statement.executeQuery(queryDetails);
+			connection.close();
+			System.out.println(r);
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
+		return detailsResult;
+	}
+	
+	@Override
+	public ResultSet getTimetableslotStudentDetails(int sessionID) {
+		String r = "";
+		ResultSet detailsResult = null;
+		ResultSet students = null;
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch("Delete from timetableslot ");
+			statement.executeBatch();
+
+			statement
+					.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
+							+ 1
+							+ ","
+							+ sessionID
+							+ ","
+							+ "'"
+							+ "BO715"
+							+ "'"
+							+ "," + 1 + "," + 2 + ")");
+			statement.executeBatch();
+			for (int i = 0; i < 15; i++) {
+				statement
+						.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
+								+ i + "," + sessionID + "," + 100 + ")");
+				statement.executeBatch();
+			}
+
+			String queryDetails = "SELECT * FROM timetableslot WHERE session_id= "
+					+ sessionID;
 			String queryStudents = "SELECT student_id FROM student_course_session WHERE session_id ="
 					+ sessionID;
 			detailsResult = statement.executeQuery(queryDetails);
 			if (detailsResult.next()) {
 				r = "Details:" + detailsResult.getInt(1);
-				ResultSet students = statement.executeQuery(queryStudents);
+				students = statement.executeQuery(queryStudents);
 				r += " " + " Students: ";
 				while (students.next()) {
 					r += students.getInt(1) + ",";
@@ -522,7 +564,7 @@ statement.executeBatch();
 			// TODO Auto-generated method stub
 			e.printStackTrace();
 		}
-		return detailsResult;
+		return students;
 	}
 
 	// non-functional distinguish between user types-OK

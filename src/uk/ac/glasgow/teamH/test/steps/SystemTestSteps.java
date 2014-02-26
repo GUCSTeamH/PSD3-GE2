@@ -83,9 +83,9 @@ public class SystemTestSteps {
 		db.specifySessionRecurrence(sessID, "one-off");
 	}
 	
-	@Then("the session $sessID is not repeated")
+	@Then("session $sessID is repeated $expected time")
 	public void recurringSession(Integer sessID, Integer expected){
-		ResultSet result = db.getTimetableslotDetails(sessID);
+		ResultSet result = lecturer.getTimetableslotDetails(sessID);
 		Integer actual = 0;
 		try {
 			while (result.next()){

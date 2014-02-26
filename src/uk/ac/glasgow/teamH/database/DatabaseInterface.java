@@ -34,4 +34,7 @@ public boolean authenticate(String username, String password);
 
 public String getUserRole(String username);
 
+
+public ResultSet getTimetableslotStudentDetails(int sessionID);
+
 }
