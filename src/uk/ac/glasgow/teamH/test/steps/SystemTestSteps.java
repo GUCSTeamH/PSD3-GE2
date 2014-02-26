@@ -16,7 +16,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 
-import uk.ac.glasgow.teamH.database.impl.DatabaseImpl;
 import uk.ac.glasgow.teamH.test.ConfiguredFrameworkFactory;
 import uk.ac.glasgow.teamH.user.AdminInterface;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
@@ -31,8 +30,6 @@ public class SystemTestSteps {
 	private AdminInterface admin;
 	private LecturerInterface lecturer;
 	private StudentInterface student;
-	
-	private DatabaseImpl db;
 	
 	@Before
 	public void aRepositoryComponent() throws Exception{
@@ -80,8 +77,10 @@ public class SystemTestSteps {
 	
 	@When("session $sessID is marked as one-off")
 	public void sessionMarkedAsOneOff(Integer sessID){
-		db.specifySessionRecurrence(sessID, "one-off");
+		lecturer.specifySessionRecurrence(sessID, "one-off");
 	}
+	
+	
 	
 	@Then("session $sessID is repeated $expected time")
 	public void recurringSession(Integer sessID, Integer expected){
