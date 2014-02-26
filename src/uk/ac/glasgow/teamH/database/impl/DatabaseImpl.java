@@ -47,15 +47,22 @@ public class DatabaseImpl implements DatabaseInterface {
 		try{connection = getDatabaseConnection();
 		Statement statement = connection.createStatement();
 		System.out.printf("\n \n CREATING TABLES \n----------------------------------\n----------------------------------\n");
-		int sesval=0;
-		
-		for (int i = 0; i < 10; i++) {
+		int sesval=1;
+		int sesplus=15;
+		int timeplus=30;
+		int studentplus=16;
+		for (int i = 1; i <= 105; i++) {
 			System.out.println("COURSE"+i);
 				statement
 			.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
 					+ i + "," +"'course"+i +"'" + ")");
 			statement.executeBatch();
-			for(int j=sesval;j<sesval+5;j++){
+			if(i>10){
+				sesplus=5;
+				timeplus=3;
+				studentplus=4;
+			}
+			for(int j=sesval;j<sesval+sesplus;j++){
 		//		System.out.println("SESSION "+j);
 				if(j<10){
 					if (j<3){
@@ -83,7 +90,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		.addBatch("INSERT INTO course_session(course_id, session_id) VALUES ("
 				+ i + "," + j + ")");
 		statement.executeBatch(); 
-		for(int f=0;f<8;f++){
+		for(int f=1;f<timeplus;f++){
 //			System.out.println("TIMETABLESLOT "+f);
 			int staffID=(int)(Math.random() * (500+i)) + 0;
 			statement
@@ -95,7 +102,7 @@ public class DatabaseImpl implements DatabaseInterface {
 				+ j + "," + f + ")");
 			statement.executeBatch();
 			int studentID=(int)(Math.random() * (595+i)) + 0;
-			for(int a=10;a<14;a++){
+			for(int a=1;a<studentplus;a++){
 		//		System.out.println("STUDENT COURSE SESSION " +a);
 			statement
 			.addBatch("INSERT INTO student_course_session(student_id, course_id,session_id,timetableslot_id) VALUES ("
@@ -112,7 +119,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 		
 		
-		for(int a=0;a<20;a++){		
+		for(int a=0;a<250;a++){		
 //			System.out.println(a);
 			statement
 			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
@@ -123,7 +130,7 @@ public class DatabaseImpl implements DatabaseInterface {
 					+ "'lecturer"+a+"'" + "," + "'lecturer"+a+"'" + ","+"'lecturer"+a+"'" + ")");
 			statement.executeBatch();
 		}
-		for(int a=20;a<40;a++){
+		for(int a=250;a<500;a++){
 		//	System.out.println(a);
 			statement
 			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
@@ -134,7 +141,7 @@ public class DatabaseImpl implements DatabaseInterface {
 					+ "'tutor"+a+"'" + "," + "'tutor"+a+"'" + ","+"'tutor"+a+"'" + ")");
 			statement.executeBatch();
 		}
-		for(int a=0;a<60;a++){
+		for(int a=0;a<600;a++){
 //			System.out.println(a);
 			statement
 			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
@@ -145,7 +152,7 @@ public class DatabaseImpl implements DatabaseInterface {
 					+ "'student"+a+"'" + "," + "'student"+a+"'" + ","+"'student"+a+"'" + ")");
 			statement.executeBatch();	
 		}
-		for(int a=65;a<70;a++){
+		for(int a=650;a<700;a++){
 //			System.out.println(a);
 			statement
 			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
