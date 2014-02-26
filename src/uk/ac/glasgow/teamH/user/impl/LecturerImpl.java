@@ -65,11 +65,7 @@ public class LecturerImpl extends User implements LecturerInterface {
 	
 
 	public ResultSet getTimetableslotDetails(int sessionId){
-		
 		return db.getTimetableslotDetails(sessionId);
-		
-		
-		
 	}
 
 	@Override

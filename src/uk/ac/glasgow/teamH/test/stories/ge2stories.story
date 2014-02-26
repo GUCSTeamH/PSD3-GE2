@@ -20,5 +20,10 @@ Then session 10 is a fortnightly session
 
 Scenario: Student views all sessions in a course
 Given a student
-When course 16 is selected from student 11
+When course 16 is selected from student 12
 Then student 12 books all compulsory sessions of course 16
+
+Scenario: Student views all compulsory sessions in a course
+Given a student
+When a student 12 selects a course 16
+Then student 12 views all compulsory sessions of course 16

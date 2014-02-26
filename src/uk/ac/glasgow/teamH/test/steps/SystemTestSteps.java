@@ -57,6 +57,7 @@ public class SystemTestSteps {
 	
 	@When("session $sessID is marked as $session")
 	public void sessionMarkedAsOneOff(Integer sessID, String session){
+		data.addSession(10, sessID, true);
 		lect.specifySessionRecurrence(sessID, session);
 	}
 	
@@ -64,10 +65,12 @@ public class SystemTestSteps {
 	
 	@Then("session $sessID is a $expected session")
 	public void recurringSession(Integer sessID, String expected) throws SQLException{
-		ResultSet result = data.getSessionDetails(sessID);
-		result.next();
-		String reccurance = result.getString(2);
-		assertTrue(reccurance.equals(expected));
+		ResultSet result = data.getTimetableslotDetails(sessID);
+		String reccurance="";
+		//if(result==null){reccurance =expected;}
+		//else 
+			reccurance = result.getString(2);
+		assertEquals(expected,reccurance);
 	}
 	
 	/*********************************************************************/
@@ -90,7 +93,7 @@ public class SystemTestSteps {
 		notenrolled=new ArrayList<Integer>();
 	}
 	
-	@When("course $courseID is selected from $studentID")
+	@When("course $courseID is selected from student $studentID")
 	public void compulsoryNotBooked(int courseID,int studentID) throws SQLException{
 		ResultSet rs=data.getSessionsCourse(courseID);
 		while(rs.next()){
@@ -99,20 +102,49 @@ public class SystemTestSteps {
 			notenrolled.add(rs.getInt(1));
 		}}
 	}
+	
+	@When("a  student $studentID selects a course $courseID")
+	public void compulsoryCheck(int courseID,int studentID) throws SQLException{
+		ResultSet rs=data.getSessionsCourse(courseID);
+		while(rs.next()){
+	
+			notenrolled.add(rs.getInt(1));
+		}
+	}
+
 	@Then("student $studentID books all compulsory sessions of course $courseID")
-	public void showCompulsory(int studentID,int courseID) throws SQLException{
+	public void showBookCompulsory(int studentID,int courseID) throws SQLException{
 		int timetableslotID=3587;
 		for(int i=0;i<notenrolled.size();i++){
 			data.bookTimetableSlot(studentID,courseID,notenrolled.get(i),
 					timetableslotID);
 		}
 		ResultSet rs=data.getSessionsCourse(courseID);
-		boolean expected=false;
+		boolean expected=true;
 		boolean result=true;
 		while(rs.next()){
 			result = data.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
 			if (result==false){break;}
 			}
-		assertEquals(result,expected);
+		assertEquals(expected,result);
 	}
+	
+	@Then("student $studentID views all compulsory sessions of course $courseID")
+	public void showCompulsory(int studentID,int courseID) throws SQLException{
+		int count=0;
+		for(int i=0;i<notenrolled.size();i++){
+		boolean result = data.checkIfSignedUpForCompulsory(studentID, notenrolled.get(i),10);
+		if(result==false){count++;}
+		ResultSet rs=data.getSessionsCourse(courseID);
+		ArrayList<Integer>checkenrolled=new ArrayList<Integer>();
+		while(rs.next()){
+			boolean rt = data.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
+			if (rt==false){
+				checkenrolled.add(rs.getInt(1));}
+		int expected=checkenrolled.size();
+		assertEquals(expected,count);
+		
+	}
+}}
+
 }

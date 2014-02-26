@@ -324,10 +324,10 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			statement.addBatch("Delete from course_session ");
+			/*statement.addBatch("Delete from course_session ");
 			statement.executeBatch();
 			statement.addBatch("Delete from session ");
-			statement.executeBatch();
+			statement.executeBatch(); */
 			statement
 					.addBatch("INSERT INTO session (session_id, compulsory) VALUES ("
 							+ sessionID + "," + compulsory + ")");
@@ -462,18 +462,18 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			statement.addBatch("Delete from session ");
+			/*statement.addBatch("Delete from session ");
 			statement.executeBatch();
-			statement.addBatch("INSERT INTO session (session_id) VALUES ("
-					+ sessionID + ")");
+			statement.addBatch("INSERT INTO session (session_id,recurring) VALUES ("
+					+ sessionID +","+"'"+recurrence+"'"+ ")");*/
 			statement.executeBatch();
-			// statement
-			// .addBatch("UPDATE session SET recurring = ?" + recurrence +
-			// " WHERE session_id = "
-			// + sessionID );
-			statement.executeUpdate("UPDATE session SET recurring = " + "'"
-					+ recurrence + "'" + " WHERE session_id = " + sessionID);
-			// statement.executeBatch();
+			 statement
+			 .addBatch("UPDATE session SET recurring = ?" + recurrence +
+			 " WHERE session_id = "
+		 + sessionID );
+		////	statement.executeUpdate("UPDATE session SET recurring = " + "'"
+				//	+ recurrence + "'" + " WHERE session_id = " + sessionID);
+			statement.executeBatch();
 			String query = "Select * FROM session";
 			ResultSet result = statement.executeQuery(query);
 			System.out.println("---------------------------------------");
@@ -582,8 +582,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			statement.addBatch("Delete from timetableslot ");
-			statement.executeBatch();
+		//	statement.addBatch("Delete from timetableslot ");
+		//	statement.executeBatch();
 
 			statement
 					.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
@@ -606,7 +606,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			String queryDetails = "SELECT * FROM timetableslot WHERE session_id= "
 					+ sessionID;
 			detailsResult = statement.executeQuery(queryDetails);
-			connection.close();
+			//connection.close();
 			System.out.println(r);
 		} catch (SQLException e) {
 			// TODO Auto-generated method stub
@@ -933,5 +933,47 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 
 	}
+
+	// 14-OK
+		public ResultSet getSessionsCourse(int courseID){
+			String r = "";
+			ResultSet detailsResult = null;
+			System.out.println("dede");
+			try {
+				connection = getDatabaseConnection();
+				Statement statement = connection.createStatement();
+
+		/*		statement.addBatch("Delete from timetableslot ");
+				statement.executeBatch();
+
+				statement
+						.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
+								+ 1
+								+ ","
+								+ sessionID
+								+ ","
+								+ "'"
+								+ "BO715"
+								+ "'"
+								+ "," + 1 + "," + 2 + ")");
+				statement.executeBatch();
+				for (int i = 0; i < 15; i++) {
+					statement
+							.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
+									+ i + "," + sessionID + "," + 100 + ")");
+					statement.executeBatch();
+				}
+	*/
+				String queryDetails = "SELECT session_iD FROM course_session WHERE course_id= "
+						+ courseID;
+				detailsResult = statement.executeQuery(queryDetails);
+				//connection.close();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated method stub
+				e.printStackTrace();
+			}
+			return detailsResult;
+		}
 
 }
