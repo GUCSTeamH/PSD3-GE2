@@ -24,6 +24,18 @@
 		
 		<delete dir="bin" />
 		<delete dir="felix-cache" />
+		<delete dir="data" />
+		<delete dir="jbehave" />
+		<delete file="derby.log" />
+		<delete file="mycampus.jar" />
+		<delete file="mycampus-impl.jar" />
+		<delete file="database.jar" />
+		<delete file="database-impl.jar" />
+		<delete file="user.jar" />
+		<delete file="user-impl.jar" />
+		<delete file="userActivities.jar" />
+			
+
 	
 	</target>
 	

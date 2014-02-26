@@ -6,16 +6,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 
 /**
- * @author Team H
+ * @author Michael
  * 
  */
 public class DatabaseImpl implements DatabaseInterface {
-	Connection connection = null;
+	static Connection connection = null;
 	Statement stmt = null;
 
 	private static final String connectionString = "jdbc:derby:data/mycampus5;create=true";
@@ -24,10 +23,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			createTables();
-//			populate();
-			specifySessionRecurrence(10, "one-off");
-			ResultSet result = getSessionDetails(10);
-			System.out.println(result.toString());
+			populate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,102 +42,204 @@ public class DatabaseImpl implements DatabaseInterface {
 			e.printStackTrace();
 		}
 	}
-	public void populate(){
+	private static void populate() {
+		// TODO Auto-generated method stub
 		try{connection = getDatabaseConnection();
 		Statement statement = connection.createStatement();
-		ArrayList<Integer> dupSid=new ArrayList<Integer>();
-		dupSid.add(0);
-		ArrayList<Integer> dupTid=new ArrayList<Integer>();
-		dupTid.add(0);
-		ArrayList<Integer> dupStudentid=new ArrayList<Integer>();
-		dupStudentid.add(0);
-		ArrayList<Integer> dupStaffid=new ArrayList<Integer>();
-		dupStaffid.add(0);
-		boolean compulsory=false;
-		for (int i = 0; i < 20; i++) {
-			String name="A";
-			int sessionID=(int)(Math.random() * (5000+i)) + 1000;
-			int staffID=(int)(Math.random() * (7000+i)) + 1400;
-			int studentID=(int)(Math.random() * (6000+i)) + 1005;
-			int timeID=(int)(Math.random() * (3000+i)) + 1005;
-			while(dupStaffid.contains(staffID)){staffID=(int)(Math.random() * (7000+i)) + 1400;}
-			while(dupTid.contains(timeID)){timeID=(int)(Math.random() * (3000+i)) + 1005;}
-			while(dupStudentid.contains(studentID)){studentID=(int)(Math.random() * (6000+i)) + 1005;}
-			while(dupSid.contains(sessionID)){sessionID=(int)(Math.random() * (5000+i)) + 1000;}
-			if (i % 2 == 0) {
-				compulsory=true;
-				name="A";
-				} else {
-				compulsory=false;
-				name="B";
-				}
-			statement
-			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
-				+ staffID + "," + "'staff"+i+"'" + ")");
+		System.out.printf("\n \n CREATING TABLES \n----------------------------------\n----------------------------------\n");
+		int sesval=1;
+		int sesplus=15;
+		int timeplus=30;
+		int studentplus=16;
+		for (int i = 1; i <= 105; i++) {
+			System.out.println("COURSE"+i);
+				statement
+			.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
+					+ i + "," +"'course"+i +"'" + ")");
 			statement.executeBatch();
+			if(i>10){
+				sesplus=5;
+				timeplus=3;
+				studentplus=4;
+			}
+			for(int j=sesval;j<sesval+sesplus;j++){
+		//		System.out.println("SESSION "+j);
+				if(j<10){
+					if (j<3){
+					statement
+						.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+								+ j + ","+"'true'"+"," +true+ ")");
+				statement.executeBatch();}
+					else{
+						statement
+						.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+								+ j + ","+"'false'"+"," +true+ ")");
+				statement.executeBatch();	
+					}}
+				else{
+					statement
+					.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+							+ j + ","+"'true'"+"," +false+ ")");
+			statement.executeBatch();
+				}
+
+
+
+
+		statement
+		.addBatch("INSERT INTO course_session(course_id, session_id) VALUES ("
+				+ i + "," + j + ")");
+		statement.executeBatch(); 
+		for(int f=1;f<timeplus;f++){
+//			System.out.println("TIMETABLESLOT "+f);
+			int staffID=(int)(Math.random() * (500+i)) + 0;
 			statement
 			.addBatch("INSERT INTO timetableslot(timetableslot_id, capacity, starttime, endtime, weekday, weeknumber, room, occupied, staff_id,session_id) VALUES ("
-					+ timeID + "," + i*50 + "," + i*2 + ","+i*3+ "," + "Monday"+ "," + i+ ","+"Boyd Orr 513"+ ","+true+ ","+staffID+ ","+sessionID+ ")");
-
+					+ f + "," + 150 + "," + 12 + ","+13+ "," + 2+ "," + i+ ","+"'Boyd Orr"+"'"+","+true+ ","+staffID+ ","+j+ ")");
+			statement.executeBatch(); 
+			statement
+			.addBatch("INSERT INTO session_timetableslot(session_id, timetableslot_id) VALUES ("
+				+ j + "," + f + ")");
+			statement.executeBatch();
+			int studentID=(int)(Math.random() * (595+i)) + 0;
+			for(int a=1;a<studentplus;a++){
+		//		System.out.println("STUDENT COURSE SESSION " +a);
 			statement
 			.addBatch("INSERT INTO student_course_session(student_id, course_id,session_id,timetableslot_id) VALUES ("
-				+ studentID + "," + i + "," + sessionID + ","+timeID+ ")");
-			statement.executeBatch();
-			
+				+ a + "," + i + "," + j + ","+f+ ")");
+
 			statement
 			.addBatch("INSERT INTO student_session(student_id, session_id) VALUES ("
-				+ studentID + "," + sessionID + ")");
+				+ a + "," + j + ")");
 			statement.executeBatch();
-					statement
-			.addBatch("INSERT INTO session_timetableslot(session_id, timetableslot_id) VALUES ("
-				+ sessionID + "," + timeID + ")");
+			}
+		}
+			}
+			sesval=sesval+16;
+		}
+
+
+		for(int a=0;a<250;a++){		
+//			System.out.println(a);
+			statement
+			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
+				+ a + "," + "'lecturer"+a+"'" + ")");
+			statement.executeBatch();
+			statement 
+			.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
+					+ "'lecturer"+a+"'" + "," + "'lecturer"+a+"'" + ","+"'lecturer"+a+"'" + ")");
+			statement.executeBatch();
+		}
+		for(int a=250;a<500;a++){
+		//	System.out.println(a);
+			statement
+			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
+				+ a + "," + "'tutor"+(a-250)+"'" + ")");
 			statement.executeBatch();
 			statement
-					.addBatch("INSERT INTO mycampus_course (course_id,course_name) VALUES ("
-							+ i + "," + "'course" + i + "'" + ")");
+			.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
+					+ "'tutor"+a+"'" + "," + "'tutor"+a+"'" + ","+"'tutor"+a+"'" + ")");
 			statement.executeBatch();
+		}
+		for(int a=0;a<600;a++){
+//			System.out.println(a);
+			statement
+			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
+					+ a + ","+"'student"+a+"'" + ")");
+			statement.executeBatch();
+			statement 
+			.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
+					+ "'student"+a+"'" + "," + "'student"+a+"'" + ","+"'student"+a+"'" + ")");
+			statement.executeBatch();	
+		}
+		for(int a=650;a<700;a++){
+//			System.out.println(a);
+			statement
+			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
+					+ a + ","+"'student"+a+"'" + ")");
+			statement.executeBatch();}
+
+
+
+			for(int a=126;a<250;a++){
+//				System.out.println(a);
+			statement
+					.addBatch("INSERT INTO mycampus_course (course_id,course_name) VALUES ("
+							+ a + "," + "'course"+a + "'" + ")");
+			statement.executeBatch();}
 
 		statement
-		.addBatch("INSERT INTO session (session_id, compulsory) VALUES ("
-				+ sessionID + "," + compulsory + ")");
-statement.executeBatch();
-statement
-.addBatch("INSERT INTO course_session (course_id, session_id) VALUES ("
-		+ i + "," + sessionID + ")");
-statement.executeBatch();
-statement
-.addBatch("INSERT INTO course (course_id, course_name) VALUES ("
-		+ i + "," + name + ")");
-statement.executeBatch();
-		statement
-		.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
-				+ studentID + "," + name + ")");
-		statement.executeBatch();}
-	
-		statement
 		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "admin" + "," + "admin" + ","+"admin" + ")");
+				+ "'admin"+"'" + "," + "'admin"+"'" + ","+"'admin"+"'" + ")");
 		statement.executeBatch();
-		statement 
-		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "lecturer" + "," + "lecturer" + ","+"lecturer" + ")");
-		statement.executeBatch();
-		statement 
-		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "student" + "," + "student" + ","+"student" + ")");
-		statement.executeBatch();
-		statement
-		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "tutor" + "," + "tutor" + ","+"tutor" + ")");
-		statement.executeBatch();
-	
+
+		System.out.println("");
+
+		String query1 = "SELECT * FROM session";
+		String query2 = "SELECT * FROM course_session";
+		String query3 = "SELECT * FROM timetableslot";
+		String query4 = "SELECT * FROM staff";
+		String query5 = "SELECT * FROM student";
+		String query6 = "SELECT * FROM course";
+		ResultSet result1 = statement.executeQuery(query1);
+		System.out.println("Table Session");
+		System.out.println("---------------------------------------");
+		while (result1.next()) {
+			System.out.println(" sessionid: "+result1.getInt(1) + "    recurring:s   "+result1.getString(2)+"   compulsory: "
+					+ result1.getBoolean(3));
+		}
+		System.out.println("---------------------------------------");
+
+		ResultSet result2 = statement.executeQuery(query2);
+		System.out.println("Table Course_Session");
+		System.out.println("---------------------------------------");
+		while (result2.next()) {
+			System.out.println("course id  :  "+result2.getInt(1) + "  session id:  " + result2.getInt(2));
+		}
+		System.out.println("---------------------------------------");
+
+		ResultSet result3 = statement.executeQuery(query3);
+		System.out.println("Timetable Slot");
+		System.out.println("---------------------------------------");
+		while (result3.next()) {
+			System.out.println(result3.getInt(1) + " "
+					+ result3.getInt(2)+ " "+result3.getInt(3)+ " "+result3.getInt(4)+ " "+result3.getInt(5)+ " "+result3.getByte(6)+ " "+result3.getString(7)+ " "+result3.getBoolean(8)+ " "+result3.getInt(9)+ " "+result3.getInt(10));
+		}
+		System.out.println("---------------------------------------");
+
+		ResultSet result4 = statement.executeQuery(query4);
+		System.out.println("Staff");
+		System.out.println("---------------------------------------");
+		while (result4.next()) {
+			System.out.println(result4.getInt(1) + " " + result4.getString(2));
+		}
+		System.out.println("---------------------------------------");
+
+		ResultSet result5 = statement.executeQuery(query5);
+		System.out.println("Student");
+		System.out.println("---------------------------------------");
+		while (result5.next()) {
+			System.out.println(result5.getInt(1) + " " + result5.getString(2));
+		}
+		System.out.println("---------------------------------------");
+
+		ResultSet result6 = statement.executeQuery(query6);
+		System.out.println("Table Course");
+		System.out.println("---------------------------------------");
+		while (result6.next()) {
+			System.out.println(result6.getInt(1) + " " + result6.getString(2));
+		}
+		System.out.println("---------------------------------------");
+
+
+
 		connection.close();
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	}
-	void createTables() {
+	static void createTables() {
 		try {
 			System.out.println("In create tables");
 			connection = getDatabaseConnection();
@@ -171,13 +269,15 @@ statement.executeBatch();
 			}
 			if (!tableExists("timetableslot")) {
 				statement
-						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER PRIMARY KEY, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,session_id INTEGER)");
+						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,session_id INTEGER,PRIMARY KEY(timetableslot_id,session_id), "
+								+ " FOREIGN KEY (session_id) REFERENCES session (session_id))");
+				System.out.println("created timetable slot table");
 
 			}
 
 			if (!tableExists("student_course_session")) {
 				statement
-						.execute("CREATE TABLE student_course_session(student_id INTEGER, course_id INTEGER,session_id INTEGER,timetableslot_id INTEGER, PRIMARY KEY(student_id,course_id,session_id))");
+						.execute("CREATE TABLE student_course_session(student_id INTEGER, course_id INTEGER,session_id INTEGER,timetableslot_id INTEGER, PRIMARY KEY(student_id,course_id,session_id,timetableslot_id))");
 				System.out.println("Created student_course_session table");
 			}
 
@@ -217,10 +317,7 @@ statement.executeBatch();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-	}
-
+		}}
 	// 2.-OK
 	@Override
 	public void addSession(int courseID, int sessionID, boolean compulsory) {
@@ -365,8 +462,8 @@ statement.executeBatch();
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-//			statement.addBatch("Delete from session ");
-//			statement.executeBatch();
+			statement.addBatch("Delete from session ");
+			statement.executeBatch();
 			statement.addBatch("INSERT INTO session (session_id) VALUES ("
 					+ sessionID + ")");
 			statement.executeBatch();
@@ -433,7 +530,7 @@ statement.executeBatch();
 			e.printStackTrace();
 		}
 	}
-	
+
 	// 12-OK
 	@Override
 	public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,
@@ -476,48 +573,6 @@ statement.executeBatch();
 
 	}
 
-	// 14-OK
-	public ResultSet getSessionsCourse(int courseID){
-		String r = "";
-		ResultSet detailsResult = null;
-		System.out.println("dede");
-		try {
-			connection = getDatabaseConnection();
-			Statement statement = connection.createStatement();
-
-	/*		statement.addBatch("Delete from timetableslot ");
-			statement.executeBatch();
-
-			statement
-					.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
-							+ 1
-							+ ","
-							+ sessionID
-							+ ","
-							+ "'"
-							+ "BO715"
-							+ "'"
-							+ "," + 1 + "," + 2 + ")");
-			statement.executeBatch();
-			for (int i = 0; i < 15; i++) {
-				statement
-						.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
-								+ i + "," + sessionID + "," + 100 + ")");
-				statement.executeBatch();
-			}
-*/
-			String queryDetails = "SELECT session_iD FROM course_session WHERE course_id= "
-					+ courseID;
-			detailsResult = statement.executeQuery(queryDetails);
-			connection.close();
-			System.out.println(r);
-		} catch (SQLException e) {
-			// TODO Auto-generated method stub
-			e.printStackTrace();
-		}
-		return detailsResult;
-	}
-	
 	@Override
 	public ResultSet getTimetableslotDetails(int sessionID) {
 		String r = "";
@@ -558,20 +613,6 @@ statement.executeBatch();
 			e.printStackTrace();
 		}
 		return detailsResult;
-	}
-	
-	public ResultSet getSessionDetails(int sessionID) {
-		ResultSet result = null;
-		try {
-			connection = getDatabaseConnection();
-			Statement statement = connection.createStatement();
-			String query = "SELECT * FROM session";
-			result = statement.executeQuery(query);
-		} catch (SQLException e) {
-			// TODO Auto-generate method stub
-			e.printStackTrace();
-		}
-		return result;
 	}
 	
 	@Override
@@ -824,7 +865,7 @@ statement.executeBatch();
 
 	}
 
-	public Boolean tableExists(String tableName) throws SQLException {
+	public static Boolean tableExists(String tableName) throws SQLException {
 
 		connection = getDatabaseConnection();
 		;
@@ -842,7 +883,7 @@ statement.executeBatch();
 		return result;
 	}
 
-	public void existingTables() throws SQLException {
+	public static void existingTables() throws SQLException {
 
 		connection = getDatabaseConnection();
 		;
