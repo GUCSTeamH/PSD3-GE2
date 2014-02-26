@@ -64,7 +64,7 @@ public class SystemTestSteps {
 		ResultSet result = data.getSessionDetails(sessID);
 		result.next();
 		String reccurance = result.getString(2);
-		assertTrue(reccurance.equals("one-off"));
+		assertTrue(reccurance.equals(expected));
 	}
 	
 	/*********************************************************************/
