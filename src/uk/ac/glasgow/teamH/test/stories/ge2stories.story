@@ -3,6 +3,22 @@ In order to achieve full functionality
 As a user
 I want to use the system without any errors
 
+
+Scenario: lecturer adds a session to a course
+Given a lecturer
+When course 30 and session 200 are provided
+Then session 200 is added to course 30
+
+Scenario: lecturer imports a course from MyCampus
+Given a lecturer
+When selecting mycampus course 128
+Then mycampus course 128 is imported
+
+Scenario: Student books timeslot in session of a course
+Given a student
+When a student 12 selects a session 25 and a particular timeslot 15 of a course 16
+Then student 12 is enrolled in the session 25 of the course 16
+
 Scenario: lecturer selects that a session is a one-off.
 Given a lecturer
 When session 10 is marked as one-off

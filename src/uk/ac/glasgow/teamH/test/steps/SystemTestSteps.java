@@ -45,24 +45,95 @@ public class SystemTestSteps {
 	private StudentImpl stud;
 	private DatabaseImpl data;
 	
-	/**********************************************************************/
+
 	
 	@Given("a lecturer")
 	public void aLecturer() throws Exception{
-	
 		data = new DatabaseImpl();
-		lect= new LecturerImpl(data);
-	
+		lect = new LecturerImpl(data);
 	}
 	
+	@When("course $cID and session $sID are provided")
+	public void addSession(int cID, int sID){
+		lect.addSession(cID, sID, true);
+	}
+	
+	@Then("session $sID is added to course $cID")
+	public void checkSession(int sID, int cID){
+		boolean found = false;
+		ResultSet result = data.getTableInfo("course_session");
+		if (result !=null)
+			try {
+				
+				while (result.next()){
+
+					if (result.getInt(1) == cID && result.getInt(2)==sID)
+						found = true;
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		assertThat(found, is(true));
+		
+	}
+	
+	@When("selecting mycampus course $cID")
+	public void selectMyCampus(int cID){
+		lect.importMyCampusCourse(cID);
+	}
+	
+	@Then("mycampus course $cID is imported")
+	public void checkCourse(int cID){
+		boolean found=false;
+		ResultSet result = data.getTableInfo("course");
+		if (result !=null)
+			try {
+				
+				while (result.next()){
+
+					if (result.getInt(1) == cID)
+						found = true;
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		assertThat(found, is(true));
+		
+	}
+	ArrayList<Integer> notenrolled;
+	@Given("a student")
+	public void aStudent(){
+		data = new DatabaseImpl();
+		stud= new StudentImpl(data);
+		notenrolled=new ArrayList<Integer>();
+	}
+	
+	@When("a student $studentID selects a session $sessionID and a particular timeslot $timeslotID of a course $courseID")
+	public void Booked(int studentID,int sessionID,int timeslotID,int courseID) throws SQLException{
+		data.bookTimetableSlot(studentID,courseID, sessionID,timeslotID);
+	
+	}
+
+	@Then("student $studentID is enrolled in the session $sessionID of the course $courseID")
+	public void Book(int studentID,int sessionID,int courseID) throws SQLException{
+		boolean result = data.checkIfSignedUp(studentID, sessionID,courseID);
+		boolean expected=true;
+		assertEquals(expected,result);
+	}
+
+
 	@When("session $sessID is marked as $session")
 	public void sessionMarkedAsOneOff(Integer sessID, String session){
 		data.addSession(10, sessID, true);
 		lect.specifySessionRecurrence(sessID, session);
 	}
-	
-	
-	
+
+
+
 	@Then("session $sessID is a $expected session")
 	public void recurringSession(Integer sessID, String expected) throws SQLException{
 		ResultSet result = data.getTimetableslotDetails(sessID);
@@ -72,27 +143,19 @@ public class SystemTestSteps {
 			reccurance = result.getString(2);
 		assertEquals(expected,reccurance);
 	}
-	
-	/*********************************************************************/
+
 	@Given("an admin")
 	public void anAdmin(){
 		ServiceReference<AdminInterface>
 		adminReference = 
 			bundleContext.getServiceReference(
 				AdminInterface.class);
-		
+
 		this.admin = bundleContext.getService(adminReference);
 	}
-	
-	/*********************************************************************/
-	ArrayList<Integer> notenrolled;
-	@Given("a student")
-	public void aStudent(){
-		data = new DatabaseImpl();
-		stud= new StudentImpl(data);
-		notenrolled=new ArrayList<Integer>();
-	}
-	
+
+
+
 	@When("course $courseID is selected from student $studentID")
 	public void compulsoryNotBooked(int courseID,int studentID) throws SQLException{
 		ResultSet rs=data.getSessionsCourse(courseID);
@@ -102,12 +165,12 @@ public class SystemTestSteps {
 			notenrolled.add(rs.getInt(1));
 		}}
 	}
-	
+
 	@When("a  student $studentID selects a course $courseID")
 	public void compulsoryCheck(int courseID,int studentID) throws SQLException{
 		ResultSet rs=data.getSessionsCourse(courseID);
 		while(rs.next()){
-	
+
 			notenrolled.add(rs.getInt(1));
 		}
 	}
@@ -128,7 +191,7 @@ public class SystemTestSteps {
 			}
 		assertEquals(expected,result);
 	}
-	
+
 	@Then("student $studentID views all compulsory sessions of course $courseID")
 	public void showCompulsory(int studentID,int courseID) throws SQLException{
 		int count=0;
@@ -143,8 +206,10 @@ public class SystemTestSteps {
 				checkenrolled.add(rs.getInt(1));}
 		int expected=checkenrolled.size();
 		assertEquals(expected,count);
-		
+
 	}
 }}
+	
 
+	
 }
