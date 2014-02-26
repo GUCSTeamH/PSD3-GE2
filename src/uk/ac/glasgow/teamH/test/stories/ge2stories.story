@@ -8,3 +8,12 @@ Given a lecturer
 When session 10 is marked as one-off
 Then session 10 is a one-off session
 
+Scenario: lecturer selects that a session is a weekly.
+Given a lecturer
+When session 10 is marked as weekly
+Then session 10 is a weekly session
+
+Scenario: lecturer selects that a session is a fortnightly.
+Given a lecturer
+When session 10 is marked as fortnightly
+Then session 10 is a fortnightly session
