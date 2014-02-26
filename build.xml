@@ -229,24 +229,9 @@
 			<classpath refid="project.classpath"/>
 			
 			<test
-				name="uk.ac.glasgow.senotes.components.lab.repository.test.RepositoryImplBundleTest"
+				name="uk.ac.glasgow.teamH.testharness"
 			/>
 						
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.repository.test.unit.TemperatureRangeTest"
-			/>
-						
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.repository.test.unit.TemperatureHandlerTest"
-			/>
-			
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.test.integration.AlarmTest"
-			/>
-			
-			<test
-				name="uk.ac.glasgow.senotes.components.lab.repository.test.LabStories"
-			/>
 
 
 		</junit>
