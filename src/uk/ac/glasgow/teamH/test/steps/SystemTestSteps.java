@@ -52,29 +52,19 @@ public class SystemTestSteps {
 	
 	}
 	
-	@When("session $sessID is marked as one-off")
-	public void sessionMarkedAsOneOff(Integer sessID){
-		lect.specifySessionRecurrence(sessID, "one-off");
+	@When("session $sessID is marked as $session")
+	public void sessionMarkedAsOneOff(Integer sessID, String session){
+		lect.specifySessionRecurrence(sessID, session);
 	}
 	
 	
 	
-	@Then("session $sessID is repeated $expected time")
-	public void recurringSession(Integer sessID, Integer expected) throws SQLException{
-//		ResultSet result = lect.getTimetableslotDetails(sessID);
+	@Then("session $sessID is a $expected session")
+	public void recurringSession(Integer sessID, String expected) throws SQLException{
 		ResultSet result = data.getSessionDetails(sessID);
 		result.next();
 		String reccurance = result.getString(2);
-		Integer actual = 0;
-		try {
-			while (result.next()){
-				actual++;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		assertTrue(reccurance.equals("one-off"));
-//		assertThat(actual, equalTo(expected));
 	}
 	
 	/*********************************************************************/
