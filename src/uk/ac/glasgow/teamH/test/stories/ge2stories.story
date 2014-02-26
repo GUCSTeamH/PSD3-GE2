@@ -17,3 +17,8 @@ Scenario: lecturer selects that a session is a fortnightly.
 Given a lecturer
 When session 10 is marked as fortnightly
 Then session 10 is a fortnightly session
+
+Scenario: Student views all sessions in a course
+Given a student
+When course 16 is selected from student 11
+Then student 12 books all compulsory sessions of course 16

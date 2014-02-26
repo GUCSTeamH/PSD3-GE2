@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 
 /**
- * @author Michael
+ * @author Team H
  * 
  */
 public class DatabaseImpl implements DatabaseInterface {
@@ -433,7 +433,7 @@ statement.executeBatch();
 			e.printStackTrace();
 		}
 	}
-
+	
 	// 12-OK
 	@Override
 	public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,
@@ -477,6 +477,47 @@ statement.executeBatch();
 	}
 
 	// 14-OK
+	public ResultSet getSessionsCourse(int courseID){
+		String r = "";
+		ResultSet detailsResult = null;
+		System.out.println("dede");
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+	/*		statement.addBatch("Delete from timetableslot ");
+			statement.executeBatch();
+
+			statement
+					.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
+							+ 1
+							+ ","
+							+ sessionID
+							+ ","
+							+ "'"
+							+ "BO715"
+							+ "'"
+							+ "," + 1 + "," + 2 + ")");
+			statement.executeBatch();
+			for (int i = 0; i < 15; i++) {
+				statement
+						.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
+								+ i + "," + sessionID + "," + 100 + ")");
+				statement.executeBatch();
+			}
+*/
+			String queryDetails = "SELECT session_iD FROM course_session WHERE course_id= "
+					+ courseID;
+			detailsResult = statement.executeQuery(queryDetails);
+			connection.close();
+			System.out.println(r);
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
+		return detailsResult;
+	}
+	
 	@Override
 	public ResultSet getTimetableslotDetails(int sessionID) {
 		String r = "";

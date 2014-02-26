@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -23,6 +24,7 @@ import uk.ac.glasgow.teamH.user.AdminInterface;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
 import uk.ac.glasgow.teamH.user.impl.LecturerImpl;
+import uk.ac.glasgow.teamH.user.impl.StudentImpl;
 
 public class SystemTestSteps {
 
@@ -40,6 +42,7 @@ public class SystemTestSteps {
 	private StudentInterface student;
 	
 	private LecturerImpl lect;
+	private StudentImpl stud;
 	private DatabaseImpl data;
 	
 	/**********************************************************************/
@@ -79,15 +82,37 @@ public class SystemTestSteps {
 	}
 	
 	/*********************************************************************/
+	ArrayList<Integer> notenrolled;
 	@Given("a student")
 	public void aStudent(){
-		ServiceReference<StudentInterface> 
-		studentReference = 
-			bundleContext.getServiceReference(
-				StudentInterface.class);
-		
-		this.student = bundleContext.getService(studentReference);
+		data = new DatabaseImpl();
+		stud= new StudentImpl(data);
+		notenrolled=new ArrayList<Integer>();
 	}
 	
-	
+	@When("course $courseID is selected from $studentID")
+	public void compulsoryNotBooked(int courseID,int studentID) throws SQLException{
+		ResultSet rs=data.getSessionsCourse(courseID);
+		while(rs.next()){
+		boolean result = data.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
+		if (result==false){
+			notenrolled.add(rs.getInt(1));
+		}}
+	}
+	@Then("student $studentID books all compulsory sessions of course $courseID")
+	public void showCompulsory(int studentID,int courseID) throws SQLException{
+		int timetableslotID=3587;
+		for(int i=0;i<notenrolled.size();i++){
+			data.bookTimetableSlot(studentID,courseID,notenrolled.get(i),
+					timetableslotID);
+		}
+		ResultSet rs=data.getSessionsCourse(courseID);
+		boolean expected=false;
+		boolean result=true;
+		while(rs.next()){
+			result = data.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
+			if (result==false){break;}
+			}
+		assertEquals(result,expected);
+	}
 }
