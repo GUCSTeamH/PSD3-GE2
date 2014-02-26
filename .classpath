@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/org.apache.felix.framework-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/derby-10.10.1.1.jar"/>
-	<classpathentry kind="lib" path="/workshop-jbehave-rev40/lib/jbehave-core-3.9.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/jbehave-core-3.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
