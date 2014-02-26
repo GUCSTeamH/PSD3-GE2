@@ -15,8 +15,7 @@
 		<fileset dir="lib" />
 
 	</path>
-
-
+	
 	<target
 		name="clean"
 		description="Deletes all intermediate files."
