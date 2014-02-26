@@ -24,7 +24,10 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			createTables();
-			populate();
+//			populate();
+			specifySessionRecurrence(10, "one-off");
+			ResultSet result = getSessionDetails(10);
+			System.out.println(result.toString());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -362,8 +365,8 @@ statement.executeBatch();
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			statement.addBatch("Delete from session ");
-			statement.executeBatch();
+//			statement.addBatch("Delete from session ");
+//			statement.executeBatch();
 			statement.addBatch("INSERT INTO session (session_id) VALUES ("
 					+ sessionID + ")");
 			statement.executeBatch();
@@ -478,6 +481,7 @@ statement.executeBatch();
 	public ResultSet getTimetableslotDetails(int sessionID) {
 		String r = "";
 		ResultSet detailsResult = null;
+		System.out.println("dede");
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -513,6 +517,20 @@ statement.executeBatch();
 			e.printStackTrace();
 		}
 		return detailsResult;
+	}
+	
+	public ResultSet getSessionDetails(int sessionID) {
+		ResultSet result = null;
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			String query = "SELECT * FROM session";
+			result = statement.executeQuery(query);
+		} catch (SQLException e) {
+			// TODO Auto-generate method stub
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	@Override

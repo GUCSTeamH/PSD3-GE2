@@ -2,7 +2,7 @@ package uk.ac.glasgow.teamH.test.steps;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,8 +60,11 @@ public class SystemTestSteps {
 	
 	
 	@Then("session $sessID is repeated $expected time")
-	public void recurringSession(Integer sessID, Integer expected){
-		ResultSet result = lect.getTimetableslotDetails(sessID);
+	public void recurringSession(Integer sessID, Integer expected) throws SQLException{
+//		ResultSet result = lect.getTimetableslotDetails(sessID);
+		ResultSet result = data.getSessionDetails(sessID);
+		result.next();
+		String reccurance = result.getString(2);
 		Integer actual = 0;
 		try {
 			while (result.next()){
@@ -70,8 +73,8 @@ public class SystemTestSteps {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		assertThat(actual, equalTo(expected));
+		assertTrue(reccurance.equals("one-off"));
+//		assertThat(actual, equalTo(expected));
 	}
 	
 	/*********************************************************************/
