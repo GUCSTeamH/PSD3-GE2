@@ -1,5 +1,7 @@
 package uk.ac.glasgow.teamH.user.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;
@@ -64,7 +66,18 @@ public class LecturerImpl extends User implements LecturerInterface {
 
 	public String getTimetableslotDetails(int sessionId){
 		
-		String details=db.getTimetableslotDetails(sessionId);
+		ResultSet result=db.getTimetableslotDetails(sessionId);
+		String details = "";
+		try {
+			while (result.next()){
+				/*****************
+				 *	Fix later    * 
+				 ****************/
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println("Lecturer : details for session: "+sessionId+" : "+details);
 		

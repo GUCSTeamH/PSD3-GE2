@@ -23,7 +23,7 @@ import org.jbehave.core.steps.ParameterConverters.DateConverter;
 import org.jbehave.core.steps.SilentStepMonitor;
 import org.jbehave.core.steps.StepMonitor;
 
-import uk.ac.glasgow.teamH.steps.SystemTestSteps;
+import uk.ac.glasgow.teamH.test.steps.SystemTestSteps;
 
 /**
  * Extends the default embedder class to customise settings for the system stories.

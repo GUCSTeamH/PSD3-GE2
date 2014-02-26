@@ -5,7 +5,6 @@ I want to use the system without any errors
 
 Scenario: lecturer selects that a session is a one-off.
 Given a lecturer
-When a session is provided
-And the lecturer marks it as one-off
-Then the session is not repeated
+When session 10 is marked as one-off
+Then session 10 is not repeated
 
