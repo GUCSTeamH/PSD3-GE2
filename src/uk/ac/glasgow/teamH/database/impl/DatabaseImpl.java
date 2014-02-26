@@ -46,31 +46,45 @@ public class DatabaseImpl implements DatabaseInterface {
 		// TODO Auto-generated method stub
 		try{connection = getDatabaseConnection();
 		Statement statement = connection.createStatement();
-		boolean compulsory=false;
-		String name="A";
-		for (int i = 0; i < 125; i++) {
-			statement
-			.addBatch("INSERT INTO course (course_id, course_name) VALUES ("
-					+ i + "," +"'course"+i +"'" + ")");
-			statement.executeBatch(); 
-			for(int j=0;j<15;j++){
-				if (i % 2 == 0) {
-					compulsory=true;
-					name="A";
-					} else {
-						name="B";
-						compulsory=false;
-					}
-					
+		System.out.printf("\n \n CREATING TABLES \n----------------------------------\n----------------------------------\n");
+		int sesval=0;
+		
+		for (int i = 0; i < 10; i++) {
+			System.out.println("COURSE"+i);
 				statement
-				.addBatch("INSERT INTO session (session_id, compulsory) VALUES ("
-						+ j + "," + compulsory + ")");
-		statement.executeBatch(); 
+			.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
+					+ i + "," +"'course"+i +"'" + ")");
+			statement.executeBatch();
+			for(int j=sesval;j<sesval+5;j++){
+		//		System.out.println("SESSION "+j);
+				if(j<10){
+					if (j<3){
+					statement
+						.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+								+ j + ","+"'true'"+"," +true+ ")");
+				statement.executeBatch();}
+					else{
+						statement
+						.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+								+ j + ","+"'false'"+"," +true+ ")");
+				statement.executeBatch();	
+					}}
+				else{
+					statement
+					.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+							+ j + ","+"'true'"+"," +false+ ")");
+			statement.executeBatch();
+				}
+				
+					
+				
+
 		statement
 		.addBatch("INSERT INTO course_session(course_id, session_id) VALUES ("
 				+ i + "," + j + ")");
 		statement.executeBatch(); 
-		for(int f=0;f<30;f++){
+		for(int f=0;f<8;f++){
+//			System.out.println("TIMETABLESLOT "+f);
 			int staffID=(int)(Math.random() * (500+i)) + 0;
 			statement
 			.addBatch("INSERT INTO timetableslot(timetableslot_id, capacity, starttime, endtime, weekday, weeknumber, room, occupied, staff_id,session_id) VALUES ("
@@ -81,11 +95,12 @@ public class DatabaseImpl implements DatabaseInterface {
 				+ j + "," + f + ")");
 			statement.executeBatch();
 			int studentID=(int)(Math.random() * (595+i)) + 0;
-			for(int a=10;a<20;a++){
+			for(int a=10;a<14;a++){
+		//		System.out.println("STUDENT COURSE SESSION " +a);
 			statement
 			.addBatch("INSERT INTO student_course_session(student_id, course_id,session_id,timetableslot_id) VALUES ("
 				+ a + "," + i + "," + j + ","+f+ ")");
- 
+
 			statement
 			.addBatch("INSERT INTO student_session(student_id, session_id) VALUES ("
 				+ a + "," + j + ")");
@@ -93,10 +108,12 @@ public class DatabaseImpl implements DatabaseInterface {
 			}
 		}
 			}
+			sesval=sesval+16;
 		}
 		
 		
-		for(int a=0;a<250;a++){		
+		for(int a=0;a<20;a++){		
+//			System.out.println(a);
 			statement
 			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
 				+ a + "," + "'lecturer"+a+"'" + ")");
@@ -106,7 +123,8 @@ public class DatabaseImpl implements DatabaseInterface {
 					+ "'lecturer"+a+"'" + "," + "'lecturer"+a+"'" + ","+"'lecturer"+a+"'" + ")");
 			statement.executeBatch();
 		}
-		for(int a=250;a<500;a++){
+		for(int a=20;a<40;a++){
+		//	System.out.println(a);
 			statement
 			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
 				+ a + "," + "'tutor"+(a-250)+"'" + ")");
@@ -116,7 +134,8 @@ public class DatabaseImpl implements DatabaseInterface {
 					+ "'tutor"+a+"'" + "," + "'tutor"+a+"'" + ","+"'tutor"+a+"'" + ")");
 			statement.executeBatch();
 		}
-		for(int a=0;a<600;a++){
+		for(int a=0;a<60;a++){
+//			System.out.println(a);
 			statement
 			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
 					+ a + ","+"'student"+a+"'" + ")");
@@ -126,8 +145,8 @@ public class DatabaseImpl implements DatabaseInterface {
 					+ "'student"+a+"'" + "," + "'student"+a+"'" + ","+"'student"+a+"'" + ")");
 			statement.executeBatch();	
 		}
-		
-		for(int a=650;a<700;a++){
+		for(int a=65;a<70;a++){
+//			System.out.println(a);
 			statement
 			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
 					+ a + ","+"'student"+a+"'" + ")");
@@ -136,26 +155,84 @@ public class DatabaseImpl implements DatabaseInterface {
 			
 			
 			for(int a=126;a<250;a++){
+//				System.out.println(a);
 			statement
 					.addBatch("INSERT INTO mycampus_course (course_id,course_name) VALUES ("
 							+ a + "," + "'course"+a + "'" + ")");
 			statement.executeBatch();}
-	
+
 		statement
 		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
 				+ "'admin"+"'" + "," + "'admin"+"'" + ","+"'admin"+"'" + ")");
 		statement.executeBatch();
 		
+		System.out.println("");
+		
+		String query1 = "SELECT * FROM session";
+		String query2 = "SELECT * FROM course_session";
+		String query3 = "SELECT * FROM timetableslot";
+		String query4 = "SELECT * FROM staff";
+		String query5 = "SELECT * FROM student";
+		String query6 = "SELECT * FROM course";
+		ResultSet result1 = statement.executeQuery(query1);
+		System.out.println("Table Session");
+		System.out.println("---------------------------------------");
+		while (result1.next()) {
+			System.out.println(" sessionid: "+result1.getInt(1) + "    recurring:s   "+result1.getString(2)+"   compulsory: "
+					+ result1.getBoolean(3));
+		}
+		System.out.println("---------------------------------------");
+
+		ResultSet result2 = statement.executeQuery(query2);
+		System.out.println("Table Course_Session");
+		System.out.println("---------------------------------------");
+		while (result2.next()) {
+			System.out.println("course id  :  "+result2.getInt(1) + "  session id:  " + result2.getInt(2));
+		}
+		System.out.println("---------------------------------------");
+		
+		ResultSet result3 = statement.executeQuery(query3);
+		System.out.println("Timetable Slot");
+		System.out.println("---------------------------------------");
+		while (result3.next()) {
+			System.out.println(result3.getInt(1) + " "
+					+ result3.getInt(2)+ " "+result3.getInt(3)+ " "+result3.getInt(4)+ " "+result3.getInt(5)+ " "+result3.getByte(6)+ " "+result3.getString(7)+ " "+result3.getBoolean(8)+ " "+result3.getInt(9)+ " "+result3.getInt(10));
+		}
+		System.out.println("---------------------------------------");
+
+		ResultSet result4 = statement.executeQuery(query4);
+		System.out.println("Staff");
+		System.out.println("---------------------------------------");
+		while (result4.next()) {
+			System.out.println(result4.getInt(1) + " " + result4.getString(2));
+		}
+		System.out.println("---------------------------------------");
+		
+		ResultSet result5 = statement.executeQuery(query5);
+		System.out.println("Student");
+		System.out.println("---------------------------------------");
+		while (result5.next()) {
+			System.out.println(result5.getInt(1) + " " + result5.getString(2));
+		}
+		System.out.println("---------------------------------------");
+
+		ResultSet result6 = statement.executeQuery(query6);
+		System.out.println("Table Course");
+		System.out.println("---------------------------------------");
+		while (result6.next()) {
+			System.out.println(result6.getInt(1) + " " + result6.getString(2));
+		}
+		System.out.println("---------------------------------------");
 		
 		
-	
+
 		connection.close();
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	}
-	void createTables() {
+	static void createTables() {
 		try {
 			System.out.println("In create tables");
 			connection = getDatabaseConnection();
@@ -233,10 +310,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	
-	}
-
+		}}
 	// 2.-OK
 	@Override
 	public void addSession(int courseID, int sessionID, boolean compulsory) {
@@ -741,7 +815,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
-	public Boolean tableExists(String tableName) throws SQLException {
+	public static Boolean tableExists(String tableName) throws SQLException {
 
 		connection = getDatabaseConnection();
 		;
@@ -759,7 +833,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		return result;
 	}
 
-	public void existingTables() throws SQLException {
+	public static void existingTables() throws SQLException {
 
 		connection = getDatabaseConnection();
 		;
