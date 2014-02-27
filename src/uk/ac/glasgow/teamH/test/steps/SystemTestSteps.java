@@ -219,7 +219,7 @@ public class SystemTestSteps {
 	}
 	
 	@When("a student has successfully logged in")
-	public void whenLogIn() {
+	public void whenStudentLogIn() {
 		stud = new StudentImpl(data);
 		stud.registerMyCampusAuthenticator(myCamp);
 		assertTrue(stud.login());
@@ -228,5 +228,17 @@ public class SystemTestSteps {
 	@Then("student will only have rights/privileges associated with their role")
 	public void studentAccess() {
 		assertTrue(stud instanceof StudentImpl);
+	}
+	
+	@When("a lecturer has successfully logged in")
+	public void whenLecturerLogIn() {
+		lect = new LecturerImpl(data);
+		lect.registerMyCampusAuthenticator(myCamp);
+		assertTrue(lect.login());
+	}
+	
+	@Then("lecturer will only have rights/privileges associated with their role")
+	public void LecturerAccess() {
+		assertTrue(lect instanceof LecturerImpl);
 	}
 }
