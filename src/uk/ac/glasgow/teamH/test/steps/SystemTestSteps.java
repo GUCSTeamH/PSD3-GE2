@@ -49,7 +49,8 @@ public class SystemTestSteps {
 	private DatabaseImpl data;
 	
 	private MyCampus myCamp;
-
+	
+	private ArrayList<Integer> notenrolled;
 	
 	@Given("a lecturer")
 	public void aLecturer() throws Exception{
@@ -92,7 +93,7 @@ public class SystemTestSteps {
 	public void checkCourse(int cID){
 		boolean found=false;
 		ResultSet result = data.getTableInfo("course");
-		if (result !=null)
+		if (result !=null){
 			try {
 				
 				while (result.next()){
@@ -105,10 +106,11 @@ public class SystemTestSteps {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
 		assertThat(found, is(true));
 		
 	}
-	ArrayList<Integer> notenrolled;
+	
 	@Given("a student")
 	public void aStudent(){
 		data = new DatabaseImpl();
