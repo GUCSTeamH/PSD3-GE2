@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
 <project
-	name="se-notes.workshop.lab"
+	name="uk.ac.glasgow.teamH.LabSessionSystem"
 	basedir="."
 	xmlns:ivy="antlib:org.apache.ivy.ant"
 	default="build"
@@ -15,8 +15,7 @@
 		<fileset dir="lib" />
 
 	</path>
-
-
+	
 	<target
 		name="clean"
 		description="Deletes all intermediate files."
@@ -24,19 +23,7 @@
 		
 		<delete dir="bin" />
 		<delete dir="felix-cache" />
-		<delete dir="data" />
 		<delete dir="jbehave" />
-		<delete file="derby.log" />
-		<delete file="mycampus.jar" />
-		<delete file="mycampus-impl.jar" />
-		<delete file="database.jar" />
-		<delete file="database-impl.jar" />
-		<delete file="user.jar" />
-		<delete file="user-impl.jar" />
-		<delete file="userActivities.jar" />
-			
-
-	
 	</target>
 	
 	
@@ -47,6 +34,13 @@
 	>
 		
 		<delete dir="lib" />
+		
+		<delete>
+			<fileset dir="." includes="*.jar" />
+		</delete>
+		<delete dir="bundle" />
+		<delete dir="data" />
+		<ivy:cleancache/>
 	
 	</target>
 	
@@ -228,28 +222,36 @@
 		depends="osgi.run"
 	/>
 	
+	<target
+		name="test.init"
+		depends="build"
+		description="Prepares the jbehave directory with view resources for the HTML view of JBehave tests."
+	>
+		<mkdir dir="jbehave/view"/>
+		
+		<unzip
+			src="lib/jbehave-core-3.9-resources-3.9.zip"
+			dest="jbehave/view"
+		/>
+		
+		<unzip
+			src="lib/jbehave-site-resources-3.1.1.zip"
+			dest="jbehave/view"
+		/>
+	</target>
+	
 	
 	<target
 		name="test"
-		depends="build"
+		depends="test.init"
 	>
-		
-
 		<junit			
 			printsummary="yes"
 		>
+			<test name="uk.ac.glasgow.teamH.testharness.SystemStories"/>
 			<classpath refid="project.classpath"/>
-			
-			<test
-				name="uk.ac.glasgow.teamH.testharness.SystemStories"
-			/>
-
 
 		</junit>
-
-
-		
-	
 	</target>
 	
 </project>

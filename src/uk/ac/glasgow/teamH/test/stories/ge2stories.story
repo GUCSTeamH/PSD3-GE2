@@ -37,13 +37,13 @@ Then session 10 is a one-off session
 
 Scenario: lecturer selects that a session is a weekly.
 Given a lecturer
-When session 10 is marked as weekly
-Then session 10 is a weekly session
+When session 11 is marked as weekly
+Then session 11 is a weekly session
 
 Scenario: lecturer selects that a session is a fortnightly.
 Given a lecturer
-When session 10 is marked as fortnightly
-Then session 10 is a fortnightly session
+When session 12 is marked as fortnightly
+Then session 12 is a fortnightly session
 
 Scenario: Student views all sessions in a course
 Given a student
@@ -59,3 +59,39 @@ Scenario: Admin assigns a room to a timetableSlot
 Given an admin
 When room BO504 and timeslot 1002 are selected
 Then room BO504 is assigned to timeslot 1002
+
+Scenario: Student logs in to the system
+Given MyCampus authentication
+When a student has successfully logged in
+Then student will only have rights/privileges associated with their role
+
+Scenario: Lecturer logs in to the system
+Given MyCampus authentication
+When a lecturer has successfully logged in
+Then lecturer will only have rights/privileges associated with their role
+
+Scenario: Admin logs in to the system
+Given MyCampus authentication
+When an admin has successfully logged in
+Then the admin will only have rights/privileges associated with their role
+
+Scenario: System needs to support over 100 courses
+Given a system
+When courses are over 100
+Then system can support over 100 courses
+
+Scenario: System needs to support over 10 session per courses
+Given a system
+When course 2 is selected to support 10 sessions
+Then if sessions are over 10 then system can support 
+
+Scenario: System needs to support over 20 timeslots per session
+Given a system
+When session 2 is selected and it has over 20 timeslots
+Then if number of timeslots are over 20 then the system can support
+
+
+Scenario: System needs to support over 1000  users
+Given a system
+When users are over 1000
+Then system can support over 1000 users

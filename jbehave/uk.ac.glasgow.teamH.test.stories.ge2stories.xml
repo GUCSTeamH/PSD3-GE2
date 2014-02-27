@@ -34,17 +34,17 @@ Expected: is &lt;true&gt;
 <scenario keyword="Scenario:" title="lecturer selects that a session is a one-off.">
 <step outcome="successful">Given a lecturer</step>
 <step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>one-off</parameter></step>
-<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>one-off</parameter> session<failure>java.lang.NullPointerException</failure></step>
+<step outcome="successful">Then session <parameter>10</parameter> is a <parameter>one-off</parameter> session</step>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a weekly.">
 <step outcome="successful">Given a lecturer</step>
-<step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>weekly</parameter></step>
-<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>weekly</parameter> session<failure>java.lang.NullPointerException</failure></step>
+<step outcome="successful">When session <parameter>11</parameter> is marked as <parameter>weekly</parameter></step>
+<step outcome="successful">Then session <parameter>11</parameter> is a <parameter>weekly</parameter> session</step>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a fortnightly.">
 <step outcome="successful">Given a lecturer</step>
-<step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>fortnightly</parameter></step>
-<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>fortnightly</parameter> session<failure>java.lang.NullPointerException</failure></step>
+<step outcome="successful">When session <parameter>12</parameter> is marked as <parameter>fortnightly</parameter></step>
+<step outcome="successful">Then session <parameter>12</parameter> is a <parameter>fortnightly</parameter> session</step>
 </scenario>
 <scenario keyword="Scenario:" title="Student views all sessions in a course">
 <step outcome="successful">Given a student</step>
@@ -60,7 +60,42 @@ Expected: is &lt;true&gt;
 <step outcome="successful">Given an admin</step>
 <step outcome="successful">When room <parameter>BO504</parameter> and timeslot <parameter>1002</parameter> are selected</step>
 <step outcome="failed" keyword="FAILED">Then room <parameter>BO504</parameter> is assigned to timeslot <parameter>1002</parameter><failure>java.lang.AssertionError: 
-Expected: is &lt;1002&gt;
-     but: was &lt;90&gt;</failure></step>
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</failure></step>
+</scenario>
+<scenario keyword="Scenario:" title="Student logs in to the system">
+<step outcome="successful">Given MyCampus authentication</step>
+<step outcome="successful">When a student has successfully logged in</step>
+<step outcome="successful">Then student will only have rights/privileges associated with their role</step>
+</scenario>
+<scenario keyword="Scenario:" title="Lecturer logs in to the system">
+<step outcome="successful">Given MyCampus authentication</step>
+<step outcome="successful">When a lecturer has successfully logged in</step>
+<step outcome="successful">Then lecturer will only have rights/privileges associated with their role</step>
+</scenario>
+<scenario keyword="Scenario:" title="Admin logs in to the system">
+<step outcome="successful">Given MyCampus authentication</step>
+<step outcome="successful">When an admin has successfully logged in</step>
+<step outcome="successful">Then the admin will only have rights/privileges associated with their role</step>
+</scenario>
+<scenario keyword="Scenario:" title="System needs to support over 100 courses">
+<step outcome="successful">Given a system</step>
+<step outcome="successful">When courses are over <parameter>100</parameter></step>
+<step outcome="successful">Then system can support over <parameter>100</parameter> courses</step>
+</scenario>
+<scenario keyword="Scenario:" title="System needs to support over 10 session per courses">
+<step outcome="successful">Given a system</step>
+<step outcome="successful">When course <parameter>2</parameter> is selected to support <parameter>10</parameter> sessions</step>
+<step outcome="successful">Then if sessions are over <parameter>10</parameter> then system can support</step>
+</scenario>
+<scenario keyword="Scenario:" title="System needs to support over 20 timeslots per session">
+<step outcome="successful">Given a system</step>
+<step outcome="successful">When session <parameter>2</parameter> is selected and it has over <parameter>20</parameter> timeslots</step>
+<step outcome="successful">Then if number of timeslots are over <parameter>20</parameter> then the system can support</step>
+</scenario>
+<scenario keyword="Scenario:" title="System needs to support over 1000  users">
+<step outcome="successful">Given a system</step>
+<step outcome="successful">When users are over <parameter>1000</parameter></step>
+<step outcome="successful">Then system can support over <parameter>1000</parameter> users</step>
 </scenario>
 </story>

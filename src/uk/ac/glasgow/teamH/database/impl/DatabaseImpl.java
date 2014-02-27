@@ -24,6 +24,29 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			createTables();
 			populate();
+			
+			System.out.println("dsadsadsadsa");
+//			specifySessionRecurrence(10, "one-off");
+//			ResultSet result = getSessionDetails(10);
+//			result.next();
+//			String resultStr = result.getString(2);
+//			System.out.println(resultStr);
+			importMycampusCourse(321);
+			boolean found = false;
+			ResultSet result = getTableInfo("course");
+			System.out.println("trying");
+			try {
+				System.out.println("try block");
+				while (result.next()){
+					System.out.println(result.getInt(1));
+					if (result.getInt("course_id") == 321)
+						found = true;
+				}
+				System.out.println(found);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,6 +65,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			e.printStackTrace();
 		}
 	}
+
 	private static void populate() {
 		// TODO Auto-generated method stub
 		try{connection = getDatabaseConnection();
@@ -238,6 +262,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		e.printStackTrace();
 	}
 	}
+	
 	static void createTables() {
 		try {
 			System.out.println("In create tables");
@@ -316,7 +341,9 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}}
+		}
+	}
+
 	// 2.-OK
 	@Override
 	public void addSession(int courseID, int sessionID, boolean compulsory) {
@@ -416,8 +443,9 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			String query = "SELECT * FROM session";
+			String query = "SELECT * FROM session WHERE session_id = " + sessionID;
 			result = statement.executeQuery(query);
+//			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generate method stub
 			e.printStackTrace();
@@ -468,11 +496,12 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println("in db");
 			statement.addBatch("INSERT INTO course(course_id,course_name) VALUES ("
 						+ courseID + "," + "'course"+courseID + "'"
+
 						+ ")");
+//						+ info.getInt(1) + "," + "'" + info.getString(2) + "'"
+//						+ ")");
 				statement.executeBatch();
-				//String query = "Select * FROM course";
-				//ResultSet result = statement.executeQuery(query);
-			
+
 			//connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -502,6 +531,19 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
+	public void changeSessionRecurrence(int sessionID, String recurrence) {
+		try{
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			String q = "UPDATE session SET recurring = '" + recurrence +"' WHERE session_id = " + sessionID;
+			statement.executeUpdate(q);
+			//connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	// 4-OK
 	@Override
 	public void specifySessionRecurrence(int sessionID, String recurrence) {

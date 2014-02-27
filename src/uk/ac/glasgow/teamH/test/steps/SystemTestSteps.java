@@ -18,6 +18,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 
+import uk.ac.glasgow.teamH.MyCampus.impl.MyCampus;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.database.impl.DatabaseImpl;
 import uk.ac.glasgow.teamH.test.ConfiguredFrameworkFactory;
@@ -30,24 +31,19 @@ import uk.ac.glasgow.teamH.user.impl.StudentImpl;
 
 public class SystemTestSteps {
 
-	private static final LecturerInterface LecturerInterface = null;
-	private BundleContext bundleContext;
-	private Framework framework;
-	private Bundle database;
-	private Bundle mycampus;
-	private Bundle user;
-	private Bundle activities;
-	
-	
-	private AdminInterface admin;
-	private LecturerInterface lecturer;
-	private StudentInterface student;
-	
+
+	private AdminImpl admin;
 	private LecturerImpl lect;
 	private StudentImpl stud;
 	private DatabaseImpl data;
 	
-
+	private MyCampus myCamp;
+	
+	private ArrayList<Integer> notenrolled;
+	public int countsessions=0;
+	public int countcourses=0;
+	public int counttimeslots=0;
+	public int countUsers=0;
 	
 	@Given("a lecturer")
 	public void aLecturer() throws Exception{
@@ -98,7 +94,7 @@ public class SystemTestSteps {
 		assertThat(found, is(true));
 		
 	}
-	ArrayList<Integer> notenrolled;
+	
 	@Given("a student")
 	public void aStudent(){
 		data = new DatabaseImpl();
@@ -108,7 +104,7 @@ public class SystemTestSteps {
 	
 	@When("a student $studentID selects a session $sessionID and a particular timeslot $timeslotID of a course $courseID")
 	public void Booked(int studentID,int sessionID,int timeslotID,int courseID) throws SQLException{
-		data.bookTimetableSlot(studentID,courseID, sessionID,timeslotID);
+		stud.bookTimetableSlot(studentID,courseID, sessionID,timeslotID);
 	
 	}
 
@@ -121,26 +117,24 @@ public class SystemTestSteps {
 
 
 	@When("session $sessID is marked as $session")
-	public void sessionMarkedAsOneOff(Integer sessID, String session){
-		data.addSession(10, sessID, true);
+	public void sessionMarkedAsOneOff(int sessID, String session){
+//		data.addSession(10, sessID, true);
 		lect.specifySessionRecurrence(sessID, session);
 	}
 
 
 
 	@Then("session $sessID is a $expected session")
-	public void recurringSession(Integer sessID, String expected) throws SQLException{
-		ResultSet result = data.getTimetableslotDetails(sessID);
-		String reccurance="";
-		//if(result==null){reccurance =expected;}
-		//else 
-			reccurance = result.getString(2);
-		assertEquals(expected,reccurance);
+	public void recurringSession(int sessID, String expected) throws SQLException{
+		ResultSet result = data.getSessionDetails(sessID);
+		result.next();
+		String reccurance = result.getString("recurring");
+		assertTrue(reccurance.equalsIgnoreCase(expected));
 	}
 
 	@When("course $courseID is selected from student $studentID")
 	public void compulsoryNotBooked(int courseID,int studentID) throws SQLException{
-		ResultSet rs=data.getSessionsCourse(courseID);
+		ResultSet rs=stud.getSessionsCourse(courseID);
 		while(rs.next()){
 		boolean result = data.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
 		if (result==false){
@@ -150,7 +144,7 @@ public class SystemTestSteps {
 
 	@When("a  student $studentID selects a course $courseID")
 	public void compulsoryCheck(int courseID,int studentID) throws SQLException{
-		ResultSet rs=data.getSessionsCourse(courseID);
+		ResultSet rs=stud.getSessionsCourse(courseID);
 		while(rs.next()){
 
 			notenrolled.add(rs.getInt(1));
@@ -207,23 +201,14 @@ public class SystemTestSteps {
 	
 	@Then("room $room is assigned to timeslot $time")
 	public void checkDB(String room, int time) throws SQLException {
-//		boolean found = true;
+		boolean found = false;
 		int check = 0;
 		ResultSet result = data.getTableInfo("timetableslot");
 		if (result != null){
 			try {
-
 				while (result.next()) {
-				
-					//check = result.getInt(1);
-					//if(check==time)break;	
-					//if (result.getInt(1) == time) {
-//					//	found = false;
-					//	check = result.getInt(1);
-					//	break;
-					
-				//}
-					check++;
+					if (result.getInt(1) == time && result.getString(7).equalsIgnoreCase(room))
+						found = true;
 				}
 
 			} catch (SQLException e) {
@@ -232,7 +217,94 @@ public class SystemTestSteps {
 			}
 		}
 
-		assertThat(check, is(time));
+		assertThat(found, is(true));
 	} 
+
 	
+	@Given("MyCampus authentication")
+	public void givenMyCampus() {
+		myCamp = new MyCampus();
+	}
+	
+	@When("a student has successfully logged in")
+	public void whenStudentLogIn() {
+		stud = new StudentImpl(data);
+		stud.registerMyCampusAuthenticator(myCamp);
+		assertTrue(stud.login());
+	}
+	
+	@Then("student will only have rights/privileges associated with their role")
+	public void studentAccess() {
+		assertTrue(stud instanceof StudentImpl);
+	}
+	
+	@When("a lecturer has successfully logged in")
+	public void whenLecturerLogIn() {
+		lect = new LecturerImpl(data);
+		lect.registerMyCampusAuthenticator(myCamp);
+		assertTrue(lect.login());
+	}
+	
+	@Then("lecturer will only have rights/privileges associated with their role")
+	public void LecturerAccess() {
+		assertTrue(lect instanceof LecturerImpl);
+	}
+	
+	@When("an admin has successfully logged in")
+	public void whenAdminLogIn() {
+		admin= new AdminImpl(data);
+		admin.registerMyCampusAuthenticator(myCamp);
+		assertTrue(admin.login());
+	}
+	
+	@Then("the admin will only have rights/privileges associated with their role")
+	public void AdminAccess() {
+		assertTrue(admin instanceof AdminImpl);
+	}
+	
+	@Given("a system")
+	public void system() throws Exception{
+		data = new DatabaseImpl();
+		
+	}
+	@When ("course $cID is selected to support $sessNum sessions")
+	public void sessionCalc(int cID, int sessNum){
+		countsessions = data.supportNSessionTypes(sessNum,cID);
+	}
+	
+	@Then ("if sessions are over $sessNum then system can support")
+		public void sessionSupport(int sessNum){
+		assertTrue(sessNum<=countsessions);
+	}
+	
+	
+	@When ("courses are over $num")
+	public void courseCalc(int num){
+		countcourses=data.supportNCourses(num);
+	}
+	
+	@Then ("system can support over $courseNum courses")
+	public void coursesSupport(int courseNum){
+		assertTrue(courseNum<=countcourses);
+	}
+	
+	@When ("session $sessID is selected and it has over $timeNum timeslots")
+	public void timeslotCalc(int sessID,int timeNum){
+		counttimeslots=data.supportNTimetableslotsPerSession(timeNum,sessID);
+	}
+	
+	@Then ("if number of timeslots are over $timeslots then the system can support")
+	public void timeslotsSupport(int timeslots){
+		assertTrue(timeslots<=counttimeslots);
+	}
+	
+	@When ("users are over $totalUsers")
+	public void userCalc(int totalUsers){
+		countUsers=data.supportNUsers(totalUsers);
+	}
+	
+	@Then ("system can support over $total users")
+	public void userSupport(int total){
+		assertTrue(total<=countUsers);
+	}
 }

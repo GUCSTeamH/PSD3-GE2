@@ -9,7 +9,6 @@ public interface DatabaseInterface {
 
 public void addSession(int courseID, int sessionID,boolean compulsory);
 
-
 public void importMycampusCourse(int courseID);
 
 public void specifySessionRecurrence(int sessionID,String recurrence);

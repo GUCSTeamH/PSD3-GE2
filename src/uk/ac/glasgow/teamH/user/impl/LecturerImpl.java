@@ -58,8 +58,7 @@ public class LecturerImpl extends User implements LecturerInterface {
 		db.specifySessionRecurrence(sessionId, rec);
 		
 		System.out.println("Lecturer : changed session  "+sessionId+" recurrent ");
-		//get session from db
-		//put session in db with type assigned
+
 		
 	}
 	
