@@ -1,7 +1,9 @@
-GE2/bin/
-GE2/bundle/
+bin/
+bundle/
 data/
 felix-cache/
+jbehave/
+lib/
 *.*~
-/bin
 *.class
+*.jar

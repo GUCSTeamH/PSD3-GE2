@@ -151,18 +151,14 @@ public class DatabaseImpl implements DatabaseInterface {
 			.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
 					+ "'student"+a+"'" + "," + "'student"+a+"'" + ","+"'student"+a+"'" + ")");
 			statement.executeBatch();	
-		}
+		}		
 		for(int a=650;a<700;a++){
-//			System.out.println(a);
 			statement
 			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
 					+ a + ","+"'student"+a+"'" + ")");
 			statement.executeBatch();}
-
-
-
+			
 			for(int a=126;a<250;a++){
-//				System.out.println(a);
 			statement
 					.addBatch("INSERT INTO mycampus_course (course_id,course_name) VALUES ("
 							+ a + "," + "'course"+a + "'" + ")");
@@ -230,7 +226,6 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println(result6.getInt(1) + " " + result6.getString(2));
 		}
 		System.out.println("---------------------------------------");
-
 
 
 		connection.close();
@@ -317,7 +312,9 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}}
+		}
+	}
+
 	// 2.-OK
 	@Override
 	public void addSession(int courseID, int sessionID, boolean compulsory) {
