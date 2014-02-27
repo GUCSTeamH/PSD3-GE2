@@ -7,3 +7,4 @@ lib/
 *.*~
 *.class
 *.jar
+derby.log

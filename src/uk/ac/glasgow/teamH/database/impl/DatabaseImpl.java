@@ -82,15 +82,6 @@ public class DatabaseImpl implements DatabaseInterface {
 							+ j + ","+"'true'"+"," +false+ ")");
 			statement.executeBatch();
 				}
-<<<<<<< HEAD
-				
-					
-				
-=======
-
-
-
->>>>>>> e51537d0d7859eb7df5a042cc85fb034321a8c7c
 
 		statement
 		.addBatch("INSERT INTO course_session(course_id, session_id) VALUES ("
@@ -157,11 +148,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
 					+ "'student"+a+"'" + "," + "'student"+a+"'" + ","+"'student"+a+"'" + ")");
 			statement.executeBatch();	
-<<<<<<< HEAD
 		}
-=======
-		}		
->>>>>>> e51537d0d7859eb7df5a042cc85fb034321a8c7c
+		
 		for(int a=650;a<700;a++){
 //			System.out.println(a);
 			statement
@@ -180,15 +168,8 @@ public class DatabaseImpl implements DatabaseInterface {
 		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
 				+ "'admin"+"'" + "," + "'admin"+"'" + ","+"'admin"+"'" + ")");
 		statement.executeBatch();
-<<<<<<< HEAD
-		
 		System.out.println("");
 		
-=======
-
-		System.out.println("");
-
->>>>>>> e51537d0d7859eb7df5a042cc85fb034321a8c7c
 		String query1 = "SELECT * FROM session";
 		String query2 = "SELECT * FROM course_session";
 		String query3 = "SELECT * FROM timetableslot";
@@ -211,11 +192,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println("course id  :  "+result2.getInt(1) + "  session id:  " + result2.getInt(2));
 		}
 		System.out.println("---------------------------------------");
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> e51537d0d7859eb7df5a042cc85fb034321a8c7c
 		ResultSet result3 = statement.executeQuery(query3);
 		System.out.println("Timetable Slot");
 		System.out.println("---------------------------------------");
@@ -232,11 +209,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println(result4.getInt(1) + " " + result4.getString(2));
 		}
 		System.out.println("---------------------------------------");
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> e51537d0d7859eb7df5a042cc85fb034321a8c7c
 		ResultSet result5 = statement.executeQuery(query5);
 		System.out.println("Student");
 		System.out.println("---------------------------------------");
@@ -252,12 +225,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println(result6.getInt(1) + " " + result6.getString(2));
 		}
 		System.out.println("---------------------------------------");
-<<<<<<< HEAD
-		
-		
-=======
 
->>>>>>> e51537d0d7859eb7df5a042cc85fb034321a8c7c
 
 		connection.close();
 	} catch (SQLException e) {
@@ -343,13 +311,9 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-<<<<<<< HEAD
-		}}
-=======
 		}
 	}
 
->>>>>>> e51537d0d7859eb7df5a042cc85fb034321a8c7c
 	// 2.-OK
 	@Override
 	public void addSession(int courseID, int sessionID, boolean compulsory) {
