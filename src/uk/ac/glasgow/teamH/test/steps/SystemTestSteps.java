@@ -43,7 +43,7 @@ public class SystemTestSteps {
 	private LecturerInterface lecturer;
 	private StudentInterface student;
 	
-//	private AdminImpl admin;
+	private AdminImpl adminImpl;
 	private LecturerImpl lect;
 	private StudentImpl stud;
 	private DatabaseImpl data;
@@ -240,5 +240,17 @@ public class SystemTestSteps {
 	@Then("lecturer will only have rights/privileges associated with their role")
 	public void LecturerAccess() {
 		assertTrue(lect instanceof LecturerImpl);
+	}
+	
+	@When("an admin has successfully logged in")
+	public void whenAdminLogIn() {
+		adminImpl = new AdminImpl(data);
+		adminImpl.registerMyCampusAuthenticator(myCamp);
+		assertTrue(adminImpl.login());
+	}
+	
+	@Then("the admin will only have rights/privileges associated with their role")
+	public void AdminAccess() {
+		assertTrue(adminImpl instanceof AdminImpl);
 	}
 }
