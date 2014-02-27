@@ -23,7 +23,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			createTables();
-//			populate();
+			populate();
 			
 			System.out.println("dsadsadsadsa");
 //			specifySessionRecurrence(10, "one-off");
