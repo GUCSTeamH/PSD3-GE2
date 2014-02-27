@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>uk.ac.glasgow.teamH.test.stories.ge2stories</title>
+<style type="text/css" media="all">
+@import url( "./style/jbehave-core.css" );
+</style>
+</head>
+<body>
+ 
+<script type="syntaxhighlighter" class="brush: xml"><![CDATA[
+<story path="uk/ac/glasgow/teamH/test/stories/ge2stories.story" title="">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">achieve full functionality</inOrderTo>
+  <asA keyword="As a">user</asA>
+  <iWantTo keyword="I want to">use the system without any errors</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="lecturer selects that a session is a one-off.">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>one-off</parameter></step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>one-off</parameter> session<failure>java.lang.NullPointerException</failure></step>
+</scenario>
+<scenario keyword="Scenario:" title="lecturer selects that a session is a weekly.">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>weekly</parameter></step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>weekly</parameter> session<failure>java.lang.NullPointerException</failure></step>
+</scenario>
+<scenario keyword="Scenario:" title="lecturer selects that a session is a fortnightly.">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>fortnightly</parameter></step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>fortnightly</parameter> session<failure>java.lang.NullPointerException</failure></step>
+</scenario>
+<scenario keyword="Scenario:" title="Student views all sessions in a course">
+<step outcome="successful">Given a student</step>
+<step outcome="successful">When course <parameter>16</parameter> is selected from student <parameter>12</parameter></step>
+<step outcome="successful">Then student <parameter>12</parameter> books all compulsory sessions of course <parameter>16</parameter></step>
+</scenario>
+<scenario keyword="Scenario:" title="Student views all compulsory sessions in a course">
+<step outcome="successful">Given a student</step>
+<step outcome="successful">When a student <parameter>12</parameter> selects a course <parameter>16</parameter></step>
+<step outcome="successful">Then student <parameter>12</parameter> views all compulsory sessions of course <parameter>16</parameter></step>
+</scenario>
+</story>
+
+]]></script>
+</body>
+<!--  SyntaxHighlighter resources:  should be included at end of body -->
+<link rel="stylesheet" type="text/css" href="./style/sh-3.0.83/shCore.css"/>
+<link rel="stylesheet" type="text/css" href="./style/sh-3.0.83/shThemeRDark.css"/>
+<script language="javascript" src="./js/sh-3.0.83/shCore.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushBash.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushCss.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushDiff.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushGroovy.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushJava.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushJScript.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushPlain.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushPython.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushRuby.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushScala.js"></script>
+<script language="javascript" src="./js/sh-3.0.83/shBrushXml.js"></script>
+<script language="javascript" src="./js/shBrushBdd.js"></script>
+<script type="text/javascript">
+    SyntaxHighlighter.defaults['gutter'] = false;
+    SyntaxHighlighter.defaults['toolbar'] = false;    
+    SyntaxHighlighter.all();
+</script>
+</html>

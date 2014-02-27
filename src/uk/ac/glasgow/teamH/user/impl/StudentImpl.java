@@ -1,5 +1,7 @@
 package uk.ac.glasgow.teamH.user.impl;
 
+import java.sql.ResultSet;
+
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
 
@@ -17,6 +19,10 @@ public class StudentImpl extends User implements StudentInterface {
 		this.db=db;
 		matric="112233f";
 		
+	}
+	
+	public ResultSet getSessionsCourse(int courseID){
+		return db.getSessionsCourse(courseID);
 	}
 	
 	public void bookTimetableSlot(int student, int course, int session, int time){
