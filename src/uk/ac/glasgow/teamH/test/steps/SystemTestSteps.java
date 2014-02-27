@@ -127,21 +127,19 @@ public class SystemTestSteps {
 
 
 	@When("session $sessID is marked as $session")
-	public void sessionMarkedAsOneOff(Integer sessID, String session){
-		data.addSession(10, sessID, true);
-		lect.specifySessionRecurrence(sessID, session);
+	public void sessionMarkedAsOneOff(int sessID, String session){
+//		data.addSession(10, sessID, true);
+		data.changeSessionRecurrence(sessID, session);
 	}
 
 
 
 	@Then("session $sessID is a $expected session")
-	public void recurringSession(Integer sessID, String expected) throws SQLException{
-		ResultSet result = data.getTimetableslotDetails(sessID);
-		String reccurance="";
-		//if(result==null){reccurance =expected;}
-		//else 
-			reccurance = result.getString(2);
-		assertEquals(expected,reccurance);
+	public void recurringSession(int sessID, String expected) throws SQLException{
+		ResultSet result = data.getSessionDetails(sessID);
+		result.next();
+		String reccurance = result.getString("recurring");
+		assertTrue(reccurance.equalsIgnoreCase(expected));
 	}
 
 	@Given("an admin")

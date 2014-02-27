@@ -23,7 +23,14 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			createTables();
-			populate();
+//			populate();
+			
+			System.out.println("dsadsadsadsa");
+//			specifySessionRecurrence(10, "one-off");
+//			ResultSet result = getSessionDetails(10);
+//			result.next();
+//			String resultStr = result.getString(2);
+//			System.out.println(resultStr);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -380,8 +387,9 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			String query = "SELECT * FROM session";
+			String query = "SELECT * FROM session WHERE session_id = " + sessionID;
 			result = statement.executeQuery(query);
+//			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generate method stub
 			e.printStackTrace();
@@ -467,6 +475,19 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
+	public void changeSessionRecurrence(int sessionID, String recurrence) {
+		try{
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			String q = "UPDATE session SET recurring = '" + recurrence +"' WHERE session_id = " + sessionID;
+			statement.executeUpdate(q);
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	// 4-OK
 	@Override
 	public void specifySessionRecurrence(int sessionID, String recurrence) {
