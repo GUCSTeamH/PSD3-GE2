@@ -9,10 +9,21 @@ Given a lecturer
 When course 30 and session 200 are provided
 Then session 200 is added to course 30
 
+Scenario: lecturer adds a session to a course
+Given a lecturer
+When course 30 and session 210 are provided
+Then session 210 is added to course 30
+
+Scenario: lecturer adds a session to a course
+Given a lecturer
+When course 50 and session 210 are provided
+Then session 210 is added to course 50
+
 Scenario: lecturer imports a course from MyCampus
 Given a lecturer
-When selecting mycampus course 128
-Then mycampus course 128 is imported
+When selecting mycampus course 157
+Then mycampus course 157 is imported
+
 
 Scenario: Student books timeslot in session of a course
 Given a student
@@ -43,3 +54,8 @@ Scenario: Student views all compulsory sessions in a course
 Given a student
 When a student 12 selects a course 16
 Then student 12 views all compulsory sessions of course 16
+
+Scenario: Admin assigns a room to a timetableSlot
+Given an admin
+When room BO504 and timeslot 1002 are selected
+Then room BO504 is assigned to timeslot 1002

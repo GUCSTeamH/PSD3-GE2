@@ -7,6 +7,38 @@
 <div class="element iWantTo"><span class="keyword iWantTo">I want to</span> use the system without any errors</div>
 </div>
 <div class="scenario">
+<h2>Scenario: lecturer adds a session to a course</h2>
+<div class="step successful">Given a lecturer</div>
+<div class="step successful">When course <span class="step parameter">30</span> and session <span class="step parameter">200</span> are provided</div>
+<div class="step successful">Then session <span class="step parameter">200</span> is added to course <span class="step parameter">30</span></div>
+</div>
+<div class="scenario">
+<h2>Scenario: lecturer adds a session to a course</h2>
+<div class="step successful">Given a lecturer</div>
+<div class="step successful">When course <span class="step parameter">30</span> and session <span class="step parameter">210</span> are provided</div>
+<div class="step successful">Then session <span class="step parameter">210</span> is added to course <span class="step parameter">30</span></div>
+</div>
+<div class="scenario">
+<h2>Scenario: lecturer adds a session to a course</h2>
+<div class="step successful">Given a lecturer</div>
+<div class="step successful">When course <span class="step parameter">50</span> and session <span class="step parameter">210</span> are provided</div>
+<div class="step failed">Then session <span class="step parameter">210</span> is added to course <span class="step parameter">50</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</span></div>
+</div>
+<div class="scenario">
+<h2>Scenario: lecturer imports a course from MyCampus</h2>
+<div class="step successful">Given a lecturer</div>
+<div class="step successful">When selecting mycampus course <span class="step parameter">157</span></div>
+<div class="step successful">Then mycampus course <span class="step parameter">157</span> is imported</div>
+</div>
+<div class="scenario">
+<h2>Scenario: Student books timeslot in session of a course</h2>
+<div class="step successful">Given a student</div>
+<div class="step successful">When a student <span class="step parameter">12</span> selects a session <span class="step parameter">25</span> and a particular timeslot <span class="step parameter">15</span> of a course <span class="step parameter">16</span></div>
+<div class="step successful">Then student <span class="step parameter">12</span> is enrolled in the session <span class="step parameter">25</span> of the course <span class="step parameter">16</span></div>
+</div>
+<div class="scenario">
 <h2>Scenario: lecturer selects that a session is a one-off.</h2>
 <div class="step successful">Given a lecturer</div>
 <div class="step successful">When session <span class="step parameter">10</span> is marked as <span class="step parameter">one-off</span></div>
@@ -35,5 +67,13 @@
 <div class="step successful">Given a student</div>
 <div class="step successful">When a student <span class="step parameter">12</span> selects a course <span class="step parameter">16</span></div>
 <div class="step successful">Then student <span class="step parameter">12</span> views all compulsory sessions of course <span class="step parameter">16</span></div>
+</div>
+<div class="scenario">
+<h2>Scenario: Admin assigns a room to a timetableSlot</h2>
+<div class="step successful">Given an admin</div>
+<div class="step successful">When room <span class="step parameter">BO504</span> and timeslot <span class="step parameter">1002</span> are selected</div>
+<div class="step failed">Then room <span class="step parameter">BO504</span> is assigned to timeslot <span class="step parameter">1002</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.AssertionError: 
+Expected: is &lt;1002&gt;
+     but: was &lt;90&gt;</span></div>
 </div>
 </div>

@@ -9,7 +9,7 @@ public class AdminImpl implements AdminInterface {
 	DatabaseInterface db;
 	String matric;
 
-	AdminImpl(DatabaseInterface db){
+	public AdminImpl(DatabaseInterface db){
 		this.db=db;
 		matric="110099c";
 	}

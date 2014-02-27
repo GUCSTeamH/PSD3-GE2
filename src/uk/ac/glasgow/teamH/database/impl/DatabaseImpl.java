@@ -10,13 +10,13 @@ import java.sql.Statement;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 
 /**
- * @author Michael
+ * @author Emilia
  * 
  */
 public class DatabaseImpl implements DatabaseInterface {
 	static Connection connection = null;
 	Statement stmt = null;
-
+	public static ResultSet coursetable;
 	private static final String connectionString = "jdbc:derby:data/mycampus5;create=true";
 
 	public DatabaseImpl() {
@@ -95,13 +95,12 @@ public class DatabaseImpl implements DatabaseInterface {
 			int staffID=(int)(Math.random() * (500+i)) + 0;
 			statement
 			.addBatch("INSERT INTO timetableslot(timetableslot_id, capacity, starttime, endtime, weekday, weeknumber, room, occupied, staff_id,session_id) VALUES ("
-					+ f + "," + 150 + "," + 12 + ","+13+ "," + 2+ "," + i+ ","+"'Boyd Orr"+"'"+","+true+ ","+staffID+ ","+j+ ")");
+					+ f + "," + 150 + "," + 12 + ","+13+ "," + 2+ "," + i+ ","+"'Boyd Orr'"+","+true+ ","+staffID+ ","+j+ ")");
 			statement.executeBatch(); 
 			statement
 			.addBatch("INSERT INTO session_timetableslot(session_id, timetableslot_id) VALUES ("
 				+ j + "," + f + ")");
 			statement.executeBatch();
-			int studentID=(int)(Math.random() * (595+i)) + 0;
 			for(int a=1;a<studentplus;a++){
 		//		System.out.println("STUDENT COURSE SESSION " +a);
 			statement
@@ -230,7 +229,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println(result6.getInt(1) + " " + result6.getString(2));
 		}
 		System.out.println("---------------------------------------");
-
+			coursetable=result6;
 
 
 		connection.close();
@@ -334,7 +333,7 @@ public class DatabaseImpl implements DatabaseInterface {
 					.addBatch("INSERT INTO course_session (course_id, session_id) VALUES ("
 							+ courseID + "," + sessionID + ")");
 			statement.executeBatch();
-
+/*
 			String query1 = "SELECT * FROM SESSION";
 			String query2 = "SELECT * FROM course_session";
 
@@ -349,7 +348,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println("---------------------------------------");
 
 			System.out.println("---------------------------------------");
-
+*/
 			//connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -358,25 +357,58 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
-	public ResultSet getTableInfo(String table) {
-		String r = table + ":\n--------------------------------------------"
-				+ "\n";
-		ResultSet result=null;
+	public ResultSet getTableInfo(String table) throws SQLException {
+//		String r = table + ":\n--------------------------------------------"
+//				+ "\n";
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			
+			String query = "SELECT * FROM " + table;
+			ResultSet  result = statement.executeQuery(query);
+			
+			//connection.close();
+			return result;
+
+		
+	}
+	public boolean getCourseRow(int id) throws SQLException {
+					connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			statement
+			.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
+					+ id + "," +"'course"+id +"'" + ")");
+			statement.executeBatch();
+			return true;/*
+			String query = "SELECT * FROM course WHERE course_id= "+id;
+			ResultSet  result = statement.executeQuery(query);
+			
+			//connection.close();
+			return result;*/
+
+		
+	}
+	
+	public boolean findCourse(int courseID){
+		String query = "SELECT course_id FROM course";
+		//boolean found=false;
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			String query = "SELECT * FROM " + table;
-			result = statement.executeQuery(query);
-
-			//connection.close();
-
+			ResultSet result = statement.executeQuery(query);
+			result.beforeFirst();
+			while(result.next()){
+				int cID = result.getInt(1);
+				if(cID == courseID){
+					result.beforeFirst();
+					return true;
+				}
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return result;
+		return false;
 	}
 	
 	public ResultSet getSessionDetails(int sessionID) {
@@ -401,22 +433,22 @@ public class DatabaseImpl implements DatabaseInterface {
 			Statement statement = connection.createStatement();
 
 			statement
-					.addBatch("INSERT INTO timetableslot (timetableslot_id) VALUES ("
-							+ timetableslotID + ")");
+					.addBatch("INSERT INTO timetableslot(timetableslot_id,room) VALUES ( "
+							+ timetableslotID +", "+"'"+room+"'"+ ")");
 			statement.executeBatch();
-
-			statement.addBatch("UPDATE timetableslot SET room = " + "'" + room
+			
+			
+			
+			
+			
+	//		statement
+	//		.addBatch("INSERT INTO timetableslot(timetableslot_id,room) VALUES ("
+	//				+ timetableslotID +","+room+ ")");
+	//statement.executeBatch();
+		/*	statement.addBatch("UPDATE timetableslot SET room = " + "'" + room
 					+ "'" + " WHERE timetableslot_id = " + timetableslotID);
-			statement.executeBatch();
-
-			String query = "SELECT * FROM timetableslot";
-
-			ResultSet result = statement.executeQuery(query);
-			System.out.println("Table Timetableslot");
-			System.out.println("---------------------------------------");
-
-			System.out.println("---------------------------------------");
-			connection.close();
+			statement.executeBatch();*/
+			//connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -430,18 +462,17 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			String getCourseFromMyCampus = "SELECT * FROM mycampus_course WHERE course_id="
-					+ courseID;
-			ResultSet info = statement.executeQuery(getCourseFromMyCampus);
+//			String getCourseFromMyCampus = "SELECT * FROM mycampus_course WHERE course_id="
+	//				+ courseID;
+//			ResultSet info = statement.executeQuery(getCourseFromMyCampus);
 			System.out.println("in db");
-			if (info.next()) {
-				statement.addBatch("INSERT INTO course VALUES ("
-						+ info.getInt(1) + "," + "'" + info.getString(2) + "'"
+			statement.addBatch("INSERT INTO course(course_id,course_name) VALUES ("
+						+ courseID + "," + "'course"+courseID + "'"
 						+ ")");
 				statement.executeBatch();
-				String query = "Select * FROM course";
-				ResultSet result = statement.executeQuery(query);
-			}
+				//String query = "Select * FROM course";
+				//ResultSet result = statement.executeQuery(query);
+			
 			//connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -488,8 +519,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.executeUpdate("UPDATE session SET recurring = " + "'"
 					+ recurrence + "'" + " WHERE session_id = " + sessionID);
 			// statement.executeBatch();
-			String query = "Select * FROM session";
-			ResultSet result = statement.executeQuery(query);
+////			String query = "Select * FROM session";
+//			ResultSet result = statement.executeQuery(query);
 			System.out.println("---------------------------------------");
 
 			System.out.println("---------------------------------------");
@@ -526,8 +557,8 @@ public class DatabaseImpl implements DatabaseInterface {
 							+ studentID
 							+ " AND course_id = " + courseID);
 			statement.executeBatch();
-			String query = "Select * FROM student_course_session";
-			ResultSet result = statement.executeQuery(query);
+//			String query = "Select * FROM student_course_session";
+//			ResultSet result = statement.executeQuery(query);
 			System.out.println("---------------------------------------");
 			connection.close();
 		} catch (SQLException e) {
@@ -644,8 +675,8 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			String queryDetails = "SELECT * FROM timetableslot WHERE session_id= "
 					+ sessionID;
-			String queryStudents = "SELECT student_id FROM student_course_session WHERE session_id ="
-					+ sessionID;
+//			String queryStudents = "SELECT student_id FROM student_course_session WHERE session_id ="
+//					+ sessionID;
 			detailsResult = statement.executeQuery(queryDetails);
 			connection.close();
 			System.out.println(r);
@@ -657,7 +688,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	}
 	
 	public ResultSet getSessionsCourse(int courseID){
-			String r = "";
+//			String r = "";
 			ResultSet detailsResult = null;
 			System.out.println("dede");
 			try {
@@ -796,7 +827,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			statement.addBatch("Delete from course_session ");
+			//statement.addBatch("Delete from course_session ");
 			statement.executeBatch();
 
 			for (int i = 0; i < n; i++) {

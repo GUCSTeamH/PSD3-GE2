@@ -14,6 +14,33 @@
   <asA keyword="As a">user</asA>
   <iWantTo keyword="I want to">use the system without any errors</iWantTo>
 </narrative>
+<scenario keyword="Scenario:" title="lecturer adds a session to a course">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When course <parameter>30</parameter> and session <parameter>200</parameter> are provided</step>
+<step outcome="successful">Then session <parameter>200</parameter> is added to course <parameter>30</parameter></step>
+</scenario>
+<scenario keyword="Scenario:" title="lecturer adds a session to a course">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When course <parameter>30</parameter> and session <parameter>210</parameter> are provided</step>
+<step outcome="successful">Then session <parameter>210</parameter> is added to course <parameter>30</parameter></step>
+</scenario>
+<scenario keyword="Scenario:" title="lecturer adds a session to a course">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When course <parameter>50</parameter> and session <parameter>210</parameter> are provided</step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>210</parameter> is added to course <parameter>50</parameter><failure>java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</failure></step>
+</scenario>
+<scenario keyword="Scenario:" title="lecturer imports a course from MyCampus">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When selecting mycampus course <parameter>157</parameter></step>
+<step outcome="successful">Then mycampus course <parameter>157</parameter> is imported</step>
+</scenario>
+<scenario keyword="Scenario:" title="Student books timeslot in session of a course">
+<step outcome="successful">Given a student</step>
+<step outcome="successful">When a student <parameter>12</parameter> selects a session <parameter>25</parameter> and a particular timeslot <parameter>15</parameter> of a course <parameter>16</parameter></step>
+<step outcome="successful">Then student <parameter>12</parameter> is enrolled in the session <parameter>25</parameter> of the course <parameter>16</parameter></step>
+</scenario>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a one-off.">
 <step outcome="successful">Given a lecturer</step>
 <step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>one-off</parameter></step>
@@ -38,6 +65,13 @@
 <step outcome="successful">Given a student</step>
 <step outcome="successful">When a student <parameter>12</parameter> selects a course <parameter>16</parameter></step>
 <step outcome="successful">Then student <parameter>12</parameter> views all compulsory sessions of course <parameter>16</parameter></step>
+</scenario>
+<scenario keyword="Scenario:" title="Admin assigns a room to a timetableSlot">
+<step outcome="successful">Given an admin</step>
+<step outcome="successful">When room <parameter>BO504</parameter> and timeslot <parameter>1002</parameter> are selected</step>
+<step outcome="failed" keyword="FAILED">Then room <parameter>BO504</parameter> is assigned to timeslot <parameter>1002</parameter><failure>java.lang.AssertionError: 
+Expected: is &lt;1002&gt;
+     but: was &lt;90&gt;</failure></step>
 </scenario>
 </story>
 

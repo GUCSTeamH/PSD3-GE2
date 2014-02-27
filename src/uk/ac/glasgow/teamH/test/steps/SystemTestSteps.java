@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import uk.ac.glasgow.teamH.test.ConfiguredFrameworkFactory;
 import uk.ac.glasgow.teamH.user.AdminInterface;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
+import uk.ac.glasgow.teamH.user.impl.AdminImpl;
 import uk.ac.glasgow.teamH.user.impl.LecturerImpl;
 import uk.ac.glasgow.teamH.user.impl.StudentImpl;
 
@@ -59,12 +61,11 @@ public class SystemTestSteps {
 	}
 	
 	@Then("session $sID is added to course $cID")
-	public void checkSession(int sID, int cID){
+	public void checkSession(int sID, int cID) throws SQLException{
 		boolean found = false;
 		ResultSet result = data.getTableInfo("course_session");
 		if (result !=null)
 			try {
-				
 				while (result.next()){
 
 					if (result.getInt(1) == cID && result.getInt(2)==sID)
@@ -81,26 +82,19 @@ public class SystemTestSteps {
 	
 	@When("selecting mycampus course $cID")
 	public void selectMyCampus(int cID){
-		lect.importMyCampusCourse(cID);
+		data.importMycampusCourse(cID);
 	}
 	
 	@Then("mycampus course $cID is imported")
-	public void checkCourse(int cID){
+	public void checkCourse(int cID) throws SQLException{
 		boolean found=false;
 		ResultSet result = data.getTableInfo("course");
-		if (result !=null)
-			try {
-				
-				while (result.next()){
-
-					if (result.getInt(1) == cID)
-						found = true;
-				}
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (result==null) found=false;
+		while(result.next()){
+			//if (result==null) found = false;
+			if (result.getInt(1) == cID) found =true;
+		}
+		
 		assertThat(found, is(true));
 		
 	}
@@ -143,18 +137,6 @@ public class SystemTestSteps {
 			reccurance = result.getString(2);
 		assertEquals(expected,reccurance);
 	}
-
-	@Given("an admin")
-	public void anAdmin(){
-		ServiceReference<AdminInterface>
-		adminReference = 
-			bundleContext.getServiceReference(
-				AdminInterface.class);
-
-		this.admin = bundleContext.getService(adminReference);
-	}
-
-
 
 	@When("course $courseID is selected from student $studentID")
 	public void compulsoryNotBooked(int courseID,int studentID) throws SQLException{
@@ -207,9 +189,50 @@ public class SystemTestSteps {
 		int expected=checkenrolled.size();
 		assertEquals(expected,count);
 
+			}
+		
+		}
 	}
-}}
 	
+	@Given("an admin")
+	public void anAdmin(){
+		data = new DatabaseImpl();
+		admin = new AdminImpl(data);
+	}
+	
+	@When("room $room and timeslot $time are selected")
+	public void addRoom(String room, int time){
+		data.assignRoomToTimetableslot(time, room);
+	}
+	
+	@Then("room $room is assigned to timeslot $time")
+	public void checkDB(String room, int time) throws SQLException {
+//		boolean found = true;
+		int check = 0;
+		ResultSet result = data.getTableInfo("timetableslot");
+		if (result != null){
+			try {
 
+				while (result.next()) {
+				
+					//check = result.getInt(1);
+					//if(check==time)break;	
+					//if (result.getInt(1) == time) {
+//					//	found = false;
+					//	check = result.getInt(1);
+					//	break;
+					
+				//}
+					check++;
+				}
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		assertThat(check, is(time));
+	} 
 	
 }
