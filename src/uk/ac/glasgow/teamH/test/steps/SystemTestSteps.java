@@ -17,12 +17,14 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 
+import uk.ac.glasgow.teamH.MyCampus.impl.MyCampus;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.database.impl.DatabaseImpl;
 import uk.ac.glasgow.teamH.test.ConfiguredFrameworkFactory;
 import uk.ac.glasgow.teamH.user.AdminInterface;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
+import uk.ac.glasgow.teamH.user.impl.AdminImpl;
 import uk.ac.glasgow.teamH.user.impl.LecturerImpl;
 import uk.ac.glasgow.teamH.user.impl.StudentImpl;
 
@@ -41,10 +43,12 @@ public class SystemTestSteps {
 	private LecturerInterface lecturer;
 	private StudentInterface student;
 	
+//	private AdminImpl admin;
 	private LecturerImpl lect;
 	private StudentImpl stud;
 	private DatabaseImpl data;
 	
+	private MyCampus myCamp;
 
 	
 	@Given("a lecturer")
@@ -194,20 +198,35 @@ public class SystemTestSteps {
 	public void showCompulsory(int studentID,int courseID) throws SQLException{
 		int count=0;
 		for(int i=0;i<notenrolled.size();i++){
-		boolean result = data.checkIfSignedUpForCompulsory(studentID, notenrolled.get(i),10);
-		if(result==false){count++;}
-		ResultSet rs=data.getSessionsCourse(courseID);
-		ArrayList<Integer>checkenrolled=new ArrayList<Integer>();
-		while(rs.next()){
-			boolean rt = data.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
-			if (rt==false){
-				checkenrolled.add(rs.getInt(1));}
-		int expected=checkenrolled.size();
-		assertEquals(expected,count);
-
+			boolean result = data.checkIfSignedUpForCompulsory(studentID, notenrolled.get(i),10);
+			if(result==false){count++;}
+			ResultSet rs=data.getSessionsCourse(courseID);
+			ArrayList<Integer>checkenrolled=new ArrayList<Integer>();
+			while(rs.next()){
+				boolean rt = data.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
+				if (rt==false){
+					checkenrolled.add(rs.getInt(1));}
+			int expected=checkenrolled.size();
+			assertEquals(expected,count);
+			}
+		}
 	}
-}}
 	
-
 	
+	@Given("MyCampus authentication")
+	public void givenMyCampus() {
+		myCamp = new MyCampus();
+	}
+	
+	@When("a student has successfully logged in")
+	public void whenLogIn() {
+		stud = new StudentImpl(data);
+		stud.registerMyCampusAuthenticator(myCamp);
+		assertTrue(stud.login());
+	}
+	
+	@Then("student will only have rights/privileges associated with their role")
+	public void studentAccess() {
+		assertTrue(stud instanceof StudentImpl);
+	}
 }

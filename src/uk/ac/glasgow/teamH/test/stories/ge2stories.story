@@ -43,3 +43,8 @@ Scenario: Student views all compulsory sessions in a course
 Given a student
 When a student 12 selects a course 16
 Then student 12 views all compulsory sessions of course 16
+
+Scenario: Student logs in to the system
+Given MyCampus authentication
+When a student has successfully logged in
+Then student will only have rights/privileges associated with their role
