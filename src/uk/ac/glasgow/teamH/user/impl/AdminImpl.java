@@ -5,11 +5,11 @@ import uk.ac.glasgow.teamH.user.AdminInterface;
 import uk.ac.glasgow.teamH.user.Room;
 import uk.ac.glasgow.teamH.user.TimetableSlot;
 
-public class AdminImpl implements AdminInterface {
+public class AdminImpl extends User implements AdminInterface {
 	DatabaseInterface db;
 	String matric;
 
-	AdminImpl(DatabaseInterface db){
+	public AdminImpl(DatabaseInterface db){
 		this.db=db;
 		matric="110099c";
 	}
