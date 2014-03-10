@@ -25,7 +25,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			createTables();
 		}
-		
+
 		catch (SQLException e) {
 			System.out.println("Couldn't connect to the specified database!");
 			e.printStackTrace();
@@ -45,28 +45,24 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 	}
 
-	
-
 	static void createTables() {
 		try {
 			System.out.println("In create tables");
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			
-			
+
 			if (!tableExists("course")) {
 				statement
 						.execute("CREATE TABLE course(course_id INTEGER PRIMARY KEY, course_name VARCHAR(128))");
 				System.out.println("Created course table");
 			}
 
-
 			if (!tableExists("session")) {
 				statement
 						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY, recurring VARCHAR(128), compulsory BOOLEAN,timetableslot_id INTEGER, staff_id INTEGER)");
 				System.out.println("Created session table");
 			}
-			
+
 			if (!tableExists("timetableslot")) {
 				statement
 						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,PRIMARY KEY(timetableslot_id)");
@@ -85,13 +81,13 @@ public class DatabaseImpl implements DatabaseInterface {
 						.execute("CREATE TABLE session_timetableslot(session_id INTEGER, timetableslot_id INTEGER)");
 				System.out.println("Created session_timetableslot table");
 			}
-			
+
 			if (!tableExists("mycampus_authentication")) {
 				statement
 						.execute("CREATE TABLE mycampus_authentication(username VARCHAR(128) NOT NULL PRIMARY KEY, password VARCHAR(128) NOT NULL UNIQUE, usertype VARCHAR(128))");
 				System.out.println("Created authentication table");
 			}
-			
+
 			if (!tableExists("mycampus_course")) {
 				statement
 						.execute("CREATE TABLE mycampus_course(course_id INTEGER PRIMARY KEY, course_name VARCHAR(128), staff_id INTEGER)");
@@ -104,7 +100,7 @@ public class DatabaseImpl implements DatabaseInterface {
 				System.out.println("Created course_session table");
 
 			}
-			
+
 			connection.close();
 		} catch (SQLException e) {
 			System.out.println("Error while creating the tables");
@@ -112,9 +108,6 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 	}
 
-	
-	
-	
 	// 2.-OK
 	@Override
 	public void addSession(int courseID, int sessionID, boolean compulsory) {
@@ -142,8 +135,6 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
-	
-	
 	public ResultSet getTableInfo(String table) throws SQLException {
 
 		connection = getDatabaseConnection();
@@ -154,11 +145,8 @@ public class DatabaseImpl implements DatabaseInterface {
 		return result;
 
 	}
-	
 
-
-	
-	//???????????????????
+	// ???????????????????
 	public ResultSet getSessionDetails(int sessionID) {
 		ResultSet result = null;
 		try {
@@ -174,8 +162,8 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 		return result;
 	}
-	
-	//14
+
+	// 14
 	public String getSessionInfo(int sessionID) {
 		String details = "";
 		ResultSet result = null;
@@ -185,15 +173,18 @@ public class DatabaseImpl implements DatabaseInterface {
 			String query1 = "SELECT * FROM session WHERE session_id = "
 					+ sessionID;
 			result = statement.executeQuery(query1);
-			if(result.next()){
-				details += "Session id: "+result.getInt(1)+", recurring: "+result.getString(2)+ ", compulsory: "+result.getInt(3)+", staff id: "+result.getInt(5)+ "students: ";
+			if (result.next()) {
+				details += "Session id: " + result.getInt(1) + ", recurring: "
+						+ result.getString(2) + ", compulsory: "
+						+ result.getInt(3) + ", staff id: " + result.getInt(5)
+						+ "students: ";
 			}
-			
+
 			String query2 = "SELECT student_id FROM student_course_session WHERE session_id = "
 					+ sessionID;
 			result = statement.executeQuery(query2);
-			while(result.next()){
-				details += result.getInt(1)+"; ";
+			while (result.next()) {
+				details += result.getInt(1) + "; ";
 			}
 			// connection.close();
 		} catch (SQLException e) {
@@ -210,11 +201,10 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			
-			 statement.addBatch("UPDATE timetableslot SET room = " + "'" +
-			 room + "'" + " WHERE timetableslot_id = " + timetableslotID);
-			 statement.executeBatch();
-			 
+			statement.addBatch("UPDATE timetableslot SET room = " + "'" + room
+					+ "'" + " WHERE timetableslot_id = " + timetableslotID);
+			statement.executeBatch();
+
 		} catch (SQLException e) {
 			System.out.println("Error while assigning room to a timetableslot");
 			e.printStackTrace();
@@ -228,17 +218,19 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			 String getCourseFromMyCampus = "SELECT * FROM mycampus_course WHERE course_id="
-			 + courseID;
-			 ResultSet info = statement.executeQuery(getCourseFromMyCampus);
-			 
+			String getCourseFromMyCampus = "SELECT * FROM mycampus_course WHERE course_id="
+					+ courseID;
+			ResultSet info = statement.executeQuery(getCourseFromMyCampus);
+
 			statement
 					.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
 
-			 + info.getInt(1) + "," + "'" + info.getString(2) + "'"
-			 + ")");
+							+ info.getInt(1)
+							+ ","
+							+ "'"
+							+ info.getString(2)
+							+ "'" + ")");
 			statement.executeBatch();
-
 
 		} catch (SQLException e) {
 			System.out.println("Error while trying to import from MyCampus");
@@ -246,9 +238,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 	}
 
-	
-	
-	//?????????????????????????
+	// ?????????????????????????
 	public boolean checkIfSignedUp(int studentID, int sessionID, int courseID) {
 		try {
 			connection = getDatabaseConnection();
@@ -269,8 +259,6 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
-	
-
 	// 4-OK
 	@Override
 	public void specifySessionRecurrence(int sessionID, String recurrence) {
@@ -282,7 +270,8 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			connection.close();
 		} catch (SQLException e) {
-			System.out.println("Error while trying to specify session recurrence");
+			System.out
+					.println("Error while trying to specify session recurrence");
 			e.printStackTrace();
 		}
 	}
@@ -320,7 +309,6 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-
 			String query = "SELECT s.session_id FROM session AS s, student_course_session AS scs WHERE student_id = "
 					+ studentID
 					+ " AND scs.timetableslot_id IS NOT NULL AND s.session_id = scs.session_id AND compulsory = true";
@@ -336,7 +324,6 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
-
 	public ResultSet getSessionsCourse(int courseID) {
 
 		ResultSet detailsResult = null;
@@ -349,9 +336,9 @@ public class DatabaseImpl implements DatabaseInterface {
 					+ courseID;
 			detailsResult = statement.executeQuery(queryDetails);
 
-
 		} catch (SQLException e) {
-			System.out.println("Error while trying to get session for a course");
+			System.out
+					.println("Error while trying to get session for a course");
 			e.printStackTrace();
 		}
 		return detailsResult;
@@ -411,7 +398,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection.close();
 			return r;
 		} catch (SQLException e) {
-			System.out.println("Error while trying to authenticate from MyCampus");
+			System.out
+					.println("Error while trying to authenticate from MyCampus");
 			e.printStackTrace();
 			return false;
 		}
@@ -443,7 +431,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection.close();
 			return count;
 		} catch (SQLException e) {
-			System.out.println("Error while trying to insert int course in supportNCourses method");
+			System.out
+					.println("Error while trying to insert int course in supportNCourses method");
 			e.printStackTrace();
 			return 0;
 		}
@@ -477,7 +466,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection.close();
 			return count;
 		} catch (SQLException e) {
-			System.out.println("Error while trying to open the connection in supportNSessionTypes method");
+			System.out
+					.println("Error while trying to open the connection in supportNSessionTypes method");
 			e.printStackTrace();
 			return 0;
 		}
@@ -511,7 +501,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection.close();
 			return count;
 		} catch (SQLException e) {
-			System.out.println("Error while trying to open the connection in supportNTimetableslotsPerSession method");
+			System.out
+					.println("Error while trying to open the connection in supportNTimetableslotsPerSession method");
 			e.printStackTrace();
 			return 0;
 		}
@@ -545,7 +536,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection.close();
 			return count;
 		} catch (SQLException e) {
-			System.out.println("Error while trying to open the connection in supportNUsers method");
+			System.out
+					.println("Error while trying to open the connection in supportNUsers method");
 			e.printStackTrace();
 			return 0;
 		}
@@ -555,7 +547,6 @@ public class DatabaseImpl implements DatabaseInterface {
 	public static Boolean tableExists(String tableName) throws SQLException {
 
 		connection = getDatabaseConnection();
-		
 
 		DatabaseMetaData metaData = connection.getMetaData();
 
@@ -570,59 +561,56 @@ public class DatabaseImpl implements DatabaseInterface {
 		return result;
 	}
 
+	public boolean timesOverlap(int startTime1, int endTime1, int startTime2,
+			int endTime2) {
 
-
-	
-	public boolean timesOverlap(int startTime1, int endTime1, int startTime2, int endTime2){
-
-		if(endTime1 <= startTime2 || startTime1>=endTime2){
+		if (endTime1 <= startTime2 || startTime1 >= endTime2) {
 			return false;
 		}
-		
-		else{
+
+		else {
 			return true;
 		}
-		
+
 	}
-	public boolean checkForClashes(int studentId){
+
+	public boolean checkForClashes(int studentId) {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-String query = "SELECT starttime,endtime FROM student_course_session as scs, timetableslot AS t WHERE scs.timetableslot_id = t.timetableslot_id AND student_id= "
-		+ studentId;
-ResultSet result = statement.executeQuery(query);
+			String query = "SELECT starttime,endtime FROM student_course_session as scs, timetableslot AS t WHERE scs.timetableslot_id = t.timetableslot_id AND student_id= "
+					+ studentId;
+			ResultSet result = statement.executeQuery(query);
 
+			LinkedList<int[]> timetableslotsForStudent = new LinkedList<int[]>();
 
-LinkedList<int[]> timetableslotsForStudent = new LinkedList<int[]>();
+			while (result.next()) {
+				int startEnd[] = new int[2];
+				int startTime = result.getInt(1);
+				int endTime = result.getInt(2);
+				startEnd[0] = startTime;
+				startEnd[1] = endTime;
+				timetableslotsForStudent.add(startEnd);
+			}
 
+			for (int i = 0; i < timetableslotsForStudent.size() - 1; i++) {
+				for (int j = i + 1; j < timetableslotsForStudent.size(); j++) {
 
-while(result.next()){
-	int startEnd[] = new int[2];
-	int startTime = result.getInt(1);
-	int endTime = result.getInt(2);
-	startEnd[0]=startTime;
-	startEnd[1] = endTime;
-	timetableslotsForStudent.add(startEnd);
-}
+					int startTime1 = timetableslotsForStudent.get(i)[0];
+					int endTime1 = timetableslotsForStudent.get(i)[1];
+					int startTime2 = timetableslotsForStudent.get(j)[0];
+					int endTime2 = timetableslotsForStudent.get(j)[1];
+					System.out.println(startTime1);
+					System.out.println(endTime1);
+					System.out.println(startTime2);
+					System.out.println(endTime2);
+					if (timesOverlap(startTime1, endTime1, startTime2, endTime2)) {
+						return true;
+					}
+				}
 
-for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
-	for (int j = i+1; j<timetableslotsForStudent.size();j++){
-		
-		int startTime1=timetableslotsForStudent.get(i)[0];
-		int endTime1=timetableslotsForStudent.get(i)[1];
-		int startTime2=timetableslotsForStudent.get(j)[0];
-		int endTime2=timetableslotsForStudent.get(j)[1];
-		System.out.println(startTime1);
-		System.out.println(endTime1);
-		System.out.println(startTime2);
-		System.out.println(endTime2);
-		if(timesOverlap(startTime1, endTime1, startTime2, endTime2)){
-			return true;
-		}
-	}
-	
-}
+			}
 
 			connection.close();
 		} catch (SQLException e) {
@@ -632,12 +620,7 @@ for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
 		}
 		return false;
 	}
-	
 
-	
-	
-
-	
 	public void populateMyCampusCourse(int courseId, String courseName) {
 		String deletion = "DELETE FROM MyCampusCourse";
 		String insertion = "INSERT INTO MyCampusCourse (course_id, course_name) VALUES "
@@ -653,13 +636,14 @@ for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
 			statement.addBatch(insertion);
 			statement.executeBatch();
 		} catch (SQLException e) {
-			System.out.println("Error while trying to populate mycampus_course");
+			System.out
+					.println("Error while trying to populate mycampus_course");
 			e.printStackTrace();
 		}
 
 	}
-	
-	public void populateSession(int sessionId){
+
+	public void populateSession(int sessionId) {
 		String deletion = "DELETE FROM Session";
 		String insertion = "INSERT INTO Session (session_id) VALUES "
 				+ sessionId + ")";
@@ -678,9 +662,8 @@ for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void populateTimetableslot(int timetableslotId){
+
+	public void populateTimetableslot(int timetableslotId) {
 		String deletion = "DELETE FROM Timetableslot";
 		String insertion = "INSERT INTO Timetableslot (timetableslot_id) VALUES "
 				+ timetableslotId + ")";
@@ -700,11 +683,24 @@ for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
 		}
 	}
 
-	
-	public void populateStudent_Course_SessionFully(int studentId, int courseId, int sessionId, int timetableslotId, int startTime, int endTime, boolean compulsory){
+	public void populateStudent_Course_SessionFully(int studentId,
+			int courseId, int sessionId, int timetableslotId, int startTime,
+			int endTime, boolean compulsory) {
 		String deletion = "DELETE FROM student_course_session";
 		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime) VALUES "
-				+studentId+"," + courseId + "," + sessionId+","+ timetableslotId + ","+startTime+","+endTime+","+compulsory +")";
+				+ studentId
+				+ ","
+				+ courseId
+				+ ","
+				+ sessionId
+				+ ","
+				+ timetableslotId
+				+ ","
+				+ startTime
+				+ ","
+				+ endTime
+				+ ","
+				+ compulsory + ")";
 
 		try {
 			connection = getDatabaseConnection();
@@ -720,10 +716,18 @@ for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
 			e.printStackTrace();
 		}
 	}
-	public void populateStudent_Course_SessionPartially(int studentId, int courseId, int sessionId,boolean compulsory){
+
+	public void populateStudent_Course_SessionPartially(int studentId,
+			int courseId, int sessionId, boolean compulsory) {
 		String deletion = "DELETE FROM student_course_session";
 		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime,compulsory) VALUES "
-				+studentId+"," + courseId + "," + sessionId+ ","+compulsory +")";
+				+ studentId
+				+ ","
+				+ courseId
+				+ ","
+				+ sessionId
+				+ ","
+				+ compulsory + ")";
 
 		try {
 			connection = getDatabaseConnection();
@@ -739,11 +743,11 @@ for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
 			e.printStackTrace();
 		}
 	}
-	
-	public void populateSession_Timetableslot(int sessionId, int timetableslotId){
+
+	public void populateSession_Timetableslot(int sessionId, int timetableslotId) {
 		String deletion = "DELETE FROM student_course_session";
 		String insertion = "INSERT INTO session_timetableslot (session_id,timetableslot_id) VALUES "
-				+ sessionId+ ","+timetableslotId +")";
+				+ sessionId + "," + timetableslotId + ")";
 
 		try {
 			connection = getDatabaseConnection();
@@ -759,11 +763,18 @@ for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
 			e.printStackTrace();
 		}
 	}
-	
-	public void populateSession(int sessionId, String recurring, boolean compulsory, int timetableslotId, int staffId){
+
+	public void populateSession(int sessionId, String recurring,
+			boolean compulsory, int timetableslotId, int staffId) {
 		String deletion = "DELETE FROM Session";
 		String insertion = "INSERT INTO Session (session_id,recurring,compulsory,timetableslot_id,staff_id) VALUES "
-				+sessionId+",'" + recurring + "'," + compulsory+ ","+timetableslotId +","+staffId+")";
+				+ sessionId
+				+ ",'"
+				+ recurring
+				+ "',"
+				+ compulsory
+				+ ","
+				+ timetableslotId + "," + staffId + ")";
 
 		try {
 			connection = getDatabaseConnection();
@@ -779,6 +790,5 @@ for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
 			e.printStackTrace();
 		}
 	}
-
 
 }
