@@ -24,20 +24,14 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			createTables();
 			populate();
-			
-			System.out.println("dsadsadsadsa");
-//			specifySessionRecurrence(10, "one-off");
-//			ResultSet result = getSessionDetails(10);
-//			result.next();
-//			String resultStr = result.getString(2);
-//			System.out.println(resultStr);
+
 			importMycampusCourse(321);
 			boolean found = false;
 			ResultSet result = getTableInfo("course");
 			System.out.println("trying");
 			try {
 				System.out.println("try block");
-				while (result.next()){
+				while (result.next()) {
 					System.out.println(result.getInt(1));
 					if (result.getInt("course_id") == 321)
 						found = true;
@@ -68,201 +62,270 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	private static void populate() {
 		// TODO Auto-generated method stub
-		try{connection = getDatabaseConnection();
-		Statement statement = connection.createStatement();
-		System.out.printf("\n \n CREATING TABLES \n----------------------------------\n----------------------------------\n");
-		int sesval=1;
-		int sesplus=15;
-		int timeplus=30;
-		int studentplus=16;
-		for (int i = 1; i <= 105; i++) {
-			System.out.println("COURSE"+i);
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+			System.out
+					.printf("\n \n CREATING TABLES \n----------------------------------\n----------------------------------\n");
+			int sesval = 1;
+			int sesplus = 15;
+			int timeplus = 30;
+			int studentplus = 16;
+			for (int i = 1; i <= 105; i++) {
+				System.out.println("COURSE" + i);
 				statement
-			.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
-					+ i + "," +"'course"+i +"'" + ")");
-			statement.executeBatch();
-			if(i>10){
-				sesplus=5;
-				timeplus=3;
-				studentplus=4;
-			}
-			for(int j=sesval;j<sesval+sesplus;j++){
-		//		System.out.println("SESSION "+j);
-				if(j<10){
-					if (j<3){
-					statement
-						.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
-								+ j + ","+"'true'"+"," +true+ ")");
-				statement.executeBatch();}
-					else{
-						statement
-						.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
-								+ j + ","+"'false'"+"," +true+ ")");
-				statement.executeBatch();	
-					}}
-				else{
-					statement
-					.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
-							+ j + ","+"'true'"+"," +false+ ")");
-			statement.executeBatch();
+						.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
+								+ i + "," + "'course" + i + "'" + ")");
+				statement.executeBatch();
+				if (i > 10) {
+					sesplus = 5;
+					timeplus = 3;
+					studentplus = 4;
 				}
+				for (int j = sesval; j < sesval + sesplus; j++) {
+					// System.out.println("SESSION "+j);
+					if (j < 10) {
+						if (j < 3) {
+							statement
+									.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+											+ j
+											+ ","
+											+ "'true'"
+											+ ","
+											+ true
+											+ ")");
+							statement.executeBatch();
+						} else {
+							statement
+									.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+											+ j
+											+ ","
+											+ "'false'"
+											+ ","
+											+ true
+											+ ")");
+							statement.executeBatch();
+						}
+					} else {
+						statement
+								.addBatch("INSERT INTO session (session_id,recurring, compulsory) VALUES ("
+										+ j
+										+ ","
+										+ "'true'"
+										+ ","
+										+ false
+										+ ")");
+						statement.executeBatch();
+					}
 
+					statement
+							.addBatch("INSERT INTO course_session(course_id, session_id) VALUES ("
+									+ i + "," + j + ")");
+					statement.executeBatch();
+					for (int f = 1; f < timeplus; f++) {
+						// System.out.println("TIMETABLESLOT "+f);
+						int staffID = (int) (Math.random() * (500 + i)) + 0;
+						statement
+								.addBatch("INSERT INTO timetableslot(timetableslot_id, capacity, starttime, endtime, weekday, weeknumber, room, occupied, staff_id,session_id) VALUES ("
+										+ f
+										+ ","
+										+ 150
+										+ ","
+										+ 12
+										+ ","
+										+ 13
+										+ ","
+										+ 2
+										+ ","
+										+ i
+										+ ","
+										+ "'Boyd Orr'"
+										+ ","
+										+ true
+										+ ","
+										+ staffID + "," + j + ")");
+						statement.executeBatch();
+						statement
+								.addBatch("INSERT INTO session_timetableslot(session_id, timetableslot_id) VALUES ("
+										+ j + "," + f + ")");
+						statement.executeBatch();
+						for (int a = 1; a < studentplus; a++) {
+							// System.out.println("STUDENT COURSE SESSION " +a);
+							statement
+									.addBatch("INSERT INTO student_course_session(student_id, course_id,session_id,timetableslot_id) VALUES ("
+											+ a
+											+ ","
+											+ i
+											+ ","
+											+ j
+											+ ","
+											+ f
+											+ ")");
 
-
-
-		statement
-		.addBatch("INSERT INTO course_session(course_id, session_id) VALUES ("
-				+ i + "," + j + ")");
-		statement.executeBatch(); 
-		for(int f=1;f<timeplus;f++){
-//			System.out.println("TIMETABLESLOT "+f);
-			int staffID=(int)(Math.random() * (500+i)) + 0;
-			statement
-			.addBatch("INSERT INTO timetableslot(timetableslot_id, capacity, starttime, endtime, weekday, weeknumber, room, occupied, staff_id,session_id) VALUES ("
-					+ f + "," + 150 + "," + 12 + ","+13+ "," + 2+ "," + i+ ","+"'Boyd Orr'"+","+true+ ","+staffID+ ","+j+ ")");
-			statement.executeBatch(); 
-			statement
-			.addBatch("INSERT INTO session_timetableslot(session_id, timetableslot_id) VALUES ("
-				+ j + "," + f + ")");
-			statement.executeBatch();
-			for(int a=1;a<studentplus;a++){
-		//		System.out.println("STUDENT COURSE SESSION " +a);
-			statement
-			.addBatch("INSERT INTO student_course_session(student_id, course_id,session_id,timetableslot_id) VALUES ("
-				+ a + "," + i + "," + j + ","+f+ ")");
-
-			statement
-			.addBatch("INSERT INTO student_session(student_id, session_id) VALUES ("
-				+ a + "," + j + ")");
-			statement.executeBatch();
+							statement
+									.addBatch("INSERT INTO student_session(student_id, session_id) VALUES ("
+											+ a + "," + j + ")");
+							statement.executeBatch();
+						}
+					}
+				}
+				sesval = sesval + 16;
 			}
-		}
+
+			for (int a = 0; a < 250; a++) {
+				// System.out.println(a);
+				statement
+						.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
+								+ a + "," + "'lecturer" + a + "'" + ")");
+				statement.executeBatch();
+				statement
+						.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
+								+ "'lecturer"
+								+ a
+								+ "'"
+								+ ","
+								+ "'lecturer"
+								+ a
+								+ "'" + "," + "'lecturer" + a + "'" + ")");
+				statement.executeBatch();
 			}
-			sesval=sesval+16;
-		}
+			for (int a = 250; a < 500; a++) {
+				// System.out.println(a);
+				statement
+						.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
+								+ a + "," + "'tutor" + (a - 250) + "'" + ")");
+				statement.executeBatch();
+				statement
+						.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
+								+ "'tutor"
+								+ a
+								+ "'"
+								+ ","
+								+ "'tutor"
+								+ a
+								+ "'"
+								+ "," + "'tutor" + a + "'" + ")");
+				statement.executeBatch();
+			}
+			for (int a = 0; a < 600; a++) {
+				// System.out.println(a);
+				statement
+						.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
+								+ a + "," + "'student" + a + "'" + ")");
+				statement.executeBatch();
+				statement
+						.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
+								+ "'student"
+								+ a
+								+ "'"
+								+ ","
+								+ "'student"
+								+ a
+								+ "'" + "," + "'student" + a + "'" + ")");
+				statement.executeBatch();
+			}
+			for (int a = 650; a < 700; a++) {
+				// System.out.println(a);
+				statement
+						.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
+								+ a + "," + "'student" + a + "'" + ")");
+				statement.executeBatch();
+			}
 
+			for (int a = 126; a < 250; a++) {
+				// System.out.println(a);
+				statement
+						.addBatch("INSERT INTO mycampus_course (course_id,course_name) VALUES ("
+								+ a + "," + "'course" + a + "'" + ")");
+				statement.executeBatch();
+			}
 
-		for(int a=0;a<250;a++){		
-//			System.out.println(a);
 			statement
-			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
-				+ a + "," + "'lecturer"+a+"'" + ")");
+					.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
+							+ "'admin"
+							+ "'"
+							+ ","
+							+ "'admin"
+							+ "'"
+							+ ","
+							+ "'admin" + "'" + ")");
 			statement.executeBatch();
-			statement 
-			.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-					+ "'lecturer"+a+"'" + "," + "'lecturer"+a+"'" + ","+"'lecturer"+a+"'" + ")");
-			statement.executeBatch();
+
+			System.out.println("");
+
+			String query1 = "SELECT * FROM session";
+			String query2 = "SELECT * FROM course_session";
+			String query3 = "SELECT * FROM timetableslot";
+			String query4 = "SELECT * FROM staff";
+			String query5 = "SELECT * FROM student";
+			String query6 = "SELECT * FROM course";
+			ResultSet result1 = statement.executeQuery(query1);
+			System.out.println("Table Session");
+			System.out.println("---------------------------------------");
+			while (result1.next()) {
+				System.out.println(" sessionid: " + result1.getInt(1)
+						+ "    recurring:s   " + result1.getString(2)
+						+ "   compulsory: " + result1.getBoolean(3));
+			}
+			System.out.println("---------------------------------------");
+
+			ResultSet result2 = statement.executeQuery(query2);
+			System.out.println("Table Course_Session");
+			System.out.println("---------------------------------------");
+			while (result2.next()) {
+				System.out.println("course id  :  " + result2.getInt(1)
+						+ "  session id:  " + result2.getInt(2));
+			}
+			System.out.println("---------------------------------------");
+
+			ResultSet result3 = statement.executeQuery(query3);
+			System.out.println("Timetable Slot");
+			System.out.println("---------------------------------------");
+			while (result3.next()) {
+				System.out.println(result3.getInt(1) + " " + result3.getInt(2)
+						+ " " + result3.getInt(3) + " " + result3.getInt(4)
+						+ " " + result3.getInt(5) + " " + result3.getByte(6)
+						+ " " + result3.getString(7) + " "
+						+ result3.getBoolean(8) + " " + result3.getInt(9) + " "
+						+ result3.getInt(10));
+			}
+			System.out.println("---------------------------------------");
+
+			ResultSet result4 = statement.executeQuery(query4);
+			System.out.println("Staff");
+			System.out.println("---------------------------------------");
+			while (result4.next()) {
+				System.out.println(result4.getInt(1) + " "
+						+ result4.getString(2));
+			}
+			System.out.println("---------------------------------------");
+
+			ResultSet result5 = statement.executeQuery(query5);
+			System.out.println("Student");
+			System.out.println("---------------------------------------");
+			while (result5.next()) {
+				System.out.println(result5.getInt(1) + " "
+						+ result5.getString(2));
+			}
+			System.out.println("---------------------------------------");
+
+			ResultSet result6 = statement.executeQuery(query6);
+			System.out.println("Table Course");
+			System.out.println("---------------------------------------");
+			while (result6.next()) {
+				System.out.println(result6.getInt(1) + " "
+						+ result6.getString(2));
+			}
+			System.out.println("---------------------------------------");
+			coursetable = result6;
+
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		for(int a=250;a<500;a++){
-		//	System.out.println(a);
-			statement
-			.addBatch("INSERT INTO staff(staff_id, staff_name) VALUES ("
-				+ a + "," + "'tutor"+(a-250)+"'" + ")");
-			statement.executeBatch();
-			statement
-			.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-					+ "'tutor"+a+"'" + "," + "'tutor"+a+"'" + ","+"'tutor"+a+"'" + ")");
-			statement.executeBatch();
-		}
-		for(int a=0;a<600;a++){
-//			System.out.println(a);
-			statement
-			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
-					+ a + ","+"'student"+a+"'" + ")");
-			statement.executeBatch();
-			statement 
-			.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-					+ "'student"+a+"'" + "," + "'student"+a+"'" + ","+"'student"+a+"'" + ")");
-			statement.executeBatch();	
-		}
-		for(int a=650;a<700;a++){
-//			System.out.println(a);
-			statement
-			.addBatch("INSERT INTO student (student_id, student_name) VALUES ("
-					+ a + ","+"'student"+a+"'" + ")");
-			statement.executeBatch();}
-
-
-
-			for(int a=126;a<250;a++){
-//				System.out.println(a);
-			statement
-					.addBatch("INSERT INTO mycampus_course (course_id,course_name) VALUES ("
-							+ a + "," + "'course"+a + "'" + ")");
-			statement.executeBatch();}
-
-		statement
-		.addBatch("INSERT INTO mycampus_authentication(username, password, usertype) VALUES ("
-				+ "'admin"+"'" + "," + "'admin"+"'" + ","+"'admin"+"'" + ")");
-		statement.executeBatch();
-
-		System.out.println("");
-
-		String query1 = "SELECT * FROM session";
-		String query2 = "SELECT * FROM course_session";
-		String query3 = "SELECT * FROM timetableslot";
-		String query4 = "SELECT * FROM staff";
-		String query5 = "SELECT * FROM student";
-		String query6 = "SELECT * FROM course";
-		ResultSet result1 = statement.executeQuery(query1);
-		System.out.println("Table Session");
-		System.out.println("---------------------------------------");
-		while (result1.next()) {
-			System.out.println(" sessionid: "+result1.getInt(1) + "    recurring:s   "+result1.getString(2)+"   compulsory: "
-					+ result1.getBoolean(3));
-		}
-		System.out.println("---------------------------------------");
-
-		ResultSet result2 = statement.executeQuery(query2);
-		System.out.println("Table Course_Session");
-		System.out.println("---------------------------------------");
-		while (result2.next()) {
-			System.out.println("course id  :  "+result2.getInt(1) + "  session id:  " + result2.getInt(2));
-		}
-		System.out.println("---------------------------------------");
-
-		ResultSet result3 = statement.executeQuery(query3);
-		System.out.println("Timetable Slot");
-		System.out.println("---------------------------------------");
-		while (result3.next()) {
-			System.out.println(result3.getInt(1) + " "
-					+ result3.getInt(2)+ " "+result3.getInt(3)+ " "+result3.getInt(4)+ " "+result3.getInt(5)+ " "+result3.getByte(6)+ " "+result3.getString(7)+ " "+result3.getBoolean(8)+ " "+result3.getInt(9)+ " "+result3.getInt(10));
-		}
-		System.out.println("---------------------------------------");
-
-		ResultSet result4 = statement.executeQuery(query4);
-		System.out.println("Staff");
-		System.out.println("---------------------------------------");
-		while (result4.next()) {
-			System.out.println(result4.getInt(1) + " " + result4.getString(2));
-		}
-		System.out.println("---------------------------------------");
-
-		ResultSet result5 = statement.executeQuery(query5);
-		System.out.println("Student");
-		System.out.println("---------------------------------------");
-		while (result5.next()) {
-			System.out.println(result5.getInt(1) + " " + result5.getString(2));
-		}
-		System.out.println("---------------------------------------");
-
-		ResultSet result6 = statement.executeQuery(query6);
-		System.out.println("Table Course");
-		System.out.println("---------------------------------------");
-		while (result6.next()) {
-			System.out.println(result6.getInt(1) + " " + result6.getString(2));
-		}
-		System.out.println("---------------------------------------");
-			coursetable=result6;
-
-
-		connection.close();
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	}
-	}
-	
+
 	static void createTables() {
 		try {
 			System.out.println("In create tables");
@@ -360,23 +423,23 @@ public class DatabaseImpl implements DatabaseInterface {
 					.addBatch("INSERT INTO course_session (course_id, session_id) VALUES ("
 							+ courseID + "," + sessionID + ")");
 			statement.executeBatch();
-/*
-			String query1 = "SELECT * FROM SESSION";
-			String query2 = "SELECT * FROM course_session";
-
-			ResultSet result1 = statement.executeQuery(query1);
-			System.out.println("Table Session");
-			System.out.println("---------------------------------------");
-
-			System.out.println("---------------------------------------");
-
-			ResultSet result2 = statement.executeQuery(query2);
-			System.out.println("Table Course_Session");
-			System.out.println("---------------------------------------");
-
-			System.out.println("---------------------------------------");
-*/
-			//connection.close();
+			/*
+			 * String query1 = "SELECT * FROM SESSION"; String query2 =
+			 * "SELECT * FROM course_session";
+			 * 
+			 * ResultSet result1 = statement.executeQuery(query1);
+			 * System.out.println("Table Session");
+			 * System.out.println("---------------------------------------");
+			 * 
+			 * System.out.println("---------------------------------------");
+			 * 
+			 * ResultSet result2 = statement.executeQuery(query2);
+			 * System.out.println("Table Course_Session");
+			 * System.out.println("---------------------------------------");
+			 * 
+			 * System.out.println("---------------------------------------");
+			 */
+			// connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -385,47 +448,47 @@ public class DatabaseImpl implements DatabaseInterface {
 	}
 
 	public ResultSet getTableInfo(String table) throws SQLException {
-//		String r = table + ":\n--------------------------------------------"
-//				+ "\n";
-			connection = getDatabaseConnection();
-			Statement statement = connection.createStatement();
-			
-			String query = "SELECT * FROM " + table;
-			ResultSet  result = statement.executeQuery(query);
-			
-			//connection.close();
-			return result;
+		// String r = table + ":\n--------------------------------------------"
+		// + "\n";
+		connection = getDatabaseConnection();
+		Statement statement = connection.createStatement();
 
-		
+		String query = "SELECT * FROM " + table;
+		ResultSet result = statement.executeQuery(query);
+
+		// connection.close();
+		return result;
+
 	}
+
 	public boolean getCourseRow(int id) throws SQLException {
-					connection = getDatabaseConnection();
-			Statement statement = connection.createStatement();
-			statement
-			.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
-					+ id + "," +"'course"+id +"'" + ")");
-			statement.executeBatch();
-			return true;/*
-			String query = "SELECT * FROM course WHERE course_id= "+id;
-			ResultSet  result = statement.executeQuery(query);
-			
-			//connection.close();
-			return result;*/
+		connection = getDatabaseConnection();
+		Statement statement = connection.createStatement();
+		statement
+				.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
+						+ id + "," + "'course" + id + "'" + ")");
+		statement.executeBatch();
+		return true;/*
+					 * String query =
+					 * "SELECT * FROM course WHERE course_id= "+id; ResultSet
+					 * result = statement.executeQuery(query);
+					 * 
+					 * //connection.close(); return result;
+					 */
 
-		
 	}
-	
-	public boolean findCourse(int courseID){
+
+	public boolean findCourse(int courseID) {
 		String query = "SELECT course_id FROM course";
-		//boolean found=false;
+		// boolean found=false;
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(query);
 			result.beforeFirst();
-			while(result.next()){
+			while (result.next()) {
 				int cID = result.getInt(1);
-				if(cID == courseID){
+				if (cID == courseID) {
 					result.beforeFirst();
 					return true;
 				}
@@ -437,15 +500,16 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 		return false;
 	}
-	
+
 	public ResultSet getSessionDetails(int sessionID) {
 		ResultSet result = null;
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			String query = "SELECT * FROM session WHERE session_id = " + sessionID;
+			String query = "SELECT * FROM session WHERE session_id = "
+					+ sessionID;
 			result = statement.executeQuery(query);
-//			connection.close();
+			// connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generate method stub
 			e.printStackTrace();
@@ -462,21 +526,19 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			statement
 					.addBatch("INSERT INTO timetableslot(timetableslot_id,room) VALUES ( "
-							+ timetableslotID +", "+"'"+room+"'"+ ")");
+							+ timetableslotID + ", " + "'" + room + "'" + ")");
 			statement.executeBatch();
-			
-			
-			
-			
-			
-	//		statement
-	//		.addBatch("INSERT INTO timetableslot(timetableslot_id,room) VALUES ("
-	//				+ timetableslotID +","+room+ ")");
-	//statement.executeBatch();
-		/*	statement.addBatch("UPDATE timetableslot SET room = " + "'" + room
-					+ "'" + " WHERE timetableslot_id = " + timetableslotID);
-			statement.executeBatch();*/
-			//connection.close();
+
+			// statement
+			// .addBatch("INSERT INTO timetableslot(timetableslot_id,room) VALUES ("
+			// + timetableslotID +","+room+ ")");
+			// statement.executeBatch();
+			/*
+			 * statement.addBatch("UPDATE timetableslot SET room = " + "'" +
+			 * room + "'" + " WHERE timetableslot_id = " + timetableslotID);
+			 * statement.executeBatch();
+			 */
+			// connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -490,31 +552,31 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-//			String getCourseFromMyCampus = "SELECT * FROM mycampus_course WHERE course_id="
-	//				+ courseID;
-//			ResultSet info = statement.executeQuery(getCourseFromMyCampus);
+			// String getCourseFromMyCampus =
+			// "SELECT * FROM mycampus_course WHERE course_id="
+			// + courseID;
+			// ResultSet info = statement.executeQuery(getCourseFromMyCampus);
 			System.out.println("in db");
-			statement.addBatch("INSERT INTO course(course_id,course_name) VALUES ("
-						+ courseID + "," + "'course"+courseID + "'"
+			statement
+					.addBatch("INSERT INTO course(course_id,course_name) VALUES ("
+							+ courseID + "," + "'course" + courseID + "'"
 
-						+ ")");
-//						+ info.getInt(1) + "," + "'" + info.getString(2) + "'"
-//						+ ")");
-				statement.executeBatch();
+							+ ")");
+			// + info.getInt(1) + "," + "'" + info.getString(2) + "'"
+			// + ")");
+			statement.executeBatch();
 
-			//connection.close();
+			// connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public boolean checkIfSignedUp(int studentID, int sessionID,
-			int courseID) {
+
+	public boolean checkIfSignedUp(int studentID, int sessionID, int courseID) {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-
 
 			String query = "SELECT s.session_id FROM session AS s, student_course_session AS scs WHERE student_id = "
 					+ studentID
@@ -532,18 +594,19 @@ public class DatabaseImpl implements DatabaseInterface {
 	}
 
 	public void changeSessionRecurrence(int sessionID, String recurrence) {
-		try{
+		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			String q = "UPDATE session SET recurring = '" + recurrence +"' WHERE session_id = " + sessionID;
+			String q = "UPDATE session SET recurring = '" + recurrence
+					+ "' WHERE session_id = " + sessionID;
 			statement.executeUpdate(q);
-			//connection.close();
+			// connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	// 4-OK
 	@Override
 	public void specifySessionRecurrence(int sessionID, String recurrence) {
@@ -561,8 +624,8 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.executeUpdate("UPDATE session SET recurring = " + "'"
 					+ recurrence + "'" + " WHERE session_id = " + sessionID);
 			// statement.executeBatch();
-////			String query = "Select * FROM session";
-//			ResultSet result = statement.executeQuery(query);
+			// // String query = "Select * FROM session";
+			// ResultSet result = statement.executeQuery(query);
 			System.out.println("---------------------------------------");
 
 			System.out.println("---------------------------------------");
@@ -599,8 +662,8 @@ public class DatabaseImpl implements DatabaseInterface {
 							+ studentID
 							+ " AND course_id = " + courseID);
 			statement.executeBatch();
-//			String query = "Select * FROM student_course_session";
-//			ResultSet result = statement.executeQuery(query);
+			// String query = "Select * FROM student_course_session";
+			// ResultSet result = statement.executeQuery(query);
 			System.out.println("---------------------------------------");
 			connection.close();
 		} catch (SQLException e) {
@@ -656,7 +719,6 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-
 			statement
 					.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
 							+ 1
@@ -686,7 +748,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 		return detailsResult;
 	}
-	
+
 	@Override
 	public ResultSet getTimetableslotStudentDetails(int sessionID) {
 		String r = "";
@@ -695,7 +757,6 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-
 
 			statement
 					.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
@@ -717,8 +778,9 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			String queryDetails = "SELECT * FROM timetableslot WHERE session_id= "
 					+ sessionID;
-//			String queryStudents = "SELECT student_id FROM student_course_session WHERE session_id ="
-//					+ sessionID;
+			// String queryStudents =
+			// "SELECT student_id FROM student_course_session WHERE session_id ="
+			// + sessionID;
 			detailsResult = statement.executeQuery(queryDetails);
 			connection.close();
 			System.out.println(r);
@@ -728,54 +790,45 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 		return students;
 	}
-	
-	public ResultSet getSessionsCourse(int courseID){
-//			String r = "";
-			ResultSet detailsResult = null;
-			System.out.println("dede");
-			try {
-				connection = getDatabaseConnection();
-				Statement statement = connection.createStatement();
 
-		/*		statement.addBatch("Delete from timetableslot ");
-				statement.executeBatch();
+	public ResultSet getSessionsCourse(int courseID) {
+		// String r = "";
+		ResultSet detailsResult = null;
+		System.out.println("dede");
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
 
-				statement
-						.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
-								+ 1
-								+ ","
-								+ sessionID
-								+ ","
-								+ "'"
-								+ "BO715"
-								+ "'"
-								+ "," + 1 + "," + 2 + ")");
-				statement.executeBatch();
-				for (int i = 0; i < 15; i++) {
-					statement
-							.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
-									+ i + "," + sessionID + "," + 100 + ")");
-					statement.executeBatch();
-				}
-	*/
-				String queryDetails = "SELECT session_iD FROM course_session WHERE course_id= "
-						+ courseID;
-				detailsResult = statement.executeQuery(queryDetails);
-				//connection.close();
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated method stub
-				e.printStackTrace();
-			}
-			return detailsResult;
-}
+			/*
+			 * statement.addBatch("Delete from timetableslot ");
+			 * statement.executeBatch();
+			 * 
+			 * statement .addBatch(
+			 * "INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
+			 * + 1 + "," + sessionID + "," + "'" + "BO715" + "'" + "," + 1 + ","
+			 * + 2 + ")"); statement.executeBatch(); for (int i = 0; i < 15;
+			 * i++) { statement .addBatch(
+			 * "INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
+			 * + i + "," + sessionID + "," + 100 + ")");
+			 * statement.executeBatch(); }
+			 */
+			String queryDetails = "SELECT session_iD FROM course_session WHERE course_id= "
+					+ courseID;
+			detailsResult = statement.executeQuery(queryDetails);
+			// connection.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
+		return detailsResult;
+	}
 
 	// non-functional distinguish between user types-OK
 	public String getUserRole(String username) {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-
 
 			statement
 					.addBatch("INSERT INTO mycampus_authentication(username,password,usertype) VALUES ("
@@ -869,7 +922,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			//statement.addBatch("Delete from course_session ");
+			// statement.addBatch("Delete from course_session ");
 			statement.executeBatch();
 
 			for (int i = 0; i < n; i++) {
