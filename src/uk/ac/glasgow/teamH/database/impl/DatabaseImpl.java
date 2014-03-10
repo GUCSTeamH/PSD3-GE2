@@ -364,16 +364,16 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			if (!tableExists("student_course_session")) {
 				statement
-						.execute("CREATE TABLE student_course_session(student_id INTEGER, course_id INTEGER,session_id INTEGER,timetableslot_id INTEGER, PRIMARY KEY(student_id,course_id,session_id,timetableslot_id))");
+						.execute("CREATE TABLE student_course_session(student_id INTEGER, course_id INTEGER,session_id INTEGER,timetableslot_id INTEGER,starttime INTEGER, endtime INTEGER, compulsory BOOLEAN, PRIMARY KEY(student_id,course_id,session_id))");
 				System.out.println("Created student_course_session table");
 			}
-
+/*
 			if (!tableExists("student_session")) {
 				statement
 						.execute("CREATE TABLE student_session(student_id INTEGER, session_id INTEGER)");
 			}
 
-
+*/
 			if (!tableExists("session_timetableslot")) {
 				statement
 						.execute("CREATE TABLE session_timetableslot(session_id INTEGER, timetableslot_id INTEGER)");
@@ -410,7 +410,10 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-
+			statement.addBatch("DELETE FROM Session)");
+			statement.executeBatch();
+			statement.addBatch("DELETE FROM course_session )");
+			statement.executeBatch();
 			statement
 					.addBatch("INSERT INTO session (session_id, compulsory) VALUES ("
 							+ sessionID + "," + compulsory + ")");
@@ -420,23 +423,7 @@ public class DatabaseImpl implements DatabaseInterface {
 					.addBatch("INSERT INTO course_session (course_id, session_id) VALUES ("
 							+ courseID + "," + sessionID + ")");
 			statement.executeBatch();
-			/*
-			 * String query1 = "SELECT * FROM SESSION"; String query2 =
-			 * "SELECT * FROM course_session";
-			 * 
-			 * ResultSet result1 = statement.executeQuery(query1);
-			 * System.out.println("Table Session");
-			 * System.out.println("---------------------------------------");
-			 * 
-			 * System.out.println("---------------------------------------");
-			 * 
-			 * ResultSet result2 = statement.executeQuery(query2);
-			 * System.out.println("Table Course_Session");
-			 * System.out.println("---------------------------------------");
-			 * 
-			 * System.out.println("---------------------------------------");
-			 */
-			// connection.close();
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -503,9 +490,10 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			String query = "SELECT * FROM session WHERE session_id = "
+			String query1 = "SELECT * FROM session WHERE session_id = "
 					+ sessionID;
-			result = statement.executeQuery(query);
+			result = statement.executeQuery(query1);
+			
 			// connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generate method stub
@@ -1339,7 +1327,147 @@ statement.executeBatch();
 		return clash;
 	}
 	
+	
+	
+	public void populateMyCampusCourse(int courseId, String courseName) {
+		String deletion = "DELETE FROM MyCampusCourse";
+		String insertion = "INSERT INTO MyCampusCourse (course_id, course_name) VALUES "
+				+ courseId + "," + courseName + ")";
+
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch(deletion);
+			statement.executeBatch();
+
+			statement.addBatch(insertion);
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void populateSession(int sessionId){
+		String deletion = "DELETE FROM Session";
+		String insertion = "INSERT INTO Session (session_id) VALUES "
+				+ sessionId + ")";
+
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch(deletion);
+			statement.executeBatch();
+
+			statement.addBatch(insertion);
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void populateTimetableslot(int timetableslotId){
+		String deletion = "DELETE FROM Timetableslot";
+		String insertion = "INSERT INTO Timetableslot (timetableslot_id) VALUES "
+				+ timetableslotId + ")";
+
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch(deletion);
+			statement.executeBatch();
+
+			statement.addBatch(insertion);
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	
+	public void populateStudent_Course_SessionFully(int studentId, int courseId, int sessionId, int timetableslotId, int startTime, int endTime, boolean compulsory){
+		String deletion = "DELETE FROM student_course_session";
+		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime) VALUES "
+				+studentId+"," + courseId + "," + sessionId+","+ timetableslotId + ","+startTime+","+endTime+","+compulsory +")";
 
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch(deletion);
+			statement.executeBatch();
+
+			statement.addBatch(insertion);
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void populateStudent_Course_SessionPartially(int studentId, int courseId, int sessionId,boolean compulsory){
+		String deletion = "DELETE FROM student_course_session";
+		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime,compulsory) VALUES "
+				+studentId+"," + courseId + "," + sessionId+ ","+compulsory +")";
+
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch(deletion);
+			statement.executeBatch();
+
+			statement.addBatch(insertion);
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void populateSession_Timetableslot(int sessionId, int timetableslotId){
+		String deletion = "DELETE FROM student_course_session";
+		String insertion = "INSERT INTO session_timetableslot (session_id,timetableslot_id) VALUES "
+				+ sessionId+ ","+timetableslotId +")";
+
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch(deletion);
+			statement.executeBatch();
+
+			statement.addBatch(insertion);
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void populateSession(int sessionId, String recurring, boolean compulsory, int timetableslotId, int staffId){
+		String deletion = "DELETE FROM Session";
+		String insertion = "INSERT INTO Session (session_id,recurring,compulsory,timetableslot_id,staff_id) VALUES "
+				+sessionId+",'" + recurring + "'," + compulsory+ ","+timetableslotId +","+staffId+")";
+
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch(deletion);
+			statement.executeBatch();
+
+			statement.addBatch(insertion);
+			statement.executeBatch();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

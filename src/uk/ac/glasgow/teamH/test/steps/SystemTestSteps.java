@@ -128,8 +128,8 @@ public class SystemTestSteps {
 	public void recurringSession(int sessID, String expected) throws SQLException{
 		ResultSet result = data.getSessionDetails(sessID);
 		result.next();
-		String reccurance = result.getString("recurring");
-		assertTrue(reccurance.equalsIgnoreCase(expected));
+		String reccurence = result.getString("recurring");
+		assertTrue(reccurence.equalsIgnoreCase(expected));
 	}
 
 	@When("course $courseID is selected from student $studentID")
