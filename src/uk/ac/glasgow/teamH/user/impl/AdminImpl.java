@@ -17,6 +17,11 @@ public class AdminImpl extends User implements AdminInterface {
 		System.out.println("Admin : room booked for slot: "+slot);
 		db.assignRoomToTimetableslot(slot, room);
 	}
+	
+	public void checkForClashes(int studentID){
+		db.checkForClashes(studentID);
+		
+	}
 
 	
 

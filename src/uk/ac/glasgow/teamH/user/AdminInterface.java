@@ -9,6 +9,8 @@ public interface AdminInterface {
 		public void assignRoomtoTimetableSlot(int timetableslotID, String room);
 		
 		//public void addTimeToSession(int sessionId, int timeId);
+		
+		public void checkForClashes(int studentID);
 	
 	
 }
