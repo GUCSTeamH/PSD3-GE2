@@ -658,7 +658,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.addBatch(insertion);
 			statement.executeBatch();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while trying to populate session");
 			e.printStackTrace();
 		}
 	}
@@ -678,7 +678,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.addBatch(insertion);
 			statement.executeBatch();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while trying to populate timetableslot");
 			e.printStackTrace();
 		}
 	}
@@ -712,7 +712,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.addBatch(insertion);
 			statement.executeBatch();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while trying to populate student_course_session fully");
 			e.printStackTrace();
 		}
 	}
@@ -739,7 +739,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.addBatch(insertion);
 			statement.executeBatch();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while trying to populate student_course_session partially");
 			e.printStackTrace();
 		}
 	}
@@ -759,7 +759,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.addBatch(insertion);
 			statement.executeBatch();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while trying to populate session_timetableslot");
 			e.printStackTrace();
 		}
 	}
@@ -786,7 +786,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.addBatch(insertion);
 			statement.executeBatch();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while trying to populate session");
 			e.printStackTrace();
 		}
 	}
