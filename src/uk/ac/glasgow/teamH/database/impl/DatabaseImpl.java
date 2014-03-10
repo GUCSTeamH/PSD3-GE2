@@ -587,7 +587,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			String query = "SELECT starttime,endtime FROM student_course_session as scs WHERE student_id= "
+			String query = "SELECT starttime,endtime FROM student_course_session WHERE student_id= "
 					+ studentId;
 			ResultSet result = statement.executeQuery(query);
 
@@ -601,6 +601,7 @@ public class DatabaseImpl implements DatabaseInterface {
 				startEnd[1] = endTime;
 				timetableslotsForStudent.add(startEnd);
 			}
+			
 
 			for (int i = 0; i < timetableslotsForStudent.size() - 1; i++) {
 				for (int j = i + 1; j < timetableslotsForStudent.size(); j++) {
@@ -609,10 +610,6 @@ public class DatabaseImpl implements DatabaseInterface {
 					int endTime1 = timetableslotsForStudent.get(i)[1];
 					int startTime2 = timetableslotsForStudent.get(j)[0];
 					int endTime2 = timetableslotsForStudent.get(j)[1];
-					System.out.println(startTime1);
-					System.out.println(endTime1);
-					System.out.println(startTime2);
-					System.out.println(endTime2);
 					if (timesOverlap(startTime1, endTime1, startTime2, endTime2)) {
 						return true;
 					}
@@ -673,7 +670,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	public void populateTimetableslot(int timetableslotId) {
 		String deletion = "DELETE FROM Timetableslot";
-		String insertion = "INSERT INTO Timetableslot (timetableslot_id) VALUES "
+		String insertion = "INSERT INTO Timetableslot (timetableslot_id) VALUES ("
 				+ timetableslotId + ")";
 
 		try {
@@ -693,9 +690,9 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	public void populateStudent_Course_SessionFully(int studentId,
 			int courseId, int sessionId, int timetableslotId, int startTime,
-			int endTime, boolean compulsory) {
+			int endTime, boolean compulsory,boolean refresh) {
 		String deletion = "DELETE FROM student_course_session";
-		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime) VALUES "
+		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime,compulsory) VALUES ("
 				+ studentId
 				+ ","
 				+ courseId
@@ -714,8 +711,11 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			statement.addBatch(deletion);
-			statement.executeBatch();
+			if(refresh){
+				statement.addBatch(deletion);
+				statement.executeBatch();
+
+			}
 
 			statement.addBatch(insertion);
 			statement.executeBatch();
@@ -726,7 +726,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	}
 
 	public void populateStudent_Course_SessionPartially(int studentId,
-			int courseId, int sessionId, boolean compulsory) {
+			int courseId, int sessionId, boolean compulsory,boolean refresh) {
 		String deletion = "DELETE FROM student_course_session";
 		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime,compulsory) VALUES "
 				+ studentId
@@ -741,8 +741,11 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			statement.addBatch(deletion);
-			statement.executeBatch();
+			if(refresh){
+				statement.addBatch(deletion);
+				statement.executeBatch();
+
+			}
 
 			statement.addBatch(insertion);
 			statement.executeBatch();

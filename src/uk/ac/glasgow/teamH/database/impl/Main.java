@@ -55,6 +55,43 @@ public class Main {
 		
 		// end of 4
 		
+		
+		//8
+		
+
+		db.populateTimetableslot(1);
+		db.assignRoomToTimetableslot(1, "BO720");
+		 result = db.getTableInfo("timetableslot");
+		try {
+			while(result.next()){
+				System.out.println("timetablislotid: "+result.getInt(1)+" room: "+result.getString("room"));
+				
+			}
+		} catch (SQLException e) {
+			System.out.println("Error while reading results");
+			e.printStackTrace();
+		}
+		
+		//end of 8
+		
+		//9-proove no clashes
+		db.populateStudent_Course_SessionFully(1, 2, 3, 4, 12, 13, true,true);
+		db.populateStudent_Course_SessionFully(1, 3, 4, 5, 13, 15, true,false);
+		db.populateStudent_Course_SessionFully(1, 4, 5, 6, 15, 16, true,false);
+		System.out.println("clashes: "+db.checkForClashes(1));
+		//end of 9 with no clashes
+		
+		//9-proove clashes
+		db.populateStudent_Course_SessionFully(1, 2, 3, 4, 12, 13, true,true);
+		db.populateStudent_Course_SessionFully(1, 3, 4, 5, 13, 15, true,false);
+		db.populateStudent_Course_SessionFully(1, 4, 5, 6, 15, 16, true,false);
+		db.populateStudent_Course_SessionFully(1, 5, 6, 7, 14, 15, true,false);
+		System.out.println("clashes: "+db.checkForClashes(1));
+		
+		//end of 9 with clashes
+		
+		
+	
 	}
 	
 	
