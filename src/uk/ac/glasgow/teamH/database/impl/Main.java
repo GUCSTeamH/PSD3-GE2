@@ -126,6 +126,33 @@ public class Main {
 		
 		//end of 12
 		
+		
+		//14
+		db.populateSession(1);
+		db.populateStudent_Course_SessionPartially(2, 3, 1, true, true);
+		db.populateStudent_Course_SessionPartially(3, 4, 1, true, false);
+		db.populateStudent_Course_SessionPartially(4, 5, 1, true, false);
+		System.out.println(db.getSessionInfo(1));
+		
+		//end of 14
+		
+		//additional story
+		
+		db.populateSession_Timetableslot(1, 2);
+
+		 
+		result = db.getTableInfo("session_timetableslot");
+		try {
+			while(result.next()){
+				System.out.println("sessionid: "+result.getInt(1)+" timetableslotid: "+result.getInt(2));
+				
+				
+			}
+		} catch (SQLException e) {
+			System.out.println("Error while reading results");
+			e.printStackTrace();
+		}
+		
 	
 	}
 	

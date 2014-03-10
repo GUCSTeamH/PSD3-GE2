@@ -18,7 +18,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	static Connection connection = null;
 	Statement stmt = null;
 	public static ResultSet coursetable;
-	private static final String connectionString = "jdbc:derby:data/mycampusH;create=true";
+	private static final String connectionString = "jdbc:derby:data/mycampustH;create=true";
 
 	public DatabaseImpl() {
 		try {
@@ -59,7 +59,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			if (!tableExists("session")) {
 				statement
-						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY, recurring VARCHAR(128), compulsory BOOLEAN,timetableslot_id INTEGER, staff_id INTEGER)");
+						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY, recurring VARCHAR(128), compulsory BOOLEAN,timetableslot_id INTEGER, staff_id INTEGER, starttime INTEGER , endtime INTEGER)");
 				System.out.println("Created session table");
 			}
 
@@ -156,7 +156,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	public ResultSet getSessionDetails(int sessionID) {
 		ResultSet result = null;
 		try {
-			connection = getDatabaseConnection();
+			connection = getDatabaseConnection();		
 			Statement statement = connection.createStatement();
 			String query = "SELECT * FROM session WHERE session_id = "
 					+ sessionID;
@@ -182,14 +182,14 @@ public class DatabaseImpl implements DatabaseInterface {
 			if (result.next()) {
 				details += "Session id: " + result.getInt(1) + ", recurring: "
 						+ result.getString(2) + ", compulsory: "
-						+ result.getInt(3) + ", staff id: " + result.getInt(5)
-						+ "students: ";
+						+ result.getInt(3) + ", staff id: " + result.getInt(5)+", starttime: "+ result.getInt("starttime")+", endtime: "+ result.getInt("endtime")
+						+ " students: ";
 			}
 
 			String query2 = "SELECT student_id FROM student_course_session WHERE session_id = "
 					+ sessionID;
 			result = statement.executeQuery(query2);
-			while (result.next()) {
+			while (result.next()) {	
 				details += result.getInt(1) + "; ";
 			}
 			// connection.close();
@@ -672,8 +672,8 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	public void populateSession(int sessionId) {
 		String deletion = "DELETE FROM Session";
-		String insertion = "INSERT INTO Session (session_id) VALUES ("
-				+ sessionId + ")";
+		String insertion = "INSERT INTO Session (session_id,compulsory,recurring,endtime,starttime) VALUES ("
+				+ sessionId +","+true+", '"+"one-off"+"' ,"+14+","+13+ ")";
 
 		try {
 			connection = getDatabaseConnection();
@@ -779,7 +779,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	public void populateSession_Timetableslot(int sessionId, int timetableslotId) {
 		String deletion = "DELETE FROM student_course_session";
-		String insertion = "INSERT INTO session_timetableslot (session_id,timetableslot_id) VALUES "
+		String insertion = "INSERT INTO session_timetableslot (session_id,timetableslot_id) VALUES ("
 				+ sessionId + "," + timetableslotId + ")";
 
 		try {
