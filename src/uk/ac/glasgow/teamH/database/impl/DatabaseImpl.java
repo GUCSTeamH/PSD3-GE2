@@ -18,7 +18,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	static Connection connection = null;
 	Statement stmt = null;
 	public static ResultSet coursetable;
-	private static final String connectionString = "jdbc:derby:data/mycampus5;create=true";
+	private static final String connectionString = "jdbc:derby:data/mycampusH;create=true";
 
 	public DatabaseImpl() {
 		try {
@@ -65,7 +65,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			if (!tableExists("timetableslot")) {
 				statement
-						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,PRIMARY KEY(timetableslot_id)");
+						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,PRIMARY KEY(timetableslot_id))");
 				System.out.println("created timetable slot table");
 
 			}
@@ -135,14 +135,20 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
-	public ResultSet getTableInfo(String table) throws SQLException {
-
+	public ResultSet getTableInfo(String table)  {
+		try{
 		connection = getDatabaseConnection();
 		Statement statement = connection.createStatement();
 
 		String query = "SELECT * FROM " + table;
 		ResultSet result = statement.executeQuery(query);
 		return result;
+		}
+		catch(SQLException e){
+			System.out.println("Error while getting table info");
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -217,11 +223,13 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-
+			statement
+			.addBatch("Delete from course");
+	statement.executeBatch();
 			String getCourseFromMyCampus = "SELECT * FROM mycampus_course WHERE course_id="
 					+ courseID;
 			ResultSet info = statement.executeQuery(getCourseFromMyCampus);
-
+			if(	info.next()){
 			statement
 					.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
 
@@ -229,9 +237,9 @@ public class DatabaseImpl implements DatabaseInterface {
 							+ ","
 							+ "'"
 							+ info.getString(2)
-							+ "'" + ")");
+							+ "')");
 			statement.executeBatch();
-
+			}
 		} catch (SQLException e) {
 			System.out.println("Error while trying to import from MyCampus");
 			e.printStackTrace();
@@ -579,7 +587,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			String query = "SELECT starttime,endtime FROM student_course_session as scs, timetableslot AS t WHERE scs.timetableslot_id = t.timetableslot_id AND student_id= "
+			String query = "SELECT starttime,endtime FROM student_course_session as scs WHERE student_id= "
 					+ studentId;
 			ResultSet result = statement.executeQuery(query);
 
@@ -622,9 +630,9 @@ public class DatabaseImpl implements DatabaseInterface {
 	}
 
 	public void populateMyCampusCourse(int courseId, String courseName) {
-		String deletion = "DELETE FROM MyCampusCourse";
-		String insertion = "INSERT INTO MyCampusCourse (course_id, course_name) VALUES "
-				+ courseId + "," + courseName + ")";
+		String deletion = "DELETE FROM mycampus_course";
+		String insertion = "INSERT INTO mycampus_course (course_id, course_name) VALUES ("
+				+ courseId + "," + "'"+courseName+"')";
 
 		try {
 			connection = getDatabaseConnection();
@@ -645,7 +653,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	public void populateSession(int sessionId) {
 		String deletion = "DELETE FROM Session";
-		String insertion = "INSERT INTO Session (session_id) VALUES "
+		String insertion = "INSERT INTO Session (session_id) VALUES ("
 				+ sessionId + ")";
 
 		try {
