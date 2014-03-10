@@ -6,18 +6,18 @@ import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
 
 public class StudentImpl extends User implements StudentInterface {
-	private String matric;
+
 	private DatabaseInterface db;
 	
-	public StudentImpl(String name, String surname, String email, String password, String matric){
+	public StudentImpl(String name, String surname, String email, String password){
 		super(name, surname, email,password);
-		this.matric=matric;
+
 	}
 	
 	
 	public StudentImpl(DatabaseInterface db){
 		this.db=db;
-		matric="112233f";
+
 		
 	}
 	

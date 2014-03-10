@@ -1,5 +1,5 @@
 package uk.ac.glasgow.teamH.user;
-import java.util.LinkedList;
+
 
 
 public class Course {

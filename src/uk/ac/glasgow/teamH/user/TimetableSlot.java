@@ -5,7 +5,6 @@ public class TimetableSlot {
 	
 	private Room room;
 	private boolean free;
-	private int capacity;
 	private int weekNumber;
 	private String weekDay;
 	private int startTime;
@@ -41,18 +40,7 @@ public class TimetableSlot {
 		free = f;
 	}
 	
-	
-	//should be used to add capacity to a session- returns true if successful, 
-	// false if the specified capacity is greater than the room capacity
-	public boolean setCapacity(int capacity){
-		if(capacity<=room.getCapacity()){
-			this.capacity = capacity;
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
+
 	public int getWeekNum(){
 		return weekNumber;
 	}

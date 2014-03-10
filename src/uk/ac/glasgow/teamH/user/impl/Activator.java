@@ -14,9 +14,9 @@ import uk.ac.glasgow.teamH.user.LecturerInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
 
 public class Activator implements BundleActivator {
-	    private ServiceRegistration registrationLec;
-	    private ServiceRegistration registrationAdm;
-	    private ServiceRegistration registrationStud;
+	    private ServiceRegistration<?> registrationLec;
+	    private ServiceRegistration<?> registrationAdm;
+	    private ServiceRegistration<?> registrationStud;
 	  
 	    @Override
 	    public void start(BundleContext bundleContext) throws Exception {

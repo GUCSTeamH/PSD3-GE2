@@ -4,7 +4,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 
 import org.jbehave.core.configuration.Configuration;
-import org.jbehave.core.configuration.Keywords;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.embedder.EmbedderControls;

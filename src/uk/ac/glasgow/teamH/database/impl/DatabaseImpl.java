@@ -238,7 +238,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 	}
 
-	// ?????????????????????????
+	// 12
 	public boolean checkIfSignedUp(int studentID, int sessionID, int courseID) {
 		try {
 			connection = getDatabaseConnection();
@@ -252,7 +252,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection.close();
 			return r;
 		} catch (SQLException e) {
-			// TODO Auto-generated method stub
+			System.out.println("Error while checking if a student had signed up for a session");
 			e.printStackTrace();
 			return false;
 		}
@@ -301,7 +301,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 	}
 
-	// 12-??????????????
+	// 12 
 	@Override
 	public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,
 			int courseID) {
@@ -317,7 +317,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection.close();
 			return r;
 		} catch (SQLException e) {
-			// TODO Auto-generated method stub
+			System.out.println("Error while trying to check if a student has signed up for all compulsory sessions");
 			e.printStackTrace();
 			return false;
 		}

@@ -1,6 +1,6 @@
 package uk.ac.glasgow.teamH.user.impl;
 
-import java.sql.ResultSet;
+
 
 
 import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;

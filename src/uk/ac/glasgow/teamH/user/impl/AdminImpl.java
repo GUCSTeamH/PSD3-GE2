@@ -2,8 +2,7 @@ package uk.ac.glasgow.teamH.user.impl;
 
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.AdminInterface;
-import uk.ac.glasgow.teamH.user.Room;
-import uk.ac.glasgow.teamH.user.TimetableSlot;
+
 
 public class AdminImpl extends User implements AdminInterface {
 	DatabaseInterface db;
@@ -20,11 +19,6 @@ public class AdminImpl extends User implements AdminInterface {
 	}
 
 	
-	/*public void addTimeToSession(int sessionId, int timeId) {
-		System.out.println("added timeslot to a session");
-		db.
-	}*/
-	
-	
+
 
 }
