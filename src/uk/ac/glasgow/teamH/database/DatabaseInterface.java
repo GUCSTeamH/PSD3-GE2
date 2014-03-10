@@ -19,7 +19,7 @@ public void bookTimetableSlot(int studentID, int courseID, int sessionID,int tim
 
 public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,int courseID);
 
-public ResultSet getTimetableslotDetails(int sessionID);
+
 
 public int supportNUsers(int n);
 
@@ -35,8 +35,8 @@ public String getUserRole(String username);
 
 public ResultSet getSessionsCourse(int courseID);
 
-public ResultSet getTimetableslotStudentDetails(int sessionID);
 
 public boolean checkForClashes(int studentId);
 
+public String getSessionInfo(int sessionId);
 }

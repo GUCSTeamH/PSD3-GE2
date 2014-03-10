@@ -1,6 +1,5 @@
 package uk.ac.glasgow.teamH.user;
 
-import java.sql.ResultSet;
 
 
 
@@ -12,9 +11,8 @@ public interface LecturerInterface {
 	
 	void specifySessionRecurrence(int sessionId, String recurrence);
 	
-	ResultSet getTimetableslotDetails(int sessionId);
-	
-	ResultSet getTimetablslotStudentDetails(int sessionId);
+	String getSessionDetails(int sessionId);
+
 
 	
 }

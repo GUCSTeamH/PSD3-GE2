@@ -24,25 +24,10 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			createTables();
-
-			importMycampusCourse(321);
-			boolean found = false;
-			ResultSet result = getTableInfo("course");
-			System.out.println("trying");
-			try {
-				System.out.println("try block");
-				while (result.next()) {
-					System.out.println(result.getInt(1));
-					if (result.getInt("course_id") == 321)
-						found = true;
-				}
-				System.out.println(found);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		}
+		
+		catch (SQLException e) {
+			System.out.println("Couldn't connect to the specified database!");
 			e.printStackTrace();
 		}
 	}
@@ -67,29 +52,21 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println("In create tables");
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
+			
+			
 			if (!tableExists("course")) {
 				statement
 						.execute("CREATE TABLE course(course_id INTEGER PRIMARY KEY, course_name VARCHAR(128))");
 				System.out.println("Created course table");
 			}
 
-			if (!tableExists("student")) {
-				statement
-						.execute("CREATE TABLE student(student_id INTEGER PRIMARY KEY, student_name VARCHAR(128))");
-				System.out.println("Created student table");
-			}
-			if (!tableExists("staff")) {
 
-				statement
-						.execute("CREATE TABLE staff(staff_id INTEGER PRIMARY KEY, staff_name VARCHAR(128))");
-				System.out.println("Created staff table");
-			}
 			if (!tableExists("session")) {
 				statement
-						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY, recurring VARCHAR(128), compulsory BOOLEAN,timetableslot_id INTEGER, staff_id INTEGER,"
-								+ " FOREIGN KEY (staff_id) REFERENCES staff (staff_id))");
+						.execute("CREATE TABLE session(session_id INTEGER PRIMARY KEY, recurring VARCHAR(128), compulsory BOOLEAN,timetableslot_id INTEGER, staff_id INTEGER)");
 				System.out.println("Created session table");
 			}
+			
 			if (!tableExists("timetableslot")) {
 				statement
 						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,PRIMARY KEY(timetableslot_id)");
@@ -102,26 +79,22 @@ public class DatabaseImpl implements DatabaseInterface {
 						.execute("CREATE TABLE student_course_session(student_id INTEGER, course_id INTEGER,session_id INTEGER,timetableslot_id INTEGER,starttime INTEGER, endtime INTEGER, compulsory BOOLEAN, PRIMARY KEY(student_id,course_id,session_id))");
 				System.out.println("Created student_course_session table");
 			}
-/*
-			if (!tableExists("student_session")) {
-				statement
-						.execute("CREATE TABLE student_session(student_id INTEGER, session_id INTEGER)");
-			}
 
-*/
 			if (!tableExists("session_timetableslot")) {
 				statement
 						.execute("CREATE TABLE session_timetableslot(session_id INTEGER, timetableslot_id INTEGER)");
 				System.out.println("Created session_timetableslot table");
 			}
+			
 			if (!tableExists("mycampus_authentication")) {
 				statement
 						.execute("CREATE TABLE mycampus_authentication(username VARCHAR(128) NOT NULL PRIMARY KEY, password VARCHAR(128) NOT NULL UNIQUE, usertype VARCHAR(128))");
 				System.out.println("Created authentication table");
 			}
+			
 			if (!tableExists("mycampus_course")) {
 				statement
-						.execute("CREATE TABLE mycampus_course(course_id INTEGER PRIMARY KEY, course_name VARCHAR(128), staff_id INTEGER, FOREIGN KEY (staff_id) REFERENCES staff (staff_id))");
+						.execute("CREATE TABLE mycampus_course(course_id INTEGER PRIMARY KEY, course_name VARCHAR(128), staff_id INTEGER)");
 				System.out.println("Created mycampus_course table");
 
 			}
@@ -131,14 +104,17 @@ public class DatabaseImpl implements DatabaseInterface {
 				System.out.println("Created course_session table");
 
 			}
-			existingTables();
+			
 			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while creating the tables");
 			e.printStackTrace();
 		}
 	}
 
+	
+	
+	
 	// 2.-OK
 	@Override
 	public void addSession(int courseID, int sessionID, boolean compulsory) {
@@ -160,67 +136,48 @@ public class DatabaseImpl implements DatabaseInterface {
 			statement.executeBatch();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while adding a new session");
 			e.printStackTrace();
 		}
 
 	}
 
+	
+	
 	public ResultSet getTableInfo(String table) throws SQLException {
-		// String r = table + ":\n--------------------------------------------"
-		// + "\n";
+
 		connection = getDatabaseConnection();
 		Statement statement = connection.createStatement();
 
 		String query = "SELECT * FROM " + table;
 		ResultSet result = statement.executeQuery(query);
-
-		// connection.close();
 		return result;
 
 	}
+	
 
-	public boolean getCourseRow(int id) throws SQLException {
-		connection = getDatabaseConnection();
-		Statement statement = connection.createStatement();
-		statement
-				.addBatch("INSERT INTO course(course_id, course_name) VALUES ("
-						+ id + "," + "'course" + id + "'" + ")");
-		statement.executeBatch();
-		return true;/*
-					 * String query =
-					 * "SELECT * FROM course WHERE course_id= "+id; ResultSet
-					 * result = statement.executeQuery(query);
-					 * 
-					 * //connection.close(); return result;
-					 */
 
-	}
-
-	public boolean findCourse(int courseID) {
-		String query = "SELECT course_id FROM course";
-		// boolean found=false;
+	
+	//???????????????????
+	public ResultSet getSessionDetails(int sessionID) {
+		ResultSet result = null;
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			ResultSet result = statement.executeQuery(query);
-			result.beforeFirst();
-			while (result.next()) {
-				int cID = result.getInt(1);
-				if (cID == courseID) {
-					result.beforeFirst();
-					return true;
-				}
-			}
-
+			String query = "SELECT * FROM session WHERE session_id = "
+					+ sessionID;
+			result = statement.executeQuery(query);
+			// connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generate method stub
 			e.printStackTrace();
 		}
-		return false;
+		return result;
 	}
-
-	public ResultSet getSessionDetails(int sessionID) {
+	
+	//14
+	public String getSessionInfo(int sessionID) {
+		String details = "";
 		ResultSet result = null;
 		try {
 			connection = getDatabaseConnection();
@@ -228,13 +185,22 @@ public class DatabaseImpl implements DatabaseInterface {
 			String query1 = "SELECT * FROM session WHERE session_id = "
 					+ sessionID;
 			result = statement.executeQuery(query1);
+			if(result.next()){
+				details += "Session id: "+result.getInt(1)+", recurring: "+result.getString(2)+ ", compulsory: "+result.getInt(3)+", staff id: "+result.getInt(5)+ "students: ";
+			}
 			
+			String query2 = "SELECT student_id FROM student_course_session WHERE session_id = "
+					+ sessionID;
+			result = statement.executeQuery(query2);
+			while(result.next()){
+				details += result.getInt(1)+"; ";
+			}
 			// connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generate method stub
+			System.out.println("Error while trying to get session details");
 			e.printStackTrace();
 		}
-		return result;
+		return details;
 	}
 
 	// 8-OK
@@ -250,7 +216,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			 statement.executeBatch();
 			 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while assigning room to a timetableslot");
 			e.printStackTrace();
 		}
 	}
@@ -273,13 +239,16 @@ public class DatabaseImpl implements DatabaseInterface {
 			 + ")");
 			statement.executeBatch();
 
-			// connection.close();
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error while trying to import from MyCampus");
 			e.printStackTrace();
 		}
 	}
 
+	
+	
+	//?????????????????????????
 	public boolean checkIfSignedUp(int studentID, int sessionID, int courseID) {
 		try {
 			connection = getDatabaseConnection();
@@ -300,19 +269,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
-	public void changeSessionRecurrence(int sessionID, String recurrence) {
-		try {
-			connection = getDatabaseConnection();
-			Statement statement = connection.createStatement();
-			String q = "UPDATE session SET recurring = '" + recurrence
-					+ "' WHERE session_id = " + sessionID;
-			statement.executeUpdate(q);
-			// connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
+	
 
 	// 4-OK
 	@Override
@@ -325,7 +282,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated method stub
+			System.out.println("Error while trying to specify session recurrence");
 			e.printStackTrace();
 		}
 	}
@@ -337,7 +294,6 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-
 
 			statement
 					.addBatch("UPDATE student_course_session SET timetableslot_id = "
@@ -351,12 +307,12 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generate catch block
+			System.out.println("Error while trying to book a timetableslot");
 			e.printStackTrace();
 		}
 	}
 
-	// 12-OK
+	// 12-??????????????
 	@Override
 	public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,
 			int courseID) {
@@ -364,20 +320,6 @@ public class DatabaseImpl implements DatabaseInterface {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			statement
-					.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
-							+ studentID
-							+ ","
-							+ sessionID
-							+ ","
-							+ courseID
-							+ ")");
-			statement.executeBatch();
-
-			statement
-					.addBatch("INSERT INTO session(session_id,compulsory) VALUES ("
-							+ sessionID + "," + true + ")");
-			statement.executeBatch();
 
 			String query = "SELECT s.session_id FROM session AS s, student_course_session AS scs WHERE student_id = "
 					+ studentID
@@ -394,115 +336,22 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	}
 
-	@Override
-	public ResultSet getTimetableslotDetails(int sessionID) {
-		String r = "";
-		ResultSet detailsResult = null;
-		System.out.println("dede");
-		try {
-			connection = getDatabaseConnection();
-			Statement statement = connection.createStatement();
-
-			statement
-					.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
-							+ 1
-							+ ","
-							+ sessionID
-							+ ","
-							+ "'"
-							+ "BO715"
-							+ "'"
-							+ "," + 1 + "," + 2 + ")");
-			statement.executeBatch();
-			for (int i = 0; i < 15; i++) {
-				statement
-						.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
-								+ i + "," + sessionID + "," + 100 + ")");
-				statement.executeBatch();
-			}
-
-			String queryDetails = "SELECT * FROM timetableslot WHERE session_id= "
-					+ sessionID;
-			detailsResult = statement.executeQuery(queryDetails);
-			connection.close();
-			System.out.println(r);
-		} catch (SQLException e) {
-			// TODO Auto-generated method stub
-			e.printStackTrace();
-		}
-		return detailsResult;
-	}
-
-	@Override
-	public ResultSet getTimetableslotStudentDetails(int sessionID) {
-		String r = "";
-		ResultSet detailsResult = null;
-		ResultSet students = null;
-		try {
-			connection = getDatabaseConnection();
-			Statement statement = connection.createStatement();
-
-			statement
-					.addBatch("INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
-							+ 1
-							+ ","
-							+ sessionID
-							+ ","
-							+ "'"
-							+ "BO715"
-							+ "'"
-							+ "," + 1 + "," + 2 + ")");
-			statement.executeBatch();
-			for (int i = 0; i < 15; i++) {
-				statement
-						.addBatch("INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
-								+ i + "," + sessionID + "," + 100 + ")");
-				statement.executeBatch();
-			}
-
-			String queryDetails = "SELECT * FROM timetableslot WHERE session_id= "
-					+ sessionID;
-			// String queryStudents =
-			// "SELECT student_id FROM student_course_session WHERE session_id ="
-			// + sessionID;
-			detailsResult = statement.executeQuery(queryDetails);
-			connection.close();
-			System.out.println(r);
-		} catch (SQLException e) {
-			// TODO Auto-generated method stub
-			e.printStackTrace();
-		}
-		return students;
-	}
 
 	public ResultSet getSessionsCourse(int courseID) {
-		// String r = "";
+
 		ResultSet detailsResult = null;
 		System.out.println("dede");
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
 
-			/*
-			 * statement.addBatch("Delete from timetableslot ");
-			 * statement.executeBatch();
-			 * 
-			 * statement .addBatch(
-			 * "INSERT INTO timetableslot(timetableslot_id,session_id,room,starttime,endtime) VALUES ("
-			 * + 1 + "," + sessionID + "," + "'" + "BO715" + "'" + "," + 1 + ","
-			 * + 2 + ")"); statement.executeBatch(); for (int i = 0; i < 15;
-			 * i++) { statement .addBatch(
-			 * "INSERT INTO student_course_session(student_id,session_id,course_id) VALUES ("
-			 * + i + "," + sessionID + "," + 100 + ")");
-			 * statement.executeBatch(); }
-			 */
-			String queryDetails = "SELECT session_iD FROM course_session WHERE course_id= "
+			String queryDetails = "SELECT session_iD FROM course_session WHERE course_id = "
 					+ courseID;
 			detailsResult = statement.executeQuery(queryDetails);
-			// connection.close();
+
 
 		} catch (SQLException e) {
-			// TODO Auto-generated method stub
+			System.out.println("Error while trying to get session for a course");
 			e.printStackTrace();
 		}
 		return detailsResult;
@@ -720,23 +569,6 @@ public class DatabaseImpl implements DatabaseInterface {
 		return result;
 	}
 
-	public static void existingTables() throws SQLException {
-
-		connection = getDatabaseConnection();
-		;
-
-		DatabaseMetaData metaData = connection.getMetaData();
-
-		ResultSet resultSet;
-		resultSet = metaData.getTables(null, null, "%", null);
-		while (resultSet.next()) {
-			System.out.println(resultSet.getString(3));
-		}
-
-		resultSet.close();
-		connection.close();
-
-	}
 
 	public void populateMyCampusCourse() {
 		try {
@@ -786,67 +618,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-/*		
-			statement
-			.addBatch("Delete from student_course_session");
-	statement.executeBatch();
-	
-	statement
-	.addBatch("Delete from timetableslot");
-statement.executeBatch();
 
-
-
-			statement
-			.addBatch("INSERT INTO student_course_session(student_id,course_id, session_id,timetableslot_id) VALUES ("
-					+ studentId + "," + 111 +","+111+","+111+ ")");
-	statement.executeBatch();
-	
-	statement
-	.addBatch("INSERT INTO student_course_session(student_id,course_id, session_id,timetableslot_id) VALUES ("
-			+ studentId + "," + 222 +","+222 + ","+222+")");
-statement.executeBatch();
-
-statement
-.addBatch("INSERT INTO student_course_session(student_id,course_id, session_id,timetableslot_id) VALUES ("
-		+ studentId + "," + 777 +","+777 + ","+777+")");
-statement.executeBatch();
-
-
-
-statement
-.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime,session_id) VALUES ("
-		+ 111 + "," + 14 +","+15+","+ 1+")");
-statement.executeBatch();
-
-statement
-.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
-		+ 222 + "," + 15 +","+17 +","+ 1+")");
-statement.executeBatch();
-
-statement
-.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
-		+ 333 + "," + 15 +","+16+","+ 1+")");
-statement.executeBatch();
-statement
-.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
-		+ 444 + "," + 16 +","+17+","+ 1+ ")");
-statement.executeBatch();
-statement
-.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
-		+ 555 + "," + 17 +","+18+ ","+1+")");
-statement.executeBatch();
-
-statement
-.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
-		+ 666 + "," + 13 +","+14+ ","+1+")");
-statement.executeBatch();
-statement
-.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
-		+ 777 + "," + 10 +","+11+","+ 1+")");
-statement.executeBatch();
-
- */
 String query = "SELECT starttime,endtime FROM student_course_session as scs, timetableslot AS t WHERE scs.timetableslot_id = t.timetableslot_id AND student_id= "
 		+ studentId;
 ResultSet result = statement.executeQuery(query);
@@ -1171,4 +943,6 @@ statement.executeBatch();
 			e.printStackTrace();
 		}
 	}
+
+
 }

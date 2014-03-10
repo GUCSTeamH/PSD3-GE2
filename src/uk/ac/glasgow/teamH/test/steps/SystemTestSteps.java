@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import java.sql.Array;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,19 +12,12 @@ import java.util.ArrayList;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Before;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.launch.Framework;
+
 
 import uk.ac.glasgow.teamH.MyCampus.impl.MyCampus;
-import uk.ac.glasgow.teamH.database.DatabaseInterface;
+
 import uk.ac.glasgow.teamH.database.impl.DatabaseImpl;
-import uk.ac.glasgow.teamH.test.ConfiguredFrameworkFactory;
-import uk.ac.glasgow.teamH.user.AdminInterface;
-import uk.ac.glasgow.teamH.user.LecturerInterface;
-import uk.ac.glasgow.teamH.user.StudentInterface;
+
 import uk.ac.glasgow.teamH.user.impl.AdminImpl;
 import uk.ac.glasgow.teamH.user.impl.LecturerImpl;
 import uk.ac.glasgow.teamH.user.impl.StudentImpl;
@@ -49,6 +42,7 @@ public class SystemTestSteps {
 	public void aLecturer() throws Exception{
 		data = new DatabaseImpl();
 		lect = new LecturerImpl(data);
+		
 	}
 	
 	@When("course $cID and session $sID are provided")
@@ -202,7 +196,6 @@ public class SystemTestSteps {
 	@Then("room $room is assigned to timeslot $time")
 	public void checkDB(String room, int time) throws SQLException {
 		boolean found = false;
-		int check = 0;
 		ResultSet result = data.getTableInfo("timetableslot");
 		if (result != null){
 			try {

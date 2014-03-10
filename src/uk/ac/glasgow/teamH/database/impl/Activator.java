@@ -29,8 +29,8 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		db = new DatabaseImpl();
-//		db.connect();
-		db.createTables();
+
+
 		
 		dbinterface = db;
 		

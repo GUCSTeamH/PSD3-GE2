@@ -1,8 +1,7 @@
 package uk.ac.glasgow.teamH.user.impl;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+
 
 import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
@@ -63,14 +62,11 @@ public class LecturerImpl extends User implements LecturerInterface {
 	}
 	
 
-	public ResultSet getTimetableslotDetails(int sessionId){
-		return db.getTimetableslotDetails(sessionId);
+	public String getSessionDetails(int sessionId){
+		return db.getSessionInfo(sessionId);
 	}
 
-	@Override
-	public ResultSet getTimetablslotStudentDetails(int sessionId) {
-		return db.getTimetableslotStudentDetails(sessionId);
-	}
+
 
 
 }
