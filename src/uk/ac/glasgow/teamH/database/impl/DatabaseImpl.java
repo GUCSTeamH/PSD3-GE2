@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 
@@ -356,8 +357,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			}
 			if (!tableExists("timetableslot")) {
 				statement
-						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,session_id INTEGER,PRIMARY KEY(timetableslot_id,session_id), "
-								+ " FOREIGN KEY (session_id) REFERENCES session (session_id))");
+						.execute("CREATE TABLE timetableslot(timetableslot_id INTEGER, capacity INTEGER, starttime INTEGER, endtime INTEGER, weekday INTEGER, weeknumber INTEGER, room VARCHAR(128), occupied BOOLEAN, staff_id INTEGER,PRIMARY KEY(timetableslot_id)");
 				System.out.println("created timetable slot table");
 
 			}
@@ -373,10 +373,7 @@ public class DatabaseImpl implements DatabaseInterface {
 						.execute("CREATE TABLE student_session(student_id INTEGER, session_id INTEGER)");
 			}
 
-			// if (!tableExists("student_timeslot")) {
-			// statement
-			// .execute("CREATE TABLE student_timeslot(student_id INTEGER, timeslot_id INTEGER)");
-			// }
+
 			if (!tableExists("session_timetableslot")) {
 				statement
 						.execute("CREATE TABLE session_timetableslot(session_id INTEGER, timetableslot_id INTEGER)");
@@ -1086,5 +1083,263 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 
 	}
+	
+	public boolean timesOverlap(int startTime1, int endTime1, int startTime2, int endTime2){
+
+		if(endTime1 <= startTime2 || startTime1>=endTime2){
+			return false;
+		}
+		
+		else{
+			return true;
+		}
+		
+	}
+	public boolean checkForClashes(int studentId){
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+		
+			statement
+			.addBatch("Delete from student_course_session");
+	statement.executeBatch();
+	
+	statement
+	.addBatch("Delete from timetableslot");
+statement.executeBatch();
+
+
+
+			statement
+			.addBatch("INSERT INTO student_course_session(student_id,course_id, session_id,timetableslot_id) VALUES ("
+					+ studentId + "," + 111 +","+111+","+111+ ")");
+	statement.executeBatch();
+	
+	statement
+	.addBatch("INSERT INTO student_course_session(student_id,course_id, session_id,timetableslot_id) VALUES ("
+			+ studentId + "," + 222 +","+222 + ","+222+")");
+statement.executeBatch();
+
+statement
+.addBatch("INSERT INTO student_course_session(student_id,course_id, session_id,timetableslot_id) VALUES ("
+		+ studentId + "," + 777 +","+777 + ","+777+")");
+statement.executeBatch();
+
+
+
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime,session_id) VALUES ("
+		+ 111 + "," + 14 +","+15+","+ 1+")");
+statement.executeBatch();
+
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 222 + "," + 15 +","+17 +","+ 1+")");
+statement.executeBatch();
+
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 333 + "," + 15 +","+16+","+ 1+")");
+statement.executeBatch();
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 444 + "," + 16 +","+17+","+ 1+ ")");
+statement.executeBatch();
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 555 + "," + 17 +","+18+ ","+1+")");
+statement.executeBatch();
+
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 666 + "," + 13 +","+14+ ","+1+")");
+statement.executeBatch();
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 777 + "," + 10 +","+11+","+ 1+")");
+statement.executeBatch();
+String query = "SELECT starttime,endtime FROM student_course_session as scs, timetableslot AS t WHERE scs.timetableslot_id = t.timetableslot_id AND student_id= "
+		+ studentId;
+ResultSet result = statement.executeQuery(query);
+
+
+LinkedList<int[]> timetableslotsForStudent = new LinkedList<int[]>();
+
+
+while(result.next()){
+	int startEnd[] = new int[2];
+	int startTime = result.getInt(1);
+	int endTime = result.getInt(2);
+	startEnd[0]=startTime;
+	startEnd[1] = endTime;
+	timetableslotsForStudent.add(startEnd);
+}
+
+for (int i = 0; i < timetableslotsForStudent.size()-1; i++){
+	for (int j = i+1; j<timetableslotsForStudent.size();j++){
+		
+		int startTime1=timetableslotsForStudent.get(i)[0];
+		int endTime1=timetableslotsForStudent.get(i)[1];
+		int startTime2=timetableslotsForStudent.get(j)[0];
+		int endTime2=timetableslotsForStudent.get(j)[1];
+		System.out.println(startTime1);
+		System.out.println(endTime1);
+		System.out.println(startTime2);
+		System.out.println(endTime2);
+		if(timesOverlap(startTime1, endTime1, startTime2, endTime2)){
+			return true;
+		}
+	}
+	
+}
+
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+
+		}
+		return false;
+	}
+	
+
+	
+	
+	public int getNumberOfClashes(int studentId, int timetableslotId){
+
+		int numberOfClashes = 0;
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+
+			String query1 = "SELECT starttime,endtime FROM timetableslot WHERE timetableslot_id = "
+					+ timetableslotId;
+			ResultSet r = statement.executeQuery(query1);
+			int startTime1 = -1;
+			int endTime1 = -1;
+			if(r.next()){
+				startTime1 = r.getInt(1);
+				endTime1= r.getInt(2);
+			}
+			
+			
+			
+			String query2 = "SELECT starttime,endtime FROM student_course_session as scs, timetableslot AS t WHERE scs.timetableslot_id = t.timetableslot_id AND student_id= "
+					+ studentId;
+			ResultSet result = statement.executeQuery(query2);
+			while (result.next()) {
+				int startTime2 = result.getInt(1);
+				int endTime2 = result.getInt(2);
+				if(timesOverlap(startTime1,endTime1,startTime2,endTime2)){
+					numberOfClashes++;
+				
+			}
+			System.out.println(r);
+			connection.close();
+		}
+		}catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+
+		}
+		return numberOfClashes;
+	}
+	
+	
+	
+
+	public boolean checkForClashes2(int studentId, int timetableslotId){
+		boolean clash = false;
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+		
+			statement
+			.addBatch("Delete from student_course_session");
+	statement.executeBatch();
+	
+	statement
+	.addBatch("Delete from timetableslot");
+statement.executeBatch();
+
+
+
+			statement
+			.addBatch("INSERT INTO student_course_session(student_id,course_id, session_id,timetableslot_id) VALUES ("
+					+ studentId + "," + 111 +","+111+","+111+ ")");
+	statement.executeBatch();
+	
+	statement
+	.addBatch("INSERT INTO student_course_session(student_id,course_id, session_id,timetableslot_id) VALUES ("
+			+ studentId + "," + 222 +","+222 + ","+222+")");
+statement.executeBatch();
+
+
+
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime,session_id) VALUES ("
+		+ 111 + "," + 14 +","+15+","+ 1+")");
+statement.executeBatch();
+
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 222 + "," + 15 +","+17 +","+ 1+")");
+statement.executeBatch();
+
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 333 + "," + 15 +","+16+","+ 1+")");
+statement.executeBatch();
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 444 + "," + 16 +","+17+","+ 1+ ")");
+statement.executeBatch();
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 555 + "," + 17 +","+18+ ","+1+")");
+statement.executeBatch();
+
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 666 + "," + 13 +","+14+ ","+1+")");
+statement.executeBatch();
+statement
+.addBatch("INSERT INTO timetableslot(timetableslot_id,starttime, endtime, session_id) VALUES ("
+		+ 777 + "," + 10 +","+11+","+ 1+")");
+statement.executeBatch();
+			String query1 = "SELECT starttime,endtime FROM timetableslot WHERE timetableslot_id= "
+					+ timetableslotId;
+			ResultSet r = statement.executeQuery(query1);
+			int startTime1 = -1;
+			int endTime1 = -1;
+			if(r.next()){
+				startTime1 = r.getInt(1);
+				endTime1= r.getInt(2);
+			}
+			String query2 = "SELECT starttime,endtime FROM student_course_session as scs, timetableslot AS t WHERE scs.timetableslot_id = t.timetableslot_id AND student_id= "
+					+ studentId;
+			ResultSet result = statement.executeQuery(query2);
+			while (result.next()) {
+				int startTime2 = result.getInt(1);
+				int endTime2 = result.getInt(2);
+				if(timesOverlap(startTime1,endTime1,startTime2,endTime2)){
+					clash = true;
+					return clash;
+				}
+				
+			}
+			System.out.println(r);
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+
+		}
+		return clash;
+	}
+	
+
+	
 
 }

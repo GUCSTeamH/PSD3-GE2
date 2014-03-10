@@ -37,4 +37,6 @@ public ResultSet getSessionsCourse(int courseID);
 
 public ResultSet getTimetableslotStudentDetails(int sessionID);
 
+public boolean checkForClashes(int studentId);
+
 }
