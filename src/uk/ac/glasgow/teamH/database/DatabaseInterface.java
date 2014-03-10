@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 
 
 
+
 public interface DatabaseInterface {
 
 
@@ -18,7 +19,6 @@ public void assignRoomToTimetableslot(int timetableslotID, String room);
 public void bookTimetableSlot(int studentID, int courseID, int sessionID,int timetableslotID);
 
 public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,int courseID);
-
 
 public boolean checkIfSignedUpForAllCompulsory(int studentID);
 
@@ -40,4 +40,22 @@ public ResultSet getSessionsCourse(int courseID);
 public boolean checkForClashes(int studentId);
 
 public String getSessionInfo(int sessionId);
+
+
+public void populateMyCampusCourse(int courseId, String courseName);
+
+public void populateSession(int sessionId);
+
+public void populateTimetableslot(int timetableslotId) ;
+
+public void populateStudent_Course_SessionFully(int studentId,
+		int courseId, int sessionId, int timetableslotId, int startTime,
+		int endTime, boolean compulsory,boolean refresh) ;
+
+public void populateStudent_Course_SessionPartially(int studentId,
+		int courseId, int sessionId, boolean compulsory,boolean refresh);
+
+public void populateSession_Timetableslot(int sessionId, int timetableslotId);
+
+public void populateSession(int sessionId, String recurring	,boolean compulsory, int timetableslotId, int staffId);
 }
