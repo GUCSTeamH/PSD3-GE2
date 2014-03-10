@@ -91,6 +91,41 @@ public class Main {
 		//end of 9 with clashes
 		
 		
+		//11
+		
+
+		db.populateStudent_Course_SessionPartially(1, 2, 3, false, true);;
+		db.bookTimetableSlot(1, 2, 3, 4);
+		 
+		result = db.getTableInfo("student_course_session");
+		try {
+			while(result.next()){
+				System.out.println("studentid: "+result.getInt(1)+" courseid: "+result.getString("course_id")+" sessionid: "+result.getString("session_id")+" timetableslotid: "+result.getString("timetableslot_id"));
+				
+				
+			}
+		} catch (SQLException e) {
+			System.out.println("Error while reading results");
+			e.printStackTrace();
+		}
+		
+		//end of 11
+		
+		//12
+		
+
+		db.populateStudent_Course_SessionFully(1, 2, 3, 4, 12, 14, false, true);
+		db.populateStudent_Course_SessionFully(1, 3, 4, 5, 14, 15, true, false);
+		db.populateStudent_Course_SessionPartially(1, 4, 5, true, false);
+		db.populateStudent_Course_SessionPartially(1, 5, 6, false, false);
+
+
+		System.out.println("signed up for all compulsory "+db.checkIfSignedUpForAllCompulsory(1));
+				
+	
+		
+		//end of 12
+		
 	
 	}
 	

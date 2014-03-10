@@ -20,6 +20,7 @@ public void bookTimetableSlot(int studentID, int courseID, int sessionID,int tim
 public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,int courseID);
 
 
+public boolean checkIfSignedUpForAllCompulsory(int studentID);
 
 public int supportNUsers(int n);
 

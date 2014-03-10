@@ -331,6 +331,28 @@ public class DatabaseImpl implements DatabaseInterface {
 		}
 
 	}
+	
+	public boolean checkIfSignedUpForAllCompulsory(int studentID) {
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			String query = "SELECT session_id FROM student_course_session WHERE student_id = "
+					+ studentID
+					+ " AND timetableslot_id IS NULL AND compulsory = true";
+			ResultSet result = statement.executeQuery(query);
+			boolean r = !result.next();
+
+			connection.close();
+			return r;
+		} catch (SQLException e) {
+			System.out.println("Error while trying to check if a student has signed up for all compulsory sessions");
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
 
 	public ResultSet getSessionsCourse(int courseID) {
 
@@ -728,7 +750,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	public void populateStudent_Course_SessionPartially(int studentId,
 			int courseId, int sessionId, boolean compulsory,boolean refresh) {
 		String deletion = "DELETE FROM student_course_session";
-		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime,compulsory) VALUES "
+		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,compulsory) VALUES ("
 				+ studentId
 				+ ","
 				+ courseId
