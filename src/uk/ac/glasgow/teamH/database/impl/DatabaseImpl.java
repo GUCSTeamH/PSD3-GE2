@@ -114,9 +114,9 @@ public class DatabaseImpl implements DatabaseInterface {
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
-			statement.addBatch("DELETE FROM Session)");
+			statement.addBatch("DELETE FROM Session");
 			statement.executeBatch();
-			statement.addBatch("DELETE FROM course_session )");
+			statement.addBatch("DELETE FROM course_session ");
 			statement.executeBatch();
 			statement
 					.addBatch("INSERT INTO session (session_id, compulsory) VALUES ("
@@ -288,6 +288,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	@Override
 	public void bookTimetableSlot(int studentID, int courseID, int sessionID,
 			int timetableslotID) {
+		if(studentID>=0&&sessionID>=0&&courseID>=0&&timetableslotID>=0){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -307,12 +308,14 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println("Error while trying to book a timetableslot");
 			e.printStackTrace();
 		}
+		}
 	}
 
 	// 12 
 	@Override
 	public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,
 			int courseID) {
+		if(studentID>=0&&sessionID>=0&&courseID>=0){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -327,12 +330,13 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			System.out.println("Error while trying to check if a student has signed up for all compulsory sessions");
 			e.printStackTrace();
-			return false;
-		}
 
+		}}
+		return false;
 	}
 	
 	public boolean checkIfSignedUpForAllCompulsory(int studentID) {
+		if(studentID>=0){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -348,13 +352,16 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			System.out.println("Error while trying to check if a student has signed up for all compulsory sessions");
 			e.printStackTrace();
-			return false;
+
 		}
+		}
+		return false;
 
 	}
 
 
 	public ResultSet getSessionsCourse(int courseID) {
+		if(courseID>=0){
 
 		ResultSet detailsResult = null;
 		System.out.println("dede");
@@ -372,6 +379,7 @@ public class DatabaseImpl implements DatabaseInterface {
 			e.printStackTrace();
 		}
 		return detailsResult;
+		}return null;
 	}
 
 	// non-functional distinguish between user types-OK
@@ -412,6 +420,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 	// non-functional authenticate user-OK
 	public boolean authenticate(String username, String password) {
+		if(!username.equalsIgnoreCase("") && !password.equalsIgnoreCase("")){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -431,13 +440,15 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out
 					.println("Error while trying to authenticate from MyCampus");
 			e.printStackTrace();
-			return false;
-		}
 
+		}
+		}
+		return false;
 	}
 
 	// non-functional support at least 100 courses-OK
 	public int supportNCourses(int n) {
+		if(n>0){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -464,13 +475,14 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out
 					.println("Error while trying to insert int course in supportNCourses method");
 			e.printStackTrace();
-			return 0;
-		}
 
+		}}
+		return 0;
 	}
 
 	// non-functional support at least 10 sessions per course-OK
 	public int supportNSessionTypes(int n, int courseID) {
+		if(n>0 && courseID >=0){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -499,13 +511,15 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out
 					.println("Error while trying to open the connection in supportNSessionTypes method");
 			e.printStackTrace();
-			return 0;
-		}
+
+		}}
+		return 0;
 
 	}
 
 	// non-functional support at least 20 timetableslots per session
 	public int supportNTimetableslotsPerSession(int n, int sessionID) {
+		if(n>=0&&sessionID>=0){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -534,13 +548,15 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out
 					.println("Error while trying to open the connection in supportNTimetableslotsPerSession method");
 			e.printStackTrace();
-			return 0;
-		}
+
+		}}
+		return 0;
 
 	}
 
 	// non-functional support at least 1000 users-OK
 	public int supportNUsers(int n) {
+		if(n>0){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -569,8 +585,10 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out
 					.println("Error while trying to open the connection in supportNUsers method");
 			e.printStackTrace();
-			return 0;
-		}
+
+		}}
+		return 0;
+		
 
 	}
 
@@ -605,6 +623,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	}
 
 	public boolean checkForClashes(int studentId) {
+		if(studentId >=0){
 		try {
 			connection = getDatabaseConnection();
 			Statement statement = connection.createStatement();
@@ -645,10 +664,12 @@ public class DatabaseImpl implements DatabaseInterface {
 			e.printStackTrace();
 
 		}
+		}
 		return false;
 	}
 
 	public void populateMyCampusCourse(int courseId, String courseName) {
+		if(courseId >=0){
 		String deletion = "DELETE FROM mycampus_course";
 		String insertion = "INSERT INTO mycampus_course (course_id, course_name) VALUES ("
 				+ courseId + "," + "'"+courseName+"')";
@@ -667,10 +688,12 @@ public class DatabaseImpl implements DatabaseInterface {
 					.println("Error while trying to populate mycampus_course");
 			e.printStackTrace();
 		}
+		}
 
 	}
 
 	public void populateSession(int sessionId) {
+		if(sessionId >=0){
 		String deletion = "DELETE FROM Session";
 		String insertion = "INSERT INTO Session (session_id,compulsory,recurring,endtime,starttime) VALUES ("
 				+ sessionId +","+true+", '"+"one-off"+"' ,"+14+","+13+ ")";
@@ -687,10 +710,11 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			System.out.println("Error while trying to populate session");
 			e.printStackTrace();
-		}
+		}}
 	}
 
 	public void populateTimetableslot(int timetableslotId) {
+		if(timetableslotId>=0){
 		String deletion = "DELETE FROM Timetableslot";
 		String insertion = "INSERT INTO Timetableslot (timetableslot_id) VALUES ("
 				+ timetableslotId + ")";
@@ -707,12 +731,13 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			System.out.println("Error while trying to populate timetableslot");
 			e.printStackTrace();
-		}
+		}}
 	}
 
 	public void populateStudent_Course_SessionFully(int studentId,
 			int courseId, int sessionId, int timetableslotId, int startTime,
 			int endTime, boolean compulsory,boolean refresh) {
+		if(studentId >=0 && courseId >=0 && sessionId>=0 && timetableslotId >=0){
 		String deletion = "DELETE FROM student_course_session";
 		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,timetableslot_id,starttime,endtime,compulsory) VALUES ("
 				+ studentId
@@ -744,11 +769,12 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			System.out.println("Error while trying to populate student_course_session fully");
 			e.printStackTrace();
-		}
+		}}
 	}
 
 	public void populateStudent_Course_SessionPartially(int studentId,
 			int courseId, int sessionId, boolean compulsory,boolean refresh) {
+		if(studentId>=0 && courseId >=0 && sessionId >=0){
 		String deletion = "DELETE FROM student_course_session";
 		String insertion = "INSERT INTO student_course_session (student_id,course_id,session_id,compulsory) VALUES ("
 				+ studentId
@@ -775,9 +801,11 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println("Error while trying to populate student_course_session partially");
 			e.printStackTrace();
 		}
+		}
 	}
 
 	public void populateSession_Timetableslot(int sessionId, int timetableslotId) {
+		if(sessionId>=0 && timetableslotId >=0){
 		String deletion = "DELETE FROM student_course_session";
 		String insertion = "INSERT INTO session_timetableslot (session_id,timetableslot_id) VALUES ("
 				+ sessionId + "," + timetableslotId + ")";
@@ -795,10 +823,12 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println("Error while trying to populate session_timetableslot");
 			e.printStackTrace();
 		}
+		}
 	}
 
 	public void populateSession(int sessionId, String recurring,
 			boolean compulsory, int timetableslotId, int staffId) {
+		if(sessionId>=0 && staffId>=0){
 		String deletion = "DELETE FROM Session";
 		String insertion = "INSERT INTO Session (session_id,recurring,compulsory,timetableslot_id,staff_id) VALUES "
 				+ sessionId
@@ -822,8 +852,11 @@ public class DatabaseImpl implements DatabaseInterface {
 			System.out.println("Error while trying to populate session");
 			e.printStackTrace();
 		}
+		}
 	}
 	public void populateCourse(int courseId) {
+		
+		if(courseId>=0){
 		String deletion = "DELETE FROM Course";
 		String insertion = "INSERT INTO Course (course_id) VALUES ("
 				+ courseId +")";
@@ -840,7 +873,7 @@ public class DatabaseImpl implements DatabaseInterface {
 		} catch (SQLException e) {
 			System.out.println("Error while trying to populate course");
 			e.printStackTrace();
-		}
+		}}
 	}
 
 

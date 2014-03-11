@@ -34,7 +34,17 @@ public class Main {
 		//2
 
 		//no change in the way
-		
+		db.addSession(1, 1, true);
+		result = db.getTableInfo("course_session");
+		try {
+			while(result.next()){
+				System.out.println("Course: "+result.getInt(1)+" session: "+result.getInt(2));
+				
+			}
+		} catch (SQLException e) {
+			System.out.println("Error while reading results");
+			e.printStackTrace();
+		}
 		//end of 2
 		
 		
