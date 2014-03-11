@@ -58,4 +58,6 @@ public void populateStudent_Course_SessionPartially(int studentId,
 public void populateSession_Timetableslot(int sessionId, int timetableslotId);
 
 public void populateSession(int sessionId, String recurring	,boolean compulsory, int timetableslotId, int staffId);
+
+public void populateCourse(int courseId);
 }
