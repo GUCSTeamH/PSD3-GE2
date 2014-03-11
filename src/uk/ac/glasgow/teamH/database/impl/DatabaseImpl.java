@@ -18,7 +18,7 @@ public class DatabaseImpl implements DatabaseInterface {
 	static Connection connection = null;
 	Statement stmt = null;
 	public static ResultSet coursetable;
-	private static final String connectionString = "jdbc:derby:data/mycampustH;create=true";
+	private static final String connectionString = "jdbc:derby:data/mycampussH;create=true";
 
 	public DatabaseImpl() {
 		try {

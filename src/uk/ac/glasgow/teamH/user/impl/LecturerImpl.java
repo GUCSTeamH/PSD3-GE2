@@ -3,7 +3,7 @@ package uk.ac.glasgow.teamH.user.impl;
 
 
 
-import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;
+import uk.ac.glasgow.teamH.MyCampus.MyCampusInterface;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.Course;
 import uk.ac.glasgow.teamH.user.LecturerInterface;
@@ -12,7 +12,7 @@ import uk.ac.glasgow.teamH.user.LecturerInterface;
 public class LecturerImpl extends User implements LecturerInterface {
 
 	DatabaseInterface db;
-	MyCampusCommunicator mycampusCommunicator;
+	MyCampusInterface mycampusCommunicator;
 	
 	public LecturerImpl(DatabaseInterface db){
 		
@@ -31,8 +31,8 @@ public class LecturerImpl extends User implements LecturerInterface {
 		
 	}
 	
-	public void registerMyCampusCommunicator(MyCampusCommunicator communicator){
-		mycampusCommunicator = communicator;		
+	public void registerMyCampusCommunicator(MyCampusInterface mycampus){
+		mycampusCommunicator = mycampus;		
 	}
 	
 	public String getCourseInfoFromMyCampus(Course c){

@@ -3,9 +3,7 @@ package uk.ac.glasgow.teamH.MyCampus.impl;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
-import uk.ac.glasgow.teamH.MyCampus.AuthenticatorInterface;
-import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;
+import uk.ac.glasgow.teamH.MyCampus.MyCampusInterface;
 
 
 
@@ -13,32 +11,30 @@ import uk.ac.glasgow.teamH.MyCampus.MyCampusCommunicator;
 
 public class Activator implements BundleActivator {
 
-	private  AuthenticatorInterface authenticator;
-	private  MyCampusCommunicator communicator;
+	private  MyCampusInterface mycampusInterface;
+
 	private MyCampus mycampus;
 	
 	
-	private ServiceRegistration<AuthenticatorInterface> authenticatorRegistration;
-	private ServiceRegistration<MyCampusCommunicator> communicatorRegistration;
+	private ServiceRegistration<MyCampusInterface> myCampusRegistration;
+
 	
 	@Override
 	public void start(BundleContext context) throws Exception {
 		mycampus = new MyCampus();
-		communicator=mycampus;
-		authenticator = mycampus;
-		authenticatorRegistration = context.registerService(AuthenticatorInterface.class, authenticator,
+
+		mycampusInterface = mycampus;
+		myCampusRegistration = context.registerService(MyCampusInterface.class, mycampusInterface,
 				null);
-		communicatorRegistration = context.registerService(MyCampusCommunicator.class, communicator,
-				null);
-		
+	
 
 	}
 
 	@Override
 	public void stop(BundleContext arg0) throws Exception {
 
-		authenticatorRegistration.unregister();
-		communicatorRegistration.unregister();
+		myCampusRegistration.unregister();
+
 
 	}
 

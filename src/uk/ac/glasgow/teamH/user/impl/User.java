@@ -1,9 +1,9 @@
 package uk.ac.glasgow.teamH.user.impl;
 
-import uk.ac.glasgow.teamH.MyCampus.AuthenticatorInterface;
+import uk.ac.glasgow.teamH.MyCampus.MyCampusInterface;
 
 public abstract class User {
-	AuthenticatorInterface mycampusAuthenticator;
+	MyCampusInterface mycampusAuthenticator;
 	String name, surname, email, password;
 	
 	protected User(String n, String s, String mail,String p){
@@ -18,8 +18,8 @@ public abstract class User {
 		
 	}
 	
-	public void registerMyCampusAuthenticator(AuthenticatorInterface authenticator){
-		mycampusAuthenticator = authenticator;
+	public void registerMyCampusAuthenticator(MyCampusInterface mycampus){
+		mycampusAuthenticator = mycampus;
 	}
 	
 	public boolean login(){

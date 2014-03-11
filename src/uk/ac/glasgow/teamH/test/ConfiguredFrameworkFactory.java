@@ -10,7 +10,7 @@ import org.osgi.framework.launch.Framework;
 
 public class ConfiguredFrameworkFactory {
 
-	public static Framework createFelixFramework(String extraPackages, String extra2) throws BundleException {
+	public static Framework createFelixFramework(String extraPackages) throws BundleException {
 		FrameworkFactory ff = new FrameworkFactory();
 		
 		Map<String,Object> config = new HashMap<String,Object>();
@@ -18,9 +18,7 @@ public class ConfiguredFrameworkFactory {
 		config.put(
 			Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
 			extraPackages);
-		
-		config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, extra2);
-		
+				
 		config.put(
 			Constants.FRAMEWORK_STORAGE_CLEAN,
 			"true");
