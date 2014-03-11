@@ -823,5 +823,25 @@ public class DatabaseImpl implements DatabaseInterface {
 			e.printStackTrace();
 		}
 	}
+	public void populateCourse(int courseId) {
+		String deletion = "DELETE FROM Course";
+		String insertion = "INSERT INTO Course (course_id) VALUES ("
+				+ courseId +")";
+
+		try {
+			connection = getDatabaseConnection();
+			Statement statement = connection.createStatement();
+
+			statement.addBatch(deletion);
+			statement.executeBatch();
+
+			statement.addBatch(insertion);
+			statement.executeBatch();
+		} catch (SQLException e) {
+			System.out.println("Error while trying to populate course");
+			e.printStackTrace();
+		}
+	}
+
 
 }
