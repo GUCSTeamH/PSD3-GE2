@@ -60,6 +60,7 @@ public class SystemTestSteps {
 
 					if (result.getInt(1) == cID && result.getInt(2)==sID)
 						found = true;
+					
 				}
 				
 			} catch (SQLException e) {
@@ -72,12 +73,15 @@ public class SystemTestSteps {
 	
 	@When("selecting mycampus course $cID")
 	public void selectMyCampus(int cID){
-		data.importMycampusCourse(cID);
+		data.populateMyCampusCourse(cID, "OS3");
+		lect.importMyCampusCourse(cID);
 	}
 	
 	@Then("mycampus course $cID is imported")
 	public void checkCourse(int cID) throws SQLException{
-		boolean found=false;
+		boolean expected = true;
+		boolean found =false;
+		if (cID < 0) expected=false;
 		ResultSet result = data.getTableInfo("course");
 		if (result==null) found=false;
 		while(result.next()){
@@ -85,7 +89,7 @@ public class SystemTestSteps {
 			if (result.getInt(1) == cID) found =true;
 		}
 		
-		assertThat(found, is(true));
+		assertThat(found, is(expected));
 		
 	}
 	
@@ -190,12 +194,15 @@ public class SystemTestSteps {
 	
 	@When("room $room and timeslot $time are selected")
 	public void addRoom(String room, int time){
-		data.assignRoomToTimetableslot(time, room);
+		data.populateTimetableslot(time);
+		admin.assignRoomtoTimetableSlot(time, room);
 	}
 	
 	@Then("room $room is assigned to timeslot $time")
 	public void checkDB(String room, int time) throws SQLException {
+		boolean expected = true;
 		boolean found = false;
+		if (time < 0) expected = false;
 		ResultSet result = data.getTableInfo("timetableslot");
 		if (result != null){
 			try {
@@ -210,7 +217,7 @@ public class SystemTestSteps {
 			}
 		}
 
-		assertThat(found, is(true));
+		assertThat(found, is(expected));
 	} 
 
 	
