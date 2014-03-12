@@ -118,8 +118,21 @@ public class SystemTestSteps {
 		
 	}
 	
-
-	
+	@Given("a booking system containing course $cID with a session $sID also student $studentId")
+	public void addcourseSessions(int studentId,int cID,int sID){
+		databaseInterface.populateStudent_Course_SessionPartially(studentId, cID, sID, true, false);
+	}
+	/*@When("a  student $studentID books compulsory session $sID of course $courseID")
+	public void compulsoryCheck(int studentID,int courseID,int sID) throws SQLException{
+		studentInterface.bookTimetableSlot(studentID, courseID, sID, 12);
+	}
+	*/
+	@Then("student $studentID checks if signed up for compulsory session $sID of course $courseID")
+	public void showBookCompulsory(int studentID,int sID,int courseID) throws SQLException{
+		boolean check=studentInterface.checkIfSignedUpForCompulsory(studentID, sID, courseID);
+		boolean expected=false;
+		assertEquals(expected,check);
+	}
 	@Given("a booking system containing a course $courseId with a session $sessId and a timeslot $tslotId")
 	public void givenABookingSystemContainingCourseSessionTimeslot(Integer courseId, Integer sessId, Integer tslotId) {
 		databaseInterface.populateCourse(courseId);
