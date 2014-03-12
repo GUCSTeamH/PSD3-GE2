@@ -15,9 +15,3 @@ Given a lecturer
 And a mycampus system containing course 15
 When selecting mycampus course 15
 Then mycampus course 15 is imported
-
-Scenario: lecturer imports a course from MyCampus
-Given a lecturer
-And a mycampus system containing course -15
-When selecting mycampus course -15
-Then mycampus course -15 is imported

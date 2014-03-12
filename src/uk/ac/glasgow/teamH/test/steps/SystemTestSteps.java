@@ -172,6 +172,7 @@ public class SystemTestSteps {
 	
 	@Then("session $sID is added to course $cID")
 	public void checkSession(int sID, int cID) throws SQLException{
+
 		boolean found = false;
 		ResultSet result = 
 				databaseInterface.getTableInfo("course_session");
@@ -193,6 +194,31 @@ public class SystemTestSteps {
 		
 	}
 	
+	
+	@Then("session $sID is not added to course $cID")
+	public void checkNegativeSession(int sID, int cID) throws SQLException{
+		boolean expected = false;
+		boolean found = false;
+		ResultSet result = 
+				databaseInterface.getTableInfo("course_session");
+		
+		
+		if (result !=null)
+			try {
+				while (result.next()){
+
+					if (result.getInt(1) == cID && result.getInt(2)==sID)
+						found = true;
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		assertThat(found, is(expected));
+		
+	}
+	
 	@Given("a mycampus system containing course $cID")
 	public void populateMycampus(int cID){
 		databaseInterface.populateMyCampusCourse(cID, "OS3");
@@ -206,6 +232,23 @@ public class SystemTestSteps {
 	
 	@Then("mycampus course $cID is imported")
 	public void checkCourse(int cID) throws SQLException{
+		boolean expected=true;
+		if (cID < 0) expected = false;
+
+		boolean found=false;
+		ResultSet result = databaseInterface.getTableInfo("course");
+		if (result==null) found=false;
+		while(result.next()){
+			//if (result==null) found = false;
+			if (result.getInt(1) == cID) found =true;
+		}
+		
+		assertThat(found, is(expected));
+		
+	}
+	
+	@Then("mycampus course $cID is not imported")
+	public void checkNegativeCourse(int cID) throws SQLException{
 		boolean expected=true;
 		if (cID < 0) expected = false;
 
@@ -338,14 +381,20 @@ public class SystemTestSteps {
 			adminInterface = 
 				bundleContext.getService(adminServiceReference);
 	}
+	@Given("a system containing timeslot $tID")
+	public void populateTime(int tID){
+		databaseInterface.populateTimetableslot(tID);
+	}
 	
 	@When("room $room and timeslot $time are selected")
 	public void addRoom(String room, int time){
-		databaseInterface.assignRoomToTimetableslot(time, room);
+		adminInterface.assignRoomtoTimetableSlot(time, room);
 	}
 	
 	@Then("room $room is assigned to timeslot $time")
 	public void checkDB(String room, int time) throws SQLException {
+		boolean expected = true;
+		if (time < 0) expected = false;
 		boolean found = false;
 		ResultSet result = databaseInterface.getTableInfo("timetableslot");
 		if (result != null){
@@ -361,7 +410,7 @@ public class SystemTestSteps {
 			}
 		}
 
-		assertThat(found, is(true));
+		assertThat(found, is(expected));
 	} 
 
 	
