@@ -71,7 +71,7 @@ public class SystemTestSteps {
 		
 		// Clean up any resources left behind by failed tests
 		this.recursiveDelete(new File("felix-cache"));
-		//this.recursiveDelete(new File("data/sensordb"));
+		this.recursiveDelete(new File("data/mycampussH"));
 		
 		
 		//expectedSensorID = "Temp02";
@@ -118,10 +118,7 @@ public class SystemTestSteps {
 		
 	}
 	
-	@Given("a booking system containing a course $courseId")
-	public void givenABookingSystemContainingACourse(Integer courseId) {
-		databaseInterface.populateCourse(courseId);
-	}
+
 	
 	@Given("a booking system containing a course $courseId with a session $sessId and a timeslot $tslotId")
 	public void givenABookingSystemContainingCourseSessionTimeslot(Integer courseId, Integer sessId, Integer tslotId) {
@@ -144,6 +141,11 @@ public class SystemTestSteps {
 		
 		lecturerInterface = 
 			bundleContext.getService(lecturerServiceReference);
+	}
+	
+	@Given("a booking system containing a course $courseId")
+	public void givenABookingSystemContainingACourse(Integer courseId) {
+		databaseInterface.populateCourse(courseId);
 	}
 	
 	@Given("a mycampus")
@@ -191,13 +193,22 @@ public class SystemTestSteps {
 		
 	}
 	
+	@Given("a mycampus system containing course $cID")
+	public void populateMycampus(int cID){
+		databaseInterface.populateMyCampusCourse(cID, "OS3");
+		
+	}
+	
 	@When("selecting mycampus course $cID")
 	public void selectMyCampus(int cID){
-		databaseInterface.importMycampusCourse(cID);
+		lecturerInterface.importMyCampusCourse(cID);
 	}
 	
 	@Then("mycampus course $cID is imported")
 	public void checkCourse(int cID) throws SQLException{
+		boolean expected=true;
+		if (cID < 0) expected = false;
+
 		boolean found=false;
 		ResultSet result = databaseInterface.getTableInfo("course");
 		if (result==null) found=false;
@@ -206,7 +217,7 @@ public class SystemTestSteps {
 			if (result.getInt(1) == cID) found =true;
 		}
 		
-		assertThat(found, is(true));
+		assertThat(found, is(expected));
 		
 	}
 	
@@ -454,13 +465,13 @@ public class SystemTestSteps {
 
 	@AfterScenario()
 	public void tearDown () throws Exception{
-						
+		//databaseInterface.disconnect();				
 		framework.stop();		
 		framework.waitForStop(0);
 		
 		//Clean up resources that might have been created during testing.
 
-		recursiveDelete(new File("data/mycampustH"));
+		recursiveDelete(new File("data/mycampussH"));
 		
 		recursiveDelete(new File("felix-cache"));
 	}
