@@ -557,12 +557,12 @@ public class DatabaseImpl implements DatabaseInterface {
 
 				for (int i = 0; i < n; i++) {
 					statement
-							.addBatch("INSERT INTO timetableslot (timetableslot_id,session_id) VALUES ("
+							.addBatch("INSERT INTO session_timetableslot (timetableslot_id,session_id) VALUES ("
 									+ i + "," + sessionID + ")");
 					statement.executeBatch();
 				}
 
-				String query = "SELECT count(timetableslot_id) FROM timetableslot WHERE session_id ="
+				String query = "SELECT count(timetableslot_id) FROM session_timetableslot WHERE session_id ="
 						+ sessionID + " GROUP BY session_id";
 
 				ResultSet result = statement.executeQuery(query);
