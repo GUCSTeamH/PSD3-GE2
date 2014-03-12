@@ -236,6 +236,10 @@ public class SystemTestSteps {
 			studentInterface = 
 				bundleContext.getService(studentServiceReference);
 	}
+	@Given("a booking system containing course $cID")
+	public void addcourseSessions(int cID){
+		databaseInterface.populateCourse(cID);
+	}
 	
 	@When("a student $studentID books a session $sessionID and a particular timeslot $timeslotID of a course $courseID")
 	public void Booked(int studentID,int sessionID,int timeslotID,int courseID) throws SQLException{
@@ -277,30 +281,16 @@ public class SystemTestSteps {
 		}}
 	}
 
-	@When("a  student $studentID selects a course $courseID")
-	public void compulsoryCheck(int courseID,int studentID) throws SQLException{
-		ResultSet rs=studentInterface.getSessionsCourse(courseID);
-		while(rs.next()){
-
-			notenrolled.add(rs.getInt(1));
-		}
+	@When("a  student selects a course $courseID and session $sID")
+	public void compulsoryCheck(int courseID,int studentID,int sID) throws SQLException{
+		databaseInterface.addSession(courseID, sID, true);
 	}
 
-	@Then("student $studentID books all compulsory sessions of course $courseID")
-	public void showBookCompulsory(int studentID,int courseID) throws SQLException{
-		int timetableslotID=3587;
-		for(int i=0;i<notenrolled.size();i++){
-			databaseInterface.bookTimetableSlot(studentID,courseID,notenrolled.get(i),
-					timetableslotID);
-		}
-		ResultSet rs=databaseInterface.getSessionsCourse(courseID);
-		boolean expected=true;
-		boolean result=true;
-		while(rs.next()){
-			result = databaseInterface.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
-			if (result==false){break;}
-			}
-		assertEquals(expected,result);
+	@Then("student $studentID checks if signed up for compulsory session $sID of course $courseID")
+	public void showBookCompulsory(int studentID,int sID,int courseID) throws SQLException{
+		boolean check=studentInterface.checkIfSignedUpForCompulsory(studentID, sID, courseID);
+		boolean expected=false;
+		assertEquals(expected,check);
 	}
 
 	@Then("student $studentID views all compulsory sessions of course $courseID")

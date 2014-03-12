@@ -32,7 +32,7 @@ public class SystemStories {
 					
 		List<String> storyPaths =
 			finder.findPaths(
-				projectBinDirPath, "**/*.story", "");
+				projectBinDirPath, "**/StudentCompulsory.story", "");
 		
 		return storyPaths;
 	}

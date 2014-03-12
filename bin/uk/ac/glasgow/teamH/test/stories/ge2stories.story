@@ -52,8 +52,9 @@ Then student 12 books all compulsory sessions of course 16
 
 Scenario: Student views all compulsory sessions in a course
 Given a student
-When a student 12 selects a course 16
-Then student 12 views all compulsory sessions of course 16
+And a booking system containing course 16
+When a student selects a course 16 and session 14
+Then student 12 checks if signed up for compulsory session 14 of course 16
 
 Scenario: Admin assigns a room to a timetableSlot
 Given an admin
