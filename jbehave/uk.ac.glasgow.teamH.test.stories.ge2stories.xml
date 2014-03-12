@@ -7,7 +7,10 @@
 <scenario keyword="Scenario:" title="lecturer adds a session to a course">
 <step outcome="successful">Given a lecturer</step>
 <step outcome="successful">When course <parameter>30</parameter> and session <parameter>200</parameter> are provided</step>
-<step outcome="successful">Then session <parameter>200</parameter> is added to course <parameter>30</parameter></step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>200</parameter> is added to course <parameter>30</parameter><failure>java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</failure></step>
+<step outcome="failed" keyword="FAILED">uk.ac.glasgow.teamH.test.steps.SystemTestSteps.tearDown()<failure>org.jbehave.core.failures.BeforeOrAfterFailed: Method tearDown (annotated with @AfterScenario in class uk.ac.glasgow.teamH.test.steps.SystemTestSteps) failed: java.lang.InterruptedException</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer adds a session to a course">
 <step outcome="successful">Given a lecturer</step>
@@ -17,44 +20,50 @@
 <scenario keyword="Scenario:" title="lecturer adds a session to a course">
 <step outcome="successful">Given a lecturer</step>
 <step outcome="successful">When course <parameter>50</parameter> and session <parameter>210</parameter> are provided</step>
-<step outcome="failed" keyword="FAILED">Then session <parameter>210</parameter> is added to course <parameter>50</parameter><failure>java.lang.AssertionError: 
-Expected: is &lt;true&gt;
-     but: was &lt;false&gt;</failure></step>
+<step outcome="successful">Then session <parameter>210</parameter> is added to course <parameter>50</parameter></step>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer imports a course from MyCampus">
 <step outcome="successful">Given a lecturer</step>
 <step outcome="successful">When selecting mycampus course <parameter>157</parameter></step>
-<step outcome="successful">Then mycampus course <parameter>157</parameter> is imported</step>
+<step outcome="failed" keyword="FAILED">Then mycampus course <parameter>157</parameter> is imported<failure>java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="Student books timeslot in session of a course">
 <step outcome="successful">Given a student</step>
-<step outcome="successful">When a student <parameter>12</parameter> selects a session <parameter>25</parameter> and a particular timeslot <parameter>15</parameter> of a course <parameter>16</parameter></step>
-<step outcome="successful">Then student <parameter>12</parameter> is enrolled in the session <parameter>25</parameter> of the course <parameter>16</parameter></step>
+<step outcome="pending" keyword="PENDING">When a student 12 selects a session 25 and a particular timeslot 15 of a course 16</step>
+<step outcome="notPerformed" keyword="NOT PERFORMED">Then student <parameter>12</parameter> is enrolled in the session <parameter>25</parameter> of the course <parameter>16</parameter></step>
+<pendingMethod>@When(&quot;a student 12 selects a session 25 and a particular timeslot 15 of a course 16&quot;)
+@Pending
+public void whenAStudent12SelectsASession25AndAParticularTimeslot15OfACourse16() {
+  // PENDING
+}
+</pendingMethod>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a one-off.">
 <step outcome="successful">Given a lecturer</step>
 <step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>one-off</parameter></step>
-<step outcome="successful">Then session <parameter>10</parameter> is a <parameter>one-off</parameter> session</step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>one-off</parameter> session<failure>java.sql.SQLException: Invalid cursor state - no current row.</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a weekly.">
 <step outcome="successful">Given a lecturer</step>
 <step outcome="successful">When session <parameter>11</parameter> is marked as <parameter>weekly</parameter></step>
-<step outcome="successful">Then session <parameter>11</parameter> is a <parameter>weekly</parameter> session</step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>11</parameter> is a <parameter>weekly</parameter> session<failure>java.sql.SQLException: Invalid cursor state - no current row.</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a fortnightly.">
 <step outcome="successful">Given a lecturer</step>
 <step outcome="successful">When session <parameter>12</parameter> is marked as <parameter>fortnightly</parameter></step>
-<step outcome="successful">Then session <parameter>12</parameter> is a <parameter>fortnightly</parameter> session</step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>12</parameter> is a <parameter>fortnightly</parameter> session<failure>java.sql.SQLException: Invalid cursor state - no current row.</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="Student views all sessions in a course">
 <step outcome="successful">Given a student</step>
 <step outcome="successful">When course <parameter>16</parameter> is selected from student <parameter>12</parameter></step>
-<step outcome="successful">Then student <parameter>12</parameter> books all compulsory sessions of course <parameter>16</parameter></step>
+<step outcome="failed" keyword="FAILED">Then student <parameter>12</parameter> books all compulsory sessions of course <parameter>16</parameter><failure>java.lang.NullPointerException</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="Student views all compulsory sessions in a course">
 <step outcome="successful">Given a student</step>
 <step outcome="successful">When a student <parameter>12</parameter> selects a course <parameter>16</parameter></step>
-<step outcome="successful">Then student <parameter>12</parameter> views all compulsory sessions of course <parameter>16</parameter></step>
+<step outcome="failed" keyword="FAILED">Then student <parameter>12</parameter> views all compulsory sessions of course <parameter>16</parameter><failure>java.lang.NullPointerException</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="Admin assigns a room to a timetableSlot">
 <step outcome="successful">Given an admin</step>
@@ -64,38 +73,3 @@ Expected: is &lt;true&gt;
      but: was &lt;false&gt;</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="Student logs in to the system">
-<step outcome="successful">Given MyCampus authentication</step>
-<step outcome="successful">When a student has successfully logged in</step>
-<step outcome="successful">Then student will only have rights/privileges associated with their role</step>
-</scenario>
-<scenario keyword="Scenario:" title="Lecturer logs in to the system">
-<step outcome="successful">Given MyCampus authentication</step>
-<step outcome="successful">When a lecturer has successfully logged in</step>
-<step outcome="successful">Then lecturer will only have rights/privileges associated with their role</step>
-</scenario>
-<scenario keyword="Scenario:" title="Admin logs in to the system">
-<step outcome="successful">Given MyCampus authentication</step>
-<step outcome="successful">When an admin has successfully logged in</step>
-<step outcome="successful">Then the admin will only have rights/privileges associated with their role</step>
-</scenario>
-<scenario keyword="Scenario:" title="System needs to support over 100 courses">
-<step outcome="successful">Given a system</step>
-<step outcome="successful">When courses are over <parameter>100</parameter></step>
-<step outcome="successful">Then system can support over <parameter>100</parameter> courses</step>
-</scenario>
-<scenario keyword="Scenario:" title="System needs to support over 10 session per courses">
-<step outcome="successful">Given a system</step>
-<step outcome="successful">When course <parameter>2</parameter> is selected to support <parameter>10</parameter> sessions</step>
-<step outcome="successful">Then if sessions are over <parameter>10</parameter> then system can support</step>
-</scenario>
-<scenario keyword="Scenario:" title="System needs to support over 20 timeslots per session">
-<step outcome="successful">Given a system</step>
-<step outcome="successful">When session <parameter>2</parameter> is selected and it has over <parameter>20</parameter> timeslots</step>
-<step outcome="successful">Then if number of timeslots are over <parameter>20</parameter> then the system can support</step>
-</scenario>
-<scenario keyword="Scenario:" title="System needs to support over 1000  users">
-<step outcome="successful">Given a system</step>
-<step outcome="successful">When users are over <parameter>1000</parameter></step>
-<step outcome="successful">Then system can support over <parameter>1000</parameter> users</step>
-</scenario>
-</story>

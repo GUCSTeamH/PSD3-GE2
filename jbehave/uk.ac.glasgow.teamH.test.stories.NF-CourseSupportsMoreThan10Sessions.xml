@@ -1,0 +1,12 @@
+<story path="uk/ac/glasgow/teamH/test/stories/NF-CourseSupportsMoreThan10Sessions.story" title="">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">achieve full functionality</inOrderTo>
+  <asA keyword="As a">user</asA>
+  <iWantTo keyword="I want to">use the system without any errors</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="System needs to support over 10 session per courses">
+<step outcome="successful">Given a system</step>
+<step outcome="successful">When course <parameter>2</parameter> is selected to support <parameter>10</parameter> sessions</step>
+<step outcome="successful">Then if sessions are over <parameter>10</parameter> then system can support</step>
+</scenario>
+</story>

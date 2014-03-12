@@ -10,7 +10,10 @@
 <h2>Scenario: lecturer adds a session to a course</h2>
 <div class="step successful">Given a lecturer</div>
 <div class="step successful">When course <span class="step parameter">30</span> and session <span class="step parameter">200</span> are provided</div>
-<div class="step successful">Then session <span class="step parameter">200</span> is added to course <span class="step parameter">30</span></div>
+<div class="step failed">Then session <span class="step parameter">200</span> is added to course <span class="step parameter">30</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</span></div>
+<div class="step failed">uk.ac.glasgow.teamH.test.steps.SystemTestSteps.tearDown() <span class="keyword failed">(FAILED)</span><br/><span class="message failed">org.jbehave.core.failures.BeforeOrAfterFailed: Method tearDown (annotated with @AfterScenario in class uk.ac.glasgow.teamH.test.steps.SystemTestSteps) failed: java.lang.InterruptedException</span></div>
 </div>
 <div class="scenario">
 <h2>Scenario: lecturer adds a session to a course</h2>
@@ -22,51 +25,57 @@
 <h2>Scenario: lecturer adds a session to a course</h2>
 <div class="step successful">Given a lecturer</div>
 <div class="step successful">When course <span class="step parameter">50</span> and session <span class="step parameter">210</span> are provided</div>
-<div class="step failed">Then session <span class="step parameter">210</span> is added to course <span class="step parameter">50</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.AssertionError: 
-Expected: is &lt;true&gt;
-     but: was &lt;false&gt;</span></div>
+<div class="step successful">Then session <span class="step parameter">210</span> is added to course <span class="step parameter">50</span></div>
 </div>
 <div class="scenario">
 <h2>Scenario: lecturer imports a course from MyCampus</h2>
 <div class="step successful">Given a lecturer</div>
 <div class="step successful">When selecting mycampus course <span class="step parameter">157</span></div>
-<div class="step successful">Then mycampus course <span class="step parameter">157</span> is imported</div>
+<div class="step failed">Then mycampus course <span class="step parameter">157</span> is imported <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</span></div>
 </div>
 <div class="scenario">
 <h2>Scenario: Student books timeslot in session of a course</h2>
 <div class="step successful">Given a student</div>
-<div class="step successful">When a student <span class="step parameter">12</span> selects a session <span class="step parameter">25</span> and a particular timeslot <span class="step parameter">15</span> of a course <span class="step parameter">16</span></div>
-<div class="step successful">Then student <span class="step parameter">12</span> is enrolled in the session <span class="step parameter">25</span> of the course <span class="step parameter">16</span></div>
+<div class="step pending">When a student 12 selects a session 25 and a particular timeslot 15 of a course 16 <span class="keyword pending">(PENDING)</span></div>
+<div class="step notPerformed">Then student <span class="step parameter">12</span> is enrolled in the session <span class="step parameter">25</span> of the course <span class="step parameter">16</span> <span class="keyword notPerformed">(NOT PERFORMED)</span></div>
+<div><pre class="pending">@When(&quot;a student 12 selects a session 25 and a particular timeslot 15 of a course 16&quot;)
+@Pending
+public void whenAStudent12SelectsASession25AndAParticularTimeslot15OfACourse16() {
+  // PENDING
+}
+</pre></div>
 </div>
 <div class="scenario">
 <h2>Scenario: lecturer selects that a session is a one-off.</h2>
 <div class="step successful">Given a lecturer</div>
 <div class="step successful">When session <span class="step parameter">10</span> is marked as <span class="step parameter">one-off</span></div>
-<div class="step successful">Then session <span class="step parameter">10</span> is a <span class="step parameter">one-off</span> session</div>
+<div class="step failed">Then session <span class="step parameter">10</span> is a <span class="step parameter">one-off</span> session <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.sql.SQLException: Invalid cursor state - no current row.</span></div>
 </div>
 <div class="scenario">
 <h2>Scenario: lecturer selects that a session is a weekly.</h2>
 <div class="step successful">Given a lecturer</div>
 <div class="step successful">When session <span class="step parameter">11</span> is marked as <span class="step parameter">weekly</span></div>
-<div class="step successful">Then session <span class="step parameter">11</span> is a <span class="step parameter">weekly</span> session</div>
+<div class="step failed">Then session <span class="step parameter">11</span> is a <span class="step parameter">weekly</span> session <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.sql.SQLException: Invalid cursor state - no current row.</span></div>
 </div>
 <div class="scenario">
 <h2>Scenario: lecturer selects that a session is a fortnightly.</h2>
 <div class="step successful">Given a lecturer</div>
 <div class="step successful">When session <span class="step parameter">12</span> is marked as <span class="step parameter">fortnightly</span></div>
-<div class="step successful">Then session <span class="step parameter">12</span> is a <span class="step parameter">fortnightly</span> session</div>
+<div class="step failed">Then session <span class="step parameter">12</span> is a <span class="step parameter">fortnightly</span> session <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.sql.SQLException: Invalid cursor state - no current row.</span></div>
 </div>
 <div class="scenario">
 <h2>Scenario: Student views all sessions in a course</h2>
 <div class="step successful">Given a student</div>
 <div class="step successful">When course <span class="step parameter">16</span> is selected from student <span class="step parameter">12</span></div>
-<div class="step successful">Then student <span class="step parameter">12</span> books all compulsory sessions of course <span class="step parameter">16</span></div>
+<div class="step failed">Then student <span class="step parameter">12</span> books all compulsory sessions of course <span class="step parameter">16</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.NullPointerException</span></div>
 </div>
 <div class="scenario">
 <h2>Scenario: Student views all compulsory sessions in a course</h2>
 <div class="step successful">Given a student</div>
 <div class="step successful">When a student <span class="step parameter">12</span> selects a course <span class="step parameter">16</span></div>
-<div class="step successful">Then student <span class="step parameter">12</span> views all compulsory sessions of course <span class="step parameter">16</span></div>
+<div class="step failed">Then student <span class="step parameter">12</span> views all compulsory sessions of course <span class="step parameter">16</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.NullPointerException</span></div>
 </div>
 <div class="scenario">
 <h2>Scenario: Admin assigns a room to a timetableSlot</h2>
@@ -78,44 +87,3 @@ Expected: is &lt;true&gt;
 </div>
 <div class="scenario">
 <h2>Scenario: Student logs in to the system</h2>
-<div class="step successful">Given MyCampus authentication</div>
-<div class="step successful">When a student has successfully logged in</div>
-<div class="step successful">Then student will only have rights/privileges associated with their role</div>
-</div>
-<div class="scenario">
-<h2>Scenario: Lecturer logs in to the system</h2>
-<div class="step successful">Given MyCampus authentication</div>
-<div class="step successful">When a lecturer has successfully logged in</div>
-<div class="step successful">Then lecturer will only have rights/privileges associated with their role</div>
-</div>
-<div class="scenario">
-<h2>Scenario: Admin logs in to the system</h2>
-<div class="step successful">Given MyCampus authentication</div>
-<div class="step successful">When an admin has successfully logged in</div>
-<div class="step successful">Then the admin will only have rights/privileges associated with their role</div>
-</div>
-<div class="scenario">
-<h2>Scenario: System needs to support over 100 courses</h2>
-<div class="step successful">Given a system</div>
-<div class="step successful">When courses are over <span class="step parameter">100</span></div>
-<div class="step successful">Then system can support over <span class="step parameter">100</span> courses</div>
-</div>
-<div class="scenario">
-<h2>Scenario: System needs to support over 10 session per courses</h2>
-<div class="step successful">Given a system</div>
-<div class="step successful">When course <span class="step parameter">2</span> is selected to support <span class="step parameter">10</span> sessions</div>
-<div class="step successful">Then if sessions are over <span class="step parameter">10</span> then system can support</div>
-</div>
-<div class="scenario">
-<h2>Scenario: System needs to support over 20 timeslots per session</h2>
-<div class="step successful">Given a system</div>
-<div class="step successful">When session <span class="step parameter">2</span> is selected and it has over <span class="step parameter">20</span> timeslots</div>
-<div class="step successful">Then if number of timeslots are over <span class="step parameter">20</span> then the system can support</div>
-</div>
-<div class="scenario">
-<h2>Scenario: System needs to support over 1000  users</h2>
-<div class="step successful">Given a system</div>
-<div class="step successful">When users are over <span class="step parameter">1000</span></div>
-<div class="step successful">Then system can support over <span class="step parameter">1000</span> users</div>
-</div>
-</div>

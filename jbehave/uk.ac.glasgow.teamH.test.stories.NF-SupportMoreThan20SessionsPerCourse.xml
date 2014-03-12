@@ -1,0 +1,12 @@
+<story path="uk/ac/glasgow/teamH/test/stories/NF-SupportMoreThan20SessionsPerCourse.story" title="">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">achieve full functionality</inOrderTo>
+  <asA keyword="As a">user</asA>
+  <iWantTo keyword="I want to">use the system without any errors</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="System needs to support over 20 timeslots per session">
+<step outcome="successful">Given a system</step>
+<step outcome="successful">When session <parameter>2</parameter> is selected and it has over <parameter>20</parameter> timeslots</step>
+<step outcome="failed" keyword="FAILED">Then if number of timeslots are over <parameter>20</parameter> then the system can support<failure>java.lang.AssertionError</failure></step>
+</scenario>
+</story>

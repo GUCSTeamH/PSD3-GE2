@@ -123,6 +123,12 @@ public class SystemTestSteps {
 		databaseInterface.populateCourse(courseId);
 	}
 	
+	@Given("a booking system containing a course $courseId with a session $sessId and a timeslot $tslotId")
+	public void givenABookingSystemContainingCourseSessionTimeslot(Integer courseId, Integer sessId, Integer tslotId) {
+		databaseInterface.populateCourse(courseId);
+		databaseInterface.populateSession_Timetableslot(sessId, tslotId);
+	}
+	
 	@Given("a lecturer")
 	public void aLecturer() throws Exception{
 				
@@ -220,7 +226,7 @@ public class SystemTestSteps {
 				bundleContext.getService(studentServiceReference);
 	}
 	
-	@When("a student $studentID selects a session $sessionID and a particular timeslot $timeslotID of a course $courseID")
+	@When("a student $studentID books a session $sessionID and a particular timeslot $timeslotID of a course $courseID")
 	public void Booked(int studentID,int sessionID,int timeslotID,int courseID) throws SQLException{
 		studentInterface.bookTimetableSlot(studentID,courseID, sessionID,timeslotID);
 	

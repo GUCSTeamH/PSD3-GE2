@@ -28,3 +28,9 @@ Scenario: Student books timeslot in session of a course
 Given a student
 When a student 50 selects a session 1 and a particular timeslot 5 of a course 7
 Then student 50 is enrolled in the session 1 of the course 7
+
+Scenario: Student books timeslot in session of a course
+Given a student
+And a booking system containing a course 5 with a session 10 and a timeslot 15
+When a student 1 books a session 10 and a particular timeslot 15 of a course 5
+Then student 1 is enrolled in the session 10 of the course 5

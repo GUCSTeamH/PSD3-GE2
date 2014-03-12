@@ -1,0 +1,14 @@
+<story path="uk/ac/glasgow/teamH/test/stories/ImportMyCampus.story" title="">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">achieve full functionality</inOrderTo>
+  <asA keyword="As a">user</asA>
+  <iWantTo keyword="I want to">use the system without any errors</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="lecturer imports a course from MyCampus">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">When selecting mycampus course <parameter>157</parameter></step>
+<step outcome="failed" keyword="FAILED">Then mycampus course <parameter>157</parameter> is imported<failure>java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</failure></step>
+</scenario>
+</story>

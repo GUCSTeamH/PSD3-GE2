@@ -1,0 +1,22 @@
+<story path="uk/ac/glasgow/teamH/test/stories/NF-LogIn.story" title="">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">achieve full functionality</inOrderTo>
+  <asA keyword="As a">user</asA>
+  <iWantTo keyword="I want to">use the system without any errors</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="Student logs in to the system">
+<step outcome="successful">Given MyCampus authentication</step>
+<step outcome="successful">When a student has successfully logged in</step>
+<step outcome="successful">Then student will only have rights/privileges associated with their role</step>
+</scenario>
+<scenario keyword="Scenario:" title="Lecturer logs in to the system">
+<step outcome="successful">Given MyCampus authentication</step>
+<step outcome="successful">When a lecturer has successfully logged in</step>
+<step outcome="successful">Then lecturer will only have rights/privileges associated with their role</step>
+</scenario>
+<scenario keyword="Scenario:" title="Admin logs in to the system">
+<step outcome="successful">Given MyCampus authentication</step>
+<step outcome="successful">When an admin has successfully logged in</step>
+<step outcome="successful">Then the admin will only have rights/privileges associated with their role</step>
+</scenario>
+</story>
