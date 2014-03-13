@@ -5,18 +5,18 @@
   <iWantTo keyword="I want to">use the system without any errors</iWantTo>
 </narrative>
 <scenario keyword="Scenario:" title="Student logs in to the system">
-<step outcome="successful">Given MyCampus authentication</step>
-<step outcome="successful">When a student has successfully logged in</step>
-<step outcome="successful">Then student will only have rights/privileges associated with their role</step>
+<step outcome="successful">Given a mycampus</step>
+<step outcome="successful">And a student</step>
+<step outcome="successful">Then student <parameter>123456f</parameter> with password <parameter>123</parameter> logs into the system</step>
 </scenario>
 <scenario keyword="Scenario:" title="Lecturer logs in to the system">
-<step outcome="successful">Given MyCampus authentication</step>
-<step outcome="successful">When a lecturer has successfully logged in</step>
-<step outcome="successful">Then lecturer will only have rights/privileges associated with their role</step>
+<step outcome="successful">Given a mycampus</step>
+<step outcome="successful">And a lecturer</step>
+<step outcome="successful">Then lecturer <parameter>tim</parameter> with password <parameter>123</parameter> logs into the system</step>
 </scenario>
 <scenario keyword="Scenario:" title="Admin logs in to the system">
-<step outcome="successful">Given MyCampus authentication</step>
-<step outcome="successful">When an admin has successfully logged in</step>
-<step outcome="successful">Then the admin will only have rights/privileges associated with their role</step>
+<step outcome="successful">Given a mycampus</step>
+<step outcome="successful">And an admin</step>
+<step outcome="successful">Then admin <parameter>15487</parameter> with password <parameter>2654</parameter> logs into the system</step>
 </scenario>
 </story>

@@ -13,6 +13,7 @@ public interface LecturerInterface {
 	
 	String getSessionDetails(int sessionId);
 
+	public boolean login(String mail, String pass);
 
 	
 }

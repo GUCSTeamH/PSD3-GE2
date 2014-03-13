@@ -2,12 +2,14 @@ package uk.ac.glasgow.teamH.user.impl;
 
 import java.sql.ResultSet;
 
+import uk.ac.glasgow.teamH.MyCampus.MyCampusInterface;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.StudentInterface;
 
 public class StudentImpl extends User implements StudentInterface {
 
 	private DatabaseInterface db;
+	private MyCampusInterface myc;
 	
 	public StudentImpl(String name, String surname, String email, String password){
 		super(name, surname, email,password);
@@ -36,6 +38,10 @@ public class StudentImpl extends User implements StudentInterface {
 		
 		boolean check= db.checkIfSignedUpForCompulsory(student, session, course);
 		return check;
+	}
+	
+	public boolean login(String mail, String pass){
+		return myc.authenticate(mail, pass);
 	}
 	
 	

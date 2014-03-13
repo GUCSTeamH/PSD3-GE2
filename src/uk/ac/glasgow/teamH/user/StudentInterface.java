@@ -14,5 +14,5 @@ public interface StudentInterface {
 	public void registerMyCampusAuthenticator(
 			MyCampusInterface myCampusInterface);
 
-	public boolean login();
+	public boolean login(String mail, String pass);
 }

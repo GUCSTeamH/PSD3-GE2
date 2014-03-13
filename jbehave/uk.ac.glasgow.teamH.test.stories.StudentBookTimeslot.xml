@@ -61,7 +61,7 @@ public void whenAStudent50SelectsASession1AndAParticularTimeslot5OfACourse7() {
 </scenario>
 <scenario keyword="Scenario:" title="Student books timeslot in session of a course">
 <step outcome="successful">Given a student</step>
-<step outcome="successful">And a booking system containing a course <parameter>5 with a session 10 and a timeslot 15</parameter></step>
+<step outcome="successful">And a booking system containing a course <parameter>5</parameter> with a session <parameter>10</parameter> and a timeslot <parameter>15</parameter></step>
 <step outcome="successful">When a student <parameter>1</parameter> books a session <parameter>10</parameter> and a particular timeslot <parameter>15</parameter> of a course <parameter>5</parameter></step>
 <step outcome="failed" keyword="FAILED">Then student <parameter>1</parameter> is enrolled in the session <parameter>10</parameter> of the course <parameter>5</parameter><failure>java.lang.AssertionError: expected:&lt;true&gt; but was:&lt;false&gt;</failure></step>
 </scenario>

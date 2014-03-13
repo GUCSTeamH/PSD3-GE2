@@ -11,12 +11,12 @@ Then session 10 is a one-off session
 
 Scenario: lecturer selects that a session is a weekly.
 Given a lecturer
-And a booking system containing session 10
-When session 10 is marked as weekly
-Then session 10 is a weekly session
+And a booking system containing session 15
+When session 15 is marked as weekly
+Then session 15 is a weekly session
 
 Scenario: lecturer selects that a session is a fortnightly.
 Given a lecturer
-And a booking system containing session 10
-When session 10 is marked as fortnightly
-Then session 10 is a fortnightly session
+And a booking system containing session 14
+When session 14 is marked as fortnightly
+Then session 14 is a fortnightly session

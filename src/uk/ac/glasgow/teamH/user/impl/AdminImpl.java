@@ -1,5 +1,6 @@
 package uk.ac.glasgow.teamH.user.impl;
 
+import uk.ac.glasgow.teamH.MyCampus.MyCampusInterface;
 import uk.ac.glasgow.teamH.database.DatabaseInterface;
 import uk.ac.glasgow.teamH.user.AdminInterface;
 
@@ -7,7 +8,8 @@ import uk.ac.glasgow.teamH.user.AdminInterface;
 public class AdminImpl extends User implements AdminInterface {
 	DatabaseInterface db;
 	String matric;
-
+	MyCampusInterface myc;
+	
 	public AdminImpl(DatabaseInterface db){
 		this.db=db;
 		matric="110099c";
@@ -23,7 +25,9 @@ public class AdminImpl extends User implements AdminInterface {
 		
 	}
 
-	
+	public boolean login(String mail, String pass){
+		return myc.authenticate(mail, pass);
+	}
 
 
 }

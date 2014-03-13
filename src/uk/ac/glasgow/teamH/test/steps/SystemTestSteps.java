@@ -297,7 +297,22 @@ public class SystemTestSteps {
 	public void populateSession(Integer sessId){
 		databaseInterface.populateSession(sessId);
 	}
+
+	    @When("student $stud takes course $course , $second and $third")
+    public void populateCoursesForStudents(int stud, int course, int second, int third){
+         
+        databaseInterface.populateStudent_Course_SessionFully(stud, course, 2, 3, 9, 10, true, true);
+        databaseInterface.populateStudent_Course_SessionFully(stud, second, 5, 6, 11, 12, true, false);
+        databaseInterface.populateStudent_Course_SessionFully(stud, third, 7, 8, 15, 16, true, false);
+    }
 	
+
+	    @Then("there should be no clashes between courses for student $s")
+    public void checkForClash(int sID){
+        boolean actual = databaseInterface.checkForClashes(sID);
+        assertThat(actual, is(false));
+         
+    }
 	@When("a student $studentID books a session $sessionID and a particular timeslot $timeslotID of a course $courseID")
 	public void Booked(int studentID,int sessionID,int timeslotID,int courseID) throws SQLException{
 		studentInterface.bookTimetableSlot(studentID,courseID, sessionID,timeslotID);
@@ -436,52 +451,31 @@ public class SystemTestSteps {
 		assertThat(found, is(expected));
 	} 
 
+
 	
-	@Given("MyCampus authentication")
-	public void givenMyCampus() {
-		myCampusInterface = new MyCampus();
-	}
+	@Then("student $sID with password $pass logs into the system")
+    public void studentAccess(String sID, String pass) {
+        assertTrue(myCampusInterface.authenticate(sID, pass));
+    }
+     
+     
+    @Then("lecturer $id with password $pass logs into the system")
+    public void LecturerAccess(String id, String pass) {
+        assertTrue(myCampusInterface.authenticate(id, pass));
+    }
+     
+     
+    @Then("admin $id with password $pass logs into the system")
+    public void AdminAccess(String id, String pass) {
+        assertTrue(myCampusInterface.authenticate(id, pass));
+    }
 	
-	@When("a student has successfully logged in")
-	public void whenStudentLogIn() {
-		studentInterface = new StudentImpl(databaseInterface);
-		studentInterface.registerMyCampusAuthenticator(myCampusInterface);
-		assertTrue(studentInterface.login());
-	}
 	
-	@Then("student will only have rights/privileges associated with their role")
-	public void studentAccess() {
-		assertTrue(studentInterface instanceof StudentImpl);
-	}
 	
-	@When("a lecturer has successfully logged in")
-	public void whenLecturerLogIn() {
-		lecturerInterface = new LecturerImpl(databaseInterface);
-		// TODO - fix me in the interface.
-		//lecturerInterface.registerMyCampusAuthenticator(myCamp);
-		//assertTrue(lecturerInterface.login());
-	}
 	
-	@Then("lecturer will only have rights/privileges associated with their role")
-	public void LecturerAccess() {
-		assertTrue(lecturerInterface instanceof LecturerImpl);
-	}
-	
-	@When("an admin has successfully logged in")
-	public void whenAdminLogIn() {
-		adminInterface= new AdminImpl(databaseInterface);
-		adminInterface.registerMyCampusAuthenticator(myCampusInterface);
-		assertTrue(adminInterface.login());
-	}
-	
-	@Then("the admin will only have rights/privileges associated with their role")
-	public void AdminAccess() {
-		assertTrue(adminInterface instanceof AdminImpl);
-	}
 	
 	@Given("a system with $user users")
 	public void system(int user) throws Exception{
-		databaseInterface = new DatabaseImpl();
 		databaseInterface.populateNUsers(user);
 		
 	}

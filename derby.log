@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Thu Mar 13 13:05:58 GMT 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-0144-bb8c-9c13-000003e65ca8 
-on database directory C:\Users\Andrew\Documents\GitHub\PSD3-GE2\data\mycampussH with class loader sun.misc.Launcher$AppClassLoader@1b1f1f12 
-Loaded from file:/C:/Users/Andrew/Documents/GitHub/PSD3-GE2/lib/derby-10.10.1.1.jar
+Thu Mar 13 13:39:33 GMT 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-0144-bbab-5b25-000002bad190 
+on database directory /users/level3/1104608c/git/PSD3-GE2/data/mycampussH with class loader sun.misc.Launcher$AppClassLoader@528f2588 
+Loaded from file:/users/level3/1104608c/git/PSD3-GE2/lib/derby-10.10.1.1.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.7.0_45-b18
-user.dir=C:\Users\Andrew\Documents\GitHub\PSD3-GE2
-os.name=Windows 8
+java.runtime.version=1.7.0_51-mockbuild_2014_01_14_19_09-b00
+user.dir=/users/level3/1104608c/git/PSD3-GE2
+os.name=Linux
 os.arch=amd64
-os.version=6.2
+os.version=2.6.32-358.14.1.el6.x86_64
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

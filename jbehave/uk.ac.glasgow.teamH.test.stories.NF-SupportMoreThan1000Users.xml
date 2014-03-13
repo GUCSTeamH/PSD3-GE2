@@ -5,7 +5,7 @@
   <iWantTo keyword="I want to">use the system without any errors</iWantTo>
 </narrative>
 <scenario keyword="Scenario:" title="System needs to support over 1000  users">
-<step outcome="successful">Given a system with <parameter>1500</parameter> users</step>
-<step outcome="successful">Then system can support over <parameter>1000</parameter> users</step>
+<step outcome="failed" keyword="FAILED">Given a system with <parameter>1500</parameter> users<failure>java.lang.AbstractMethodError: uk.ac.glasgow.teamH.database.impl.DatabaseImpl.populateNUsers(I)V</failure></step>
+<step outcome="notPerformed" keyword="NOT PERFORMED">Then system can support over <parameter>1000</parameter> users</step>
 </scenario>
 </story>

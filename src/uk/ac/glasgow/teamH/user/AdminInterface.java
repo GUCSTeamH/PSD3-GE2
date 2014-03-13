@@ -17,7 +17,7 @@ public interface AdminInterface {
 		public void registerMyCampusAuthenticator(
 				MyCampusInterface myCampusInterface);
 
-		public boolean login();
+		public boolean login(String mail, String pass);
 	
 	
 }

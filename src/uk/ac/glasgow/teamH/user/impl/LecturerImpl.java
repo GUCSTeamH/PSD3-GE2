@@ -61,6 +61,11 @@ public class LecturerImpl extends User implements LecturerInterface {
 		
 	}
 	
+	public boolean login(String mail, String pass){
+		return mycampusCommunicator.authenticate(mail, pass);
+		
+	}
+	
 
 	public String getSessionDetails(int sessionId){
 		return db.getSessionInfo(sessionId);
