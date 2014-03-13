@@ -71,6 +71,18 @@ public void whenAStudent12SelectsASession25AndAParticularTimeslot15OfACourse16()
 <step outcome="failed" keyword="FAILED">Then student <parameter>12</parameter> books all compulsory sessions of course <parameter>16</parameter><failure>java.lang.NullPointerException</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="Student views all compulsory sessions in a course">
+<step outcome="successful">Given a student</step>
+<step outcome="successful">When a student <parameter>12</parameter> selects a course <parameter>16</parameter></step>
+<step outcome="failed" keyword="FAILED">Then student <parameter>12</parameter> views all compulsory sessions of course <parameter>16</parameter><failure>java.lang.NullPointerException</failure></step>
+</scenario>
+<scenario keyword="Scenario:" title="Admin assigns a room to a timetableSlot">
+<step outcome="successful">Given an admin</step>
+<step outcome="successful">When room <parameter>BO504</parameter> and timeslot <parameter>1002</parameter> are selected</step>
+<step outcome="failed" keyword="FAILED">Then room <parameter>BO504</parameter> is assigned to timeslot <parameter>1002</parameter><failure>java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</failure></step>
+</scenario>
+<scenario keyword="Scenario:" title="Student logs in to the system">
 
 ]]></script>
 </body>

@@ -6,17 +6,20 @@
 </narrative>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a one-off.">
 <step outcome="successful">Given a lecturer</step>
+<step outcome="successful">And a booking system containing session <parameter>10</parameter></step>
 <step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>one-off</parameter></step>
-<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>one-off</parameter> session<failure>java.sql.SQLException: Invalid cursor state - no current row.</failure></step>
+<step outcome="successful">Then session <parameter>10</parameter> is a <parameter>one-off</parameter> session</step>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a weekly.">
 <step outcome="successful">Given a lecturer</step>
-<step outcome="successful">When session <parameter>11</parameter> is marked as <parameter>weekly</parameter></step>
-<step outcome="failed" keyword="FAILED">Then session <parameter>11</parameter> is a <parameter>weekly</parameter> session<failure>java.sql.SQLException: Invalid cursor state - no current row.</failure></step>
+<step outcome="successful">And a booking system containing session <parameter>10</parameter></step>
+<step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>weekly</parameter></step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>weekly</parameter> session<failure>java.lang.AssertionError</failure></step>
 </scenario>
 <scenario keyword="Scenario:" title="lecturer selects that a session is a fortnightly.">
 <step outcome="successful">Given a lecturer</step>
-<step outcome="successful">When session <parameter>12</parameter> is marked as <parameter>fortnightly</parameter></step>
-<step outcome="failed" keyword="FAILED">Then session <parameter>12</parameter> is a <parameter>fortnightly</parameter> session<failure>java.sql.SQLException: Invalid cursor state - no current row.</failure></step>
+<step outcome="successful">And a booking system containing session <parameter>10</parameter></step>
+<step outcome="successful">When session <parameter>10</parameter> is marked as <parameter>fortnightly</parameter></step>
+<step outcome="failed" keyword="FAILED">Then session <parameter>10</parameter> is a <parameter>fortnightly</parameter> session<failure>java.lang.AssertionError</failure></step>
 </scenario>
 </story>

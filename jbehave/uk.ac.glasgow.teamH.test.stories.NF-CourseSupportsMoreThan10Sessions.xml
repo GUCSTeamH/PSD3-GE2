@@ -5,8 +5,26 @@
   <iWantTo keyword="I want to">use the system without any errors</iWantTo>
 </narrative>
 <scenario keyword="Scenario:" title="System needs to support over 10 session per courses">
-<step outcome="successful">Given a system</step>
-<step outcome="successful">When course <parameter>2</parameter> is selected to support <parameter>10</parameter> sessions</step>
-<step outcome="successful">Then if sessions are over <parameter>10</parameter> then system can support</step>
+<step outcome="pending" keyword="PENDING">Given a system</step>
+<step outcome="pending" keyword="PENDING">When course 2 is selected to support 10 sessions</step>
+<step outcome="pending" keyword="PENDING">Then if sessions are over 10 then system can support</step>
+<pendingMethod>@Given(&quot;a system&quot;)
+@Pending
+public void givenASystem() {
+  // PENDING
+}
+</pendingMethod>
+<pendingMethod>@When(&quot;course 2 is selected to support 10 sessions&quot;)
+@Pending
+public void whenCourse2IsSelectedToSupport10Sessions() {
+  // PENDING
+}
+</pendingMethod>
+<pendingMethod>@Then(&quot;if sessions are over 10 then system can support&quot;)
+@Pending
+public void thenIfSessionsAreOver10ThenSystemCanSupport() {
+  // PENDING
+}
+</pendingMethod>
 </scenario>
 </story>

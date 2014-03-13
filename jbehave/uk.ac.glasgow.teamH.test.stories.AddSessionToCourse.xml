@@ -6,7 +6,6 @@
 </narrative>
 <scenario keyword="Scenario:" title="lecturer adds a session to a course">
 <step outcome="successful">Given a lecturer</step>
-<step outcome="successful">And a booking system containing a course <parameter>30</parameter></step>
 <step outcome="successful">When course <parameter>30</parameter> and session <parameter>200</parameter> are provided</step>
 <step outcome="successful">Then session <parameter>200</parameter> is added to course <parameter>30</parameter></step>
 </scenario>

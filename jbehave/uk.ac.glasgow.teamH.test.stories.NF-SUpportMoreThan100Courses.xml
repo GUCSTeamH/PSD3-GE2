@@ -5,8 +5,7 @@
   <iWantTo keyword="I want to">use the system without any errors</iWantTo>
 </narrative>
 <scenario keyword="Scenario:" title="System needs to support over 100 courses">
-<step outcome="successful">Given a system</step>
-<step outcome="successful">When courses are over <parameter>100</parameter></step>
+<step outcome="successful">Given a system with <parameter>105</parameter> courses</step>
 <step outcome="successful">Then system can support over <parameter>100</parameter> courses</step>
 </scenario>
 </story>

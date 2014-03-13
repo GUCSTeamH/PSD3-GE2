@@ -293,6 +293,11 @@ public class SystemTestSteps {
 				bundleContext.getService(studentServiceReference);
 	}
 	
+	@Given("a booking system containing session $sessId")
+	public void populateSession(Integer sessId){
+		databaseInterface.populateSession(sessId);
+	}
+	
 	@When("a student $studentID books a session $sessionID and a particular timeslot $timeslotID of a course $courseID")
 	public void Booked(int studentID,int sessionID,int timeslotID,int courseID) throws SQLException{
 		studentInterface.bookTimetableSlot(studentID,courseID, sessionID,timeslotID);
@@ -318,19 +323,24 @@ public class SystemTestSteps {
 	@Then("session $sessID is a $expected session")
 	public void recurringSession(int sessID, String expected) throws SQLException{
 		ResultSet result = databaseInterface.getSessionDetails(sessID);
-		result.next();
-		String reccurence = result.getString("recurring");
-		assertTrue(reccurence.equalsIgnoreCase(expected));
+		String recurrence = "";
+		if (result.next()){
+			recurrence = result.getString("recurring");
+			System.out.println(recurrence);
+			System.out.println(expected);
+		}
+		assertTrue(recurrence.equalsIgnoreCase(expected));
 	}
 
 	@When("course $courseID is selected from student $studentID")
 	public void compulsoryNotBooked(int courseID,int studentID) throws SQLException{
 		ResultSet rs=studentInterface.getSessionsCourse(courseID);
 		while(rs.next()){
-		boolean result = databaseInterface.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
-		if (result==false){
-			notenrolled.add(rs.getInt(1));
-		}}
+			boolean result = databaseInterface.checkIfSignedUpForCompulsory(studentID, rs.getInt(1),10);
+			if (result==false){
+				notenrolled.add(rs.getInt(1));
+			}
+		}
 	}
 
 	@When("a  student $studentID selects a course $courseID")

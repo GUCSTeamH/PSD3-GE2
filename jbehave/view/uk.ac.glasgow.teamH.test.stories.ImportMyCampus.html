@@ -17,10 +17,16 @@
 <div class="scenario">
 <h2>Scenario: lecturer imports a course from MyCampus</h2>
 <div class="step successful">Given a lecturer</div>
+<div class="step successful">And a mycampus system containing course <span class="step parameter">157</span></div>
 <div class="step successful">When selecting mycampus course <span class="step parameter">157</span></div>
-<div class="step failed">Then mycampus course <span class="step parameter">157</span> is imported <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.AssertionError: 
-Expected: is &lt;true&gt;
-     but: was &lt;false&gt;</span></div>
+<div class="step successful">Then mycampus course <span class="step parameter">157</span> is imported</div>
+</div>
+<div class="scenario">
+<h2>Scenario: lecturer imports a course from MyCampus</h2>
+<div class="step successful">Given a lecturer</div>
+<div class="step successful">And a mycampus system containing course <span class="step parameter">15</span></div>
+<div class="step successful">When selecting mycampus course <span class="step parameter">15</span></div>
+<div class="step successful">Then mycampus course <span class="step parameter">15</span> is imported</div>
 </div>
 </div>
 

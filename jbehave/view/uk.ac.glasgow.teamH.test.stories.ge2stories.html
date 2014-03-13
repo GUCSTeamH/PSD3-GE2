@@ -81,6 +81,20 @@ public void whenAStudent12SelectsASession25AndAParticularTimeslot15OfACourse16()
 </div>
 <div class="scenario">
 <h2>Scenario: Student views all compulsory sessions in a course</h2>
+<div class="step successful">Given a student</div>
+<div class="step successful">When a student <span class="step parameter">12</span> selects a course <span class="step parameter">16</span></div>
+<div class="step failed">Then student <span class="step parameter">12</span> views all compulsory sessions of course <span class="step parameter">16</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.NullPointerException</span></div>
+</div>
+<div class="scenario">
+<h2>Scenario: Admin assigns a room to a timetableSlot</h2>
+<div class="step successful">Given an admin</div>
+<div class="step successful">When room <span class="step parameter">BO504</span> and timeslot <span class="step parameter">1002</span> are selected</div>
+<div class="step failed">Then room <span class="step parameter">BO504</span> is assigned to timeslot <span class="step parameter">1002</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.AssertionError: 
+Expected: is &lt;true&gt;
+     but: was &lt;false&gt;</span></div>
+</div>
+<div class="scenario">
+<h2>Scenario: Student logs in to the system</h2>
 
 </body>
 <!--  SyntaxHighlighter resources:  should be included at end of body -->

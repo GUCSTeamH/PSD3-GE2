@@ -1,0 +1,11 @@
+<story path="uk/ac/glasgow/teamH/test/stories/NF-SupportMoreThan10SessionsPerCourse.story" title="Sample story">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">communicate effectively to the business some functionality</inOrderTo>
+  <asA keyword="As a">development team</asA>
+  <iWantTo keyword="I want to">use Behaviour-Driven Development</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="System needs to support over 10 session per courses">
+<step outcome="successful">Given a system with a course <parameter>2</parameter> that has <parameter>15</parameter> sessions</step>
+<step outcome="successful">Then the system can support over <parameter>10</parameter> sessions</step>
+</scenario>
+</story>

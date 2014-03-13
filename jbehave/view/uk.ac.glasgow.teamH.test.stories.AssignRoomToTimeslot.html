@@ -17,10 +17,23 @@
 <div class="scenario">
 <h2>Scenario: Admin assigns a room to a timetableSlot</h2>
 <div class="step successful">Given an admin</div>
+<div class="step successful">And a system containing timeslot <span class="step parameter">1002</span></div>
 <div class="step successful">When room <span class="step parameter">BO504</span> and timeslot <span class="step parameter">1002</span> are selected</div>
-<div class="step failed">Then room <span class="step parameter">BO504</span> is assigned to timeslot <span class="step parameter">1002</span> <span class="keyword failed">(FAILED)</span><br/><span class="message failed">java.lang.AssertionError: 
-Expected: is &lt;true&gt;
-     but: was &lt;false&gt;</span></div>
+<div class="step successful">Then room <span class="step parameter">BO504</span> is assigned to timeslot <span class="step parameter">1002</span></div>
+</div>
+<div class="scenario">
+<h2>Scenario: Admin assigns a room to a timetableSlot</h2>
+<div class="step successful">Given an admin</div>
+<div class="step successful">And a system containing timeslot <span class="step parameter">10</span></div>
+<div class="step successful">When room <span class="step parameter">F121</span> and timeslot <span class="step parameter">10</span> are selected</div>
+<div class="step successful">Then room <span class="step parameter">F121</span> is assigned to timeslot <span class="step parameter">10</span></div>
+</div>
+<div class="scenario">
+<h2>Scenario: Admin assigns a room to a timetableSlot</h2>
+<div class="step successful">Given an admin</div>
+<div class="step successful">And a system containing timeslot <span class="step parameter">200</span></div>
+<div class="step successful">When room <span class="step parameter">F121</span> and timeslot <span class="step parameter">200</span> are selected</div>
+<div class="step successful">Then room <span class="step parameter">F121</span> is assigned to timeslot <span class="step parameter">200</span></div>
 </div>
 </div>
 

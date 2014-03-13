@@ -16,10 +16,21 @@
 </narrative>
 <scenario keyword="Scenario:" title="Admin assigns a room to a timetableSlot">
 <step outcome="successful">Given an admin</step>
+<step outcome="successful">And a system containing timeslot <parameter>1002</parameter></step>
 <step outcome="successful">When room <parameter>BO504</parameter> and timeslot <parameter>1002</parameter> are selected</step>
-<step outcome="failed" keyword="FAILED">Then room <parameter>BO504</parameter> is assigned to timeslot <parameter>1002</parameter><failure>java.lang.AssertionError: 
-Expected: is &lt;true&gt;
-     but: was &lt;false&gt;</failure></step>
+<step outcome="successful">Then room <parameter>BO504</parameter> is assigned to timeslot <parameter>1002</parameter></step>
+</scenario>
+<scenario keyword="Scenario:" title="Admin assigns a room to a timetableSlot">
+<step outcome="successful">Given an admin</step>
+<step outcome="successful">And a system containing timeslot <parameter>10</parameter></step>
+<step outcome="successful">When room <parameter>F121</parameter> and timeslot <parameter>10</parameter> are selected</step>
+<step outcome="successful">Then room <parameter>F121</parameter> is assigned to timeslot <parameter>10</parameter></step>
+</scenario>
+<scenario keyword="Scenario:" title="Admin assigns a room to a timetableSlot">
+<step outcome="successful">Given an admin</step>
+<step outcome="successful">And a system containing timeslot <parameter>200</parameter></step>
+<step outcome="successful">When room <parameter>F121</parameter> and timeslot <parameter>200</parameter> are selected</step>
+<step outcome="successful">Then room <parameter>F121</parameter> is assigned to timeslot <parameter>200</parameter></step>
 </scenario>
 </story>
 

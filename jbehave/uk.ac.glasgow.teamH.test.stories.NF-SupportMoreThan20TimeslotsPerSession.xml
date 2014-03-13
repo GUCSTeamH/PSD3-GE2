@@ -1,0 +1,23 @@
+<story path="uk/ac/glasgow/teamH/test/stories/NF-SupportMoreThan20TimeslotsPerSession.story" title="">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">communicate effectively to the business some functionality</inOrderTo>
+  <asA keyword="As a">development team</asA>
+  <iWantTo keyword="I want to">use Behaviour-Driven Development</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="System needs to support over 20 timeslots per session">
+<step outcome="pending" keyword="PENDING">Given a system with a session 2 that has 25 timeslots</step>
+<step outcome="pending" keyword="PENDING">Then if session 2 has over 20 timeslots then the system can support it</step>
+<pendingMethod>@Given(&quot;a system with a session 2 that has 25 timeslots&quot;)
+@Pending
+public void givenASystemWithASession2ThatHas25Timeslots() {
+  // PENDING
+}
+</pendingMethod>
+<pendingMethod>@Then(&quot;if session 2 has over 20 timeslots then the system can support it&quot;)
+@Pending
+public void thenIfSession2HasOver20TimeslotsThenTheSystemCanSupportIt() {
+  // PENDING
+}
+</pendingMethod>
+</scenario>
+</story>

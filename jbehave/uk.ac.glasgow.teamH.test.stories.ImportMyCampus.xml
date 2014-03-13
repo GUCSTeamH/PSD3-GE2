@@ -6,9 +6,14 @@
 </narrative>
 <scenario keyword="Scenario:" title="lecturer imports a course from MyCampus">
 <step outcome="successful">Given a lecturer</step>
+<step outcome="successful">And a mycampus system containing course <parameter>157</parameter></step>
 <step outcome="successful">When selecting mycampus course <parameter>157</parameter></step>
-<step outcome="failed" keyword="FAILED">Then mycampus course <parameter>157</parameter> is imported<failure>java.lang.AssertionError: 
-Expected: is &lt;true&gt;
-     but: was &lt;false&gt;</failure></step>
+<step outcome="successful">Then mycampus course <parameter>157</parameter> is imported</step>
+</scenario>
+<scenario keyword="Scenario:" title="lecturer imports a course from MyCampus">
+<step outcome="successful">Given a lecturer</step>
+<step outcome="successful">And a mycampus system containing course <parameter>15</parameter></step>
+<step outcome="successful">When selecting mycampus course <parameter>15</parameter></step>
+<step outcome="successful">Then mycampus course <parameter>15</parameter> is imported</step>
 </scenario>
 </story>

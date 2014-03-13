@@ -1,0 +1,22 @@
+<story path="uk/ac/glasgow/teamH/test/stories/Compulsory.story" title="">
+<narrative keyword="Narrative:">
+  <inOrderTo keyword="In order to">not fail a course</inOrderTo>
+  <asA keyword="As a">student</asA>
+  <iWantTo keyword="I want to">view all compulsory sessions</iWantTo>
+</narrative>
+<scenario keyword="Scenario:" title="Student checks if signed up for compulsory session in a course">
+<step outcome="successful">Given a student</step>
+<step outcome="successful">And a booking system containing course <parameter>16</parameter> with a session <parameter>14</parameter> also student <parameter>12</parameter></step>
+<step outcome="successful">Then student <parameter>12</parameter> checks if signed up for compulsory session <parameter>14</parameter> of course <parameter>16</parameter></step>
+</scenario>
+<scenario keyword="Scenario:" title="Student checks if signed up for compulsory session in a course">
+<step outcome="successful">Given a student</step>
+<step outcome="successful">And a booking system containing course <parameter>15</parameter> with a session <parameter>10</parameter> also student <parameter>12</parameter></step>
+<step outcome="successful">Then student <parameter>10</parameter> checks if signed up for compulsory session <parameter>10</parameter> of course <parameter>15</parameter></step>
+</scenario>
+<scenario keyword="Scenario:" title="Student checks if signed up for compulsory session in a course">
+<step outcome="successful">Given a student</step>
+<step outcome="successful">And a booking system containing course <parameter>15</parameter> with a session <parameter>11</parameter> also student <parameter>17</parameter></step>
+<step outcome="successful">Then student <parameter>17</parameter> checks if signed up for compulsory session <parameter>11</parameter> of course <parameter>15</parameter></step>
+</scenario>
+</story>
