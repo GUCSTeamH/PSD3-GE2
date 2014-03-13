@@ -469,17 +469,18 @@ public class SystemTestSteps {
 		assertTrue(adminInterface instanceof AdminImpl);
 	}
 	
-	@Given("a system")
-	public void system() throws Exception{
+	@Given("a system with $user users")
+	public void system(int user) throws Exception{
 		databaseInterface = new DatabaseImpl();
+		databaseInterface.populateNUsers(user);
 		
 	}
-	@When ("course $cID is selected to support $sessNum sessions")
+	@Given("a system with a course $cID that has $sessNum sessions")
 	public void sessionCalc(int cID, int sessNum){
 		countsessions = databaseInterface.supportNSessionTypes(sessNum,cID);
 	}
 	
-	@Then ("if sessions are over $sessNum then system can support")
+	@Then ("the system can support over $sessNum sessions")
 		public void sessionSupport(int sessNum){
 		assertTrue(sessNum<=countsessions);
 	}
@@ -515,14 +516,12 @@ public class SystemTestSteps {
 		assertTrue(timeslots<=counttimeslots);
 	}
 	
-	@When ("users are over $totalUsers")
-	public void userCalc(int totalUsers){
-		countUsers=databaseInterface.supportNUsers(totalUsers);
-	}
-	
 	@Then ("system can support over $total users")
 	public void userSupport(int total){
-		assertTrue(total<=countUsers);
+		boolean result=databaseInterface.supportNUsers(total);
+		boolean expected=true;
+		assertEquals(expected,result);
+		
 	}
 
 	@AfterScenario()

@@ -582,23 +582,34 @@ public class DatabaseImpl implements DatabaseInterface {
 		return 0;
 
 	}
+public void populateNUsers(int n){
+	try {
+		connection = getDatabaseConnection();
+		
+		Statement statement = connection.createStatement();
 
+		statement.addBatch("Delete from mycampus_authentication ");
+		statement.executeBatch();
+
+		for (int i = 0; i < n; i++) {
+			statement
+					.addBatch("INSERT INTO mycampus_authentication (username,password) VALUES ("
+							+ "'" + i + "'" + "," + "'" + i + "'" + ")");
+			statement.executeBatch();
+		}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	
+}
 	// non-functional support at least 1000 users-OK
-	public int supportNUsers(int n) {
+	public boolean supportNUsers(int n) {
 		if (n > 0) {
 			try {
 				connection = getDatabaseConnection();
 				Statement statement = connection.createStatement();
-
-				statement.addBatch("Delete from mycampus_authentication ");
-				statement.executeBatch();
-
-				for (int i = 0; i < n; i++) {
-					statement
-							.addBatch("INSERT INTO mycampus_authentication (username,password) VALUES ("
-									+ "'" + i + "'" + "," + "'" + i + "'" + ")");
-					statement.executeBatch();
-				}
 
 				String query = "SELECT * FROM mycampus_authentication";
 
@@ -607,9 +618,12 @@ public class DatabaseImpl implements DatabaseInterface {
 				while (result.next()) {
 					count++;
 				}
-
+				boolean res=false;
+				if(count>=n){
+					res=true;
+				}
 				connection.close();
-				return count;
+				return res;
 			} catch (SQLException e) {
 				System.out
 						.println("Error while trying to open the connection in supportNUsers method");
@@ -617,7 +631,7 @@ public class DatabaseImpl implements DatabaseInterface {
 
 			}
 		}
-		return 0;
+		return false;
 
 	}
 

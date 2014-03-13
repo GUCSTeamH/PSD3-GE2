@@ -22,8 +22,9 @@ public boolean checkIfSignedUpForCompulsory(int studentID, int sessionID,int cou
 
 public boolean checkIfSignedUpForAllCompulsory(int studentID);
 
-public int supportNUsers(int n);
+public boolean supportNUsers(int n);
 
+public void populateNUsers(int n);
 public int supportNTimetableslotsPerSession(int n, int sessionID);
 
 public int supportNSessionTypes(int n, int courseID);
