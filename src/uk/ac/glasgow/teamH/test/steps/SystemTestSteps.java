@@ -486,7 +486,7 @@ public class SystemTestSteps {
 	}
 	
 	
-	@When ("courses are over $num")
+	@Given ("a system with $num courses")
 	public void courseCalc(int num){
 		countcourses=databaseInterface.supportNCourses(num);
 	}
