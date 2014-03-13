@@ -4,6 +4,5 @@ As a development team
 I want to use Behaviour-Driven Development
 					 
 Scenario: System needs to support over 20 timeslots per session
-Given a system
-When session 2 is selected and it has over 20 timeslots
-Then if number of timeslots are over 20 then the system can support
+Given a system with a course 1 and a session 2 that has 25 timeslots
+Then the system can support over 20 timeslots per session
